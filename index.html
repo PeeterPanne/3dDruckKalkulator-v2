@@ -216,8 +216,6 @@ input{
 
 /* Druckzeit */
 .timebox{gap:9px !important}
-.timebox-3{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
-.timebox-3 input{text-align:center !important;padding-left:8px !important;padding-right:8px !important}
 
 /* Multi color */
 .multi-head{
@@ -467,10 +465,41 @@ body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),tr
 }
 </style>
 
+
+<style id="app-redesign">
+:root{--bg:#030914;--card:#071524;--card2:#091a2b;--text:#f5f8ff;--muted:#a9b7c9;--line:#17304a;--soft:#0a1c2e;--input:#04111e;--blue:#19a8ff}
+html,body{background:#030914!important}
+body{background:radial-gradient(560px 300px at 50% -80px,rgba(25,168,255,.2),transparent 70%),linear-gradient(180deg,#030914,#06111d)!important}
+.app{max-width:760px!important;padding:12px 16px 100px!important}
+.app-header{padding:18px 2px 22px!important;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:15px;min-width:0}.brand-icon{width:92px;height:92px;object-fit:cover;border-radius:22px;box-shadow:0 0 28px rgba(25,168,255,.25);flex:0 0 auto}
+.brand-copy{min-width:0}.brand-copy h1{font-size:31px!important;line-height:1.04!important;letter-spacing:-1.2px!important;margin:0!important;white-space:nowrap}.brand-copy h1 span{color:var(--blue)}.brand-copy .sub{font-size:14px!important;line-height:1.35!important;margin-top:8px;color:#b7c4d4}
+.header-actions{display:flex;gap:6px}.header-actions button{width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;border-radius:13px!important}
+.card,.result{background:linear-gradient(145deg,rgba(9,27,44,.97),rgba(4,15,26,.99))!important;border:1px solid #16324c!important;box-shadow:0 10px 32px rgba(0,0,0,.22)!important}
+.card{border-radius:21px!important;padding:17px!important;margin-bottom:12px!important}.sectiontitle{font-size:20px!important;margin-bottom:13px!important}
+input,select{background:linear-gradient(180deg,#061321,#04101b)!important;border-color:#1d3851!important;color:#f7fbff!important;border-radius:13px!important}
+input:focus,select:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(25,168,255,.12)!important}
+.timebox-3{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}.timebox-3 input{text-align:center!important;font-weight:750}
+.mode{background:#071827!important;border:1px solid #17324b!important;padding:4px!important}.mode button.active{box-shadow:none!important}
+.result{border-radius:21px!important;padding:19px!important;background:linear-gradient(145deg,rgba(12,38,62,.98),rgba(4,16,28,.99))!important;border-color:rgba(25,168,255,.38)!important}
+.breakdown>div{border-color:#173149!important}.hint,.filament-intro{background:rgba(255,255,255,.025)!important;border-color:#173149!important}
+details.card{background:linear-gradient(145deg,rgba(8,24,40,.96),rgba(4,15,26,.98))!important}
+.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:50;width:min(760px,100%);padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:rgba(3,12,21,.94);border-top:1px solid #183149;backdrop-filter:blur(18px)}
+.bottom-nav a{text-decoration:none;color:#8999ac;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55px;border-radius:12px;gap:2px;font-weight:700}.bottom-nav a span{font-size:22px}.bottom-nav a small{font-size:11px}.bottom-nav a.active{color:var(--blue)}
+@media(max-width:520px){.app{padding-left:12px!important;padding-right:12px!important}.app-header{align-items:flex-start!important;padding-top:10px!important}.brand{gap:11px}.brand-icon{width:82px;height:82px;border-radius:20px}.brand-copy h1{font-size:25px!important;white-space:normal}.brand-copy .sub{font-size:12px!important}.header-actions{display:none}.card{padding:14px!important}}
+@media(max-width:360px){.brand-icon{width:70px;height:70px}.brand-copy h1{font-size:22px!important}.brand-copy .sub{font-size:11px!important}}
+</style>
+
 </head>
 <body>
 <div class="app">
-<header><div><h1>3D Kalkulator</h1><div class="sub">Dein Bambu Lab Druckkostenrechner</div></div><div style="display:flex;gap:7px"><button class="theme" id="theme" aria-label="Darkmodus">☾</button><button class="reset" id="reset" aria-label="Zurücksetzen">↺</button></div></header>
+<header class="app-header">
+  <div class="brand">
+    <img src="icons/icon-180.png" alt="3D Kalkulator" class="brand-icon">
+    <div class="brand-copy"><h1><span>3D</span> Druck Kalkulator</h1><div class="sub">Berechne deine Druckkosten<br>einfach und genau</div></div>
+  </div>
+  <div class="header-actions"><button class="theme" id="theme" aria-label="Darkmodus">☾</button><button class="reset" id="reset" aria-label="Zurücksetzen">↺</button></div>
+</header>
 
 <div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
 <button data-v="friend">Freund</button><button data-v="colleague">Kollege</button><button data-v="stranger" class="active">Fremder</button><button data-v="business">Gewerblich</button>
@@ -545,7 +574,7 @@ body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),tr
   </div>
 </div>
 
-<details class="card"><summary>⚙️ Kalkulationswerte</summary><div class="grid" style="margin-top:16px">
+<details class="card" id="settings"><summary>⚙️ Kalkulationswerte</summary><div class="grid" style="margin-top:16px">
 <div><label>Strom €/kWh</label><input id="powerprice" value="0.35" type="number" step=".01"></div>
 <div><label>Druckerleistung W</label><input id="watts" value="180" type="number"></div>
 <div><label>Abschreibung privat €/h</label><input id="depP" value="0.20" type="number" step=".01"></div>
@@ -565,6 +594,13 @@ body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),tr
 </div>
 <p class="muted">Privat: 10 % der Druckzeit + Setup je Druckplatte. Gewerblich: 15 min Grundsetup + 10 min je Druckplatte.</p></details>
 <div class="card muted">💡 <strong>Darkmodus:</strong> Mit ☾/☀️ oben kannst du zwischen Hell und Dunkel wechseln. Die Einstellung wird auf deinem iPhone gespeichert.</div><div class="card muted">Hinweis: Die Werte sind kalkulatorische Startwerte. Bei gekauften STL-Dateien immer die Lizenz für Verkäufe prüfen.</div>
+
+<nav class="bottom-nav" aria-label="App-Navigation">
+<a href="#druckdetails" class="active"><span>▣</span><small>Kalkulator</small></a>
+<a href="#breakdownCard"><span>☷</span><small>Übersicht</small></a>
+<a href="#breakdownCard"><span>⌁</span><small>Ergebnis</small></a>
+<a href="#settings"><span>⚙</span><small>Einstellungen</small></a>
+</nav>
 </div>
 <script>
 (function(){
