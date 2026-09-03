@@ -618,6 +618,341 @@ body:not(.dark) .header-reset{
 }
 </style>
 
+
+<style id="orders-ui">
+.order-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.order-form-grid>div{min-width:0}
+
+.order-item{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  padding:0 !important;
+  border:1px solid #17344e;
+  background:linear-gradient(145deg,#0a1422,#070f1a);
+  border-radius:20px;
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+.order-item::before{
+  content:"";
+  display:block;
+  height:4px;
+  background:#19a8ff;
+}
+.order-card-main{padding:18px 18px 15px}
+.order-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.order-card-title{min-width:0}
+.order-card-title strong{
+  display:block;
+  font-size:20px;
+  line-height:1.2;
+  margin-bottom:6px;
+}
+.order-card-customer{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#9eafc2;
+  font-size:15px;
+}
+.order-status{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid rgba(25,168,255,.35);
+  background:rgba(25,168,255,.09);
+  color:#19a8ff;
+  border-radius:999px;
+  padding:7px 11px;
+  font-weight:800;
+  font-size:13px;
+}
+.order-price-row{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:20px;
+  color:#9eafc2;
+  font-size:16px;
+}
+.order-price-row .self-label{margin-right:2px}
+.order-price-row .self-value{color:#f7fbff;font-weight:800;font-size:21px}
+.order-price-row .separator{opacity:.45}
+.order-price-row .price-label{margin-left:2px}
+.order-price-row .price-value{color:#19a8ff;font-weight:900;font-size:22px}
+.order-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:22px;
+  margin-top:20px;
+  color:#9eafc2;
+}
+.order-stat{display:flex;align-items:center;gap:8px;font-size:16px}
+.order-stat .stat-icon{font-size:23px;line-height:1}
+.order-stat strong{color:#f7fbff;font-size:17px}
+.order-date{margin-top:12px;color:#71839a;font-size:12px}
+.order-card-actions{
+  display:flex;
+  gap:9px;
+  padding:12px 18px 15px;
+  border-top:1px solid rgba(54,76,105,.55);
+}
+.order-card-actions button{
+  flex:1;
+  min-height:40px;
+  border:1px solid #24445f;
+  background:rgba(255,255,255,.035);
+  color:#dbe7f4;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:850;
+}
+.order-card-actions .load-order{color:#19a8ff;border-color:rgba(25,168,255,.35);background:rgba(25,168,255,.07)}
+.order-card-actions .danger{color:#ff8585}
+
+@media (max-width:600px){
+  .order-form-grid{grid-template-columns:1fr;gap:10px}
+  .order-card-head{gap:8px}
+  .order-card-title strong{font-size:18px}
+  .order-status{font-size:12px;padding:6px 9px}
+  .order-price-row{margin-top:17px}
+  .order-stats{gap:16px}
+}
+
+body:not(.dark) .order-item{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;
+  border-color:#cbd5e1 !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.08) !important;
+}
+body:not(.dark) .order-card-customer,
+body:not(.dark) .order-price-row,
+body:not(.dark) .order-stats,
+body:not(.dark) .order-date{color:#64748b !important}
+body:not(.dark) .order-price-row .self-value,
+body:not(.dark) .order-stat strong{color:#111827 !important}
+body:not(.dark) .order-card-actions{border-top-color:#e2e8f0 !important}
+body:not(.dark) .order-card-actions button{
+  background:#fff !important;
+  border-color:#cbd5e1 !important;
+  color:#334155 !important;
+}
+body:not(.dark) .order-card-actions .load-order{
+  color:#0879c9 !important;
+  border-color:rgba(21,144,255,.35) !important;
+  background:rgba(21,144,255,.06) !important;
+}
+</style>
+
+<style id="finance-ui">
+/* Auftragsstatus */
+.order-item.status-open::before{background:#ff8a22}
+.order-item.status-work::before{background:#19a8ff}
+.order-item.status-done::before{background:#31c46c}
+.order-item.status-paid::before{background:#a66cff}
+
+.order-status-select{
+  flex:0 0 auto;
+  appearance:none;
+  border-radius:999px;
+  padding:8px 12px;
+  font:inherit;
+  font-size:13px;
+  font-weight:850;
+  cursor:pointer;
+  outline:none;
+  background:#101b2b;
+  border:1px solid #24445f;
+  color:#dbe7f4;
+}
+.order-status-select.status-open{color:#ff9b4a;border-color:rgba(255,138,34,.4);background:rgba(255,138,34,.10)}
+.order-status-select.status-work{color:#35b3ff;border-color:rgba(25,168,255,.4);background:rgba(25,168,255,.10)}
+.order-status-select.status-done{color:#48d37c;border-color:rgba(49,196,108,.4);background:rgba(49,196,108,.10)}
+.order-status-select.status-paid{color:#bd8aff;border-color:rgba(166,108,255,.4);background:rgba(166,108,255,.10)}
+
+.finance-filter{padding-bottom:17px}
+.finance-periods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.finance-periods button{
+  min-height:42px;border:1px solid #24445f;background:rgba(255,255,255,.035);
+  color:#9eafc2;border-radius:12px;font-weight:800;font-size:13px;
+}
+.finance-periods button.active{background:#159cff;border-color:#159cff;color:#fff}
+
+.finance-summary{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0;
+}
+.finance-summary-card{
+  min-height:102px;border-radius:18px;padding:16px;border:1px solid #17344e;
+  background:linear-gradient(145deg,#0a1422,#070f1a);display:flex;flex-direction:column;justify-content:space-between;
+}
+.finance-summary-card span{color:#9eafc2;font-size:14px;font-weight:750}
+.finance-summary-card strong{font-size:25px;color:#f7fbff}
+.finance-summary-card.income strong{color:#45d67b}
+.finance-summary-card.expense strong{color:#ff8c8c}
+.finance-summary-card.profit strong{color:#19a8ff}
+.finance-summary-card.count strong{color:#f7fbff}
+
+.finance-bars{display:grid;gap:16px;margin-top:16px}
+.finance-bar-row{display:grid;grid-template-columns:82px 1fr auto;align-items:center;gap:10px;color:#9eafc2;font-size:13px}
+.finance-bar-row strong{color:#f7fbff;font-size:13px;min-width:72px;text-align:right}
+.finance-bar-track{height:10px;border-radius:999px;background:#101d2d;overflow:hidden}
+.finance-bar-track i{display:block;height:100%;width:0;border-radius:999px;background:#19a8ff;transition:width .25s ease}
+#barExpenses{background:#ff7373}
+#barProfit{background:#45d67b}
+
+.finance-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.finance-form-grid select{
+  width:100%;min-height:50px;border-radius:14px;border:1px solid #24445f;background:#091525;color:#edf5ff;
+  padding:0 13px;font-size:16px;
+}
+.finance-save-btn{margin-top:14px}
+
+.finance-list{display:grid;gap:8px;margin-top:14px}
+.finance-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 0;border-bottom:1px solid rgba(54,76,105,.45);
+}
+.finance-row:last-child{border-bottom:0}
+.finance-row div:first-child{min-width:0}
+.finance-row strong{display:block;font-size:15px;color:#f2f7fc}
+.finance-row small{display:block;margin-top:3px;color:#71839a;font-size:12px}
+.finance-positive{color:#45d67b !important;white-space:nowrap}
+.finance-negative{color:#ff8585 !important;white-space:nowrap}
+.finance-row-right{display:flex;align-items:center;gap:10px}
+.finance-delete{border:0;background:transparent;color:#ff8585;font-size:16px;padding:6px}
+.finance-empty{padding:16px 0;color:#71839a;text-align:center}
+
+@media(max-width:600px){
+  .finance-periods{grid-template-columns:repeat(2,1fr)}
+  .finance-summary{grid-template-columns:1fr 1fr}
+  .finance-summary-card{min-height:94px;padding:14px}
+  .finance-summary-card strong{font-size:21px}
+  .finance-form-grid{grid-template-columns:1fr}
+  .finance-bar-row{grid-template-columns:70px 1fr auto}
+  .order-status-select{font-size:12px;padding:7px 8px;max-width:118px}
+}
+
+body:not(.dark) .finance-summary-card{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;
+  border-color:#cbd5e1 !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.07)
+}
+body:not(.dark) .finance-summary-card span,
+body:not(.dark) .finance-bar-row,
+body:not(.dark) .finance-row small{color:#64748b !important}
+body:not(.dark) .finance-summary-card strong,
+body:not(.dark) .finance-bar-row strong,
+body:not(.dark) .finance-row strong{color:#111827}
+body:not(.dark) .finance-bar-track{background:#e2e8f0}
+body:not(.dark) .finance-periods button{
+  background:#fff !important;border-color:#cbd5e1 !important;color:#475569 !important
+}
+body:not(.dark) .finance-periods button.active{background:#159cff !important;border-color:#159cff !important;color:#fff !important}
+body:not(.dark) .finance-form-grid select{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .finance-row{border-bottom-color:#e2e8f0 !important}
+body:not(.dark) .order-status-select{background:#fff !important}
+</style>
+
+<style id="five-nav">
+.bottom-nav{grid-template-columns:repeat(5,1fr)}
+.bottom-nav .nav-item{min-width:0}
+.bottom-nav .nav-item small{font-size:11px}
+@media(max-width:600px){
+  .bottom-nav .nav-item span{font-size:24px}
+  .bottom-nav .nav-item small{font-size:10px}
+}
+</style>
+
+<style id="order-detail-ui">
+.order-note-field{grid-column:1/-1}
+.order-note-field label span{font-weight:500;opacity:.65}
+.order-form-grid textarea,
+.order-detail-sheet textarea{
+  width:100%;box-sizing:border-box;resize:vertical;min-height:70px;
+  border-radius:14px;border:1px solid #24445f;background:#091525;color:#edf5ff;
+  padding:12px 13px;font:inherit;font-size:15px;outline:none;
+}
+.order-form-grid textarea:focus,
+.order-detail-sheet textarea:focus{border-color:#159cff;box-shadow:0 0 0 3px rgba(21,156,255,.10)}
+
+.order-details-btn{color:#dbe7f4 !important}
+body.modal-open{overflow:hidden}
+.order-detail-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center}
+.order-detail-modal[hidden]{display:none}
+.order-detail-backdrop{position:absolute;inset:0;background:rgba(0,5,12,.72);backdrop-filter:blur(6px)}
+.order-detail-sheet{
+  position:relative;width:min(720px,100%);max-height:90vh;overflow:auto;
+  background:linear-gradient(145deg,#0b1727,#07111e);
+  border:1px solid #24445f;border-bottom:0;border-radius:26px 26px 0 0;
+  padding:22px 22px 28px;box-shadow:0 -15px 50px rgba(0,0,0,.35)
+}
+.order-detail-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.order-detail-kicker{display:block;color:#19a8ff;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.order-detail-sheet h2{margin:4px 0 5px;font-size:27px;color:#f7fbff}
+.order-detail-customer{color:#9eafc2;font-size:15px}
+.order-detail-close{
+  width:42px;height:42px;border-radius:50%;border:1px solid #24445f;background:#101d2d;color:#dbe7f4;font-size:28px;line-height:1
+}
+.order-detail-status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 15px}
+.order-detail-status-row label{font-weight:800;color:#9eafc2}
+.order-detail-status-row select{
+  border-radius:999px;padding:9px 13px;background:#101d2d;border:1px solid #24445f;color:#edf5ff;font-weight:850
+}
+.order-detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.detail-stat{padding:14px;border:1px solid #17344e;border-radius:15px;background:rgba(255,255,255,.025)}
+.detail-stat span{display:block;color:#8fa2b8;font-size:12px}
+.detail-stat strong{display:block;margin-top:5px;color:#f7fbff;font-size:19px}
+.detail-stat:nth-child(1) strong{color:#19a8ff}
+.detail-stat:nth-child(3) strong.positive-profit{color:#45d67b}
+.detail-stat:nth-child(3) strong.negative-profit{color:#ff8585}
+.detail-section{margin-top:19px;padding-top:17px;border-top:1px solid rgba(54,76,105,.55)}
+.detail-section h3{margin:0 0 11px;color:#f2f7fc;font-size:16px}
+.detail-cost-list{display:grid;gap:0}
+.detail-cost-list>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(54,76,105,.35);color:#9eafc2;font-size:14px}
+.detail-cost-list>div:last-child{border-bottom:0}
+.detail-cost-list strong{color:#edf5ff}
+.detail-meta{display:flex;flex-wrap:wrap;gap:8px;color:#9eafc2;font-size:13px}
+.detail-meta span{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid #17344e}
+.order-detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.order-detail-actions button{min-height:46px;border-radius:13px;border:1px solid #24445f;background:#101d2d;color:#dbe7f4;font-weight:850}
+.order-detail-actions .load-order{color:#19a8ff;border-color:rgba(25,168,255,.4);background:rgba(25,168,255,.08)}
+
+@media(max-width:600px){
+  .order-detail-sheet{padding:19px 16px 24px;border-radius:23px 23px 0 0}
+  .order-detail-grid{grid-template-columns:1fr 1fr}
+  .order-detail-sheet h2{font-size:23px}
+  .order-detail-actions{grid-template-columns:1fr}
+}
+
+body:not(.dark) .order-form-grid textarea,
+body:not(.dark) .order-detail-sheet textarea{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .order-detail-sheet{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .order-detail-sheet h2,
+body:not(.dark) .detail-stat strong,
+body:not(.dark) .detail-section h3,
+body:not(.dark) .detail-cost-list strong{color:#111827 !important}
+body:not(.dark) .order-detail-customer,
+body:not(.dark) .order-detail-status-row label,
+body:not(.dark) .detail-stat span,
+body:not(.dark) .detail-cost-list,
+body:not(.dark) .detail-meta{color:#64748b !important}
+body:not(.dark) .detail-stat{background:#fff !important;border-color:#cbd5e1 !important}
+body:not(.dark) .detail-cost-list>div,
+body:not(.dark) .detail-section{border-color:#e2e8f0 !important}
+body:not(.dark) .order-detail-status-row select{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .order-detail-close,
+body:not(.dark) .order-detail-actions button{background:#fff !important;color:#334155 !important;border-color:#cbd5e1 !important}
+body:not(.dark) .order-detail-actions .load-order{color:#0879c9 !important}
+</style>
 </head>
 <body>
 <div class="app">
@@ -721,13 +1056,184 @@ body:not(.dark) .header-reset{
   <div class="page-subtitle">Speichere fertige Kalkulationen und rufe sie später wieder auf.</div>
   <div class="card order-create">
     <div class="sectiontitle">Neuen Auftrag speichern</div>
-    <label>Auftragsname</label>
-    <input id="orderName" type="text" placeholder="z. B. Ersatzteil Halterung">
+    <div class="order-form-grid">
+      <div>
+        <label>Auftragsname</label>
+        <input id="orderName" type="text" placeholder="z. B. Ersatzteil Halterung">
+      </div>
+      <div>
+        <label>Kunde</label>
+        <input id="orderCustomer" type="text" placeholder="z. B. Max Mustermann">
+      </div>
+      <div>
+        <label>Status</label>
+        <select id="orderStatus">
+          <option value="open">🟠 Offen</option>
+          <option value="work">🔵 In Arbeit</option>
+          <option value="done">🟢 Fertig</option>
+          <option value="paid">💰 Bezahlt</option>
+        </select>
+      </div>
+      <div class="order-note-field">
+        <label>Notiz <span>(optional)</span></label>
+        <textarea id="orderNote" rows="2" placeholder="z. B. Abholung am Freitag, Farbe Schwarz ..."></textarea>
+      </div>
+    </div>
     <button type="button" class="save-order-main" id="saveOrderMain">💾 Aktuelle Kalkulation speichern</button>
   </div>
   <div class="card">
     <div class="sectiontitle">Gespeicherte Aufträge</div>
     <div id="ordersList" class="orders-list"></div>
+  </div>
+</div>
+
+
+
+<div class="order-detail-modal" id="orderDetailModal" hidden>
+  <div class="order-detail-backdrop" data-close-order-detail></div>
+  <section class="order-detail-sheet" role="dialog" aria-modal="true" aria-labelledby="orderDetailTitle">
+    <div class="order-detail-head">
+      <div>
+        <span class="order-detail-kicker">Auftragsdetails</span>
+        <h2 id="orderDetailTitle">Auftrag</h2>
+        <div id="orderDetailCustomer" class="order-detail-customer"></div>
+      </div>
+      <button type="button" class="order-detail-close" data-close-order-detail aria-label="Schließen">×</button>
+    </div>
+
+    <div class="order-detail-status-row">
+      <label>Status</label>
+      <select id="orderDetailStatus">
+        <option value="open">🟠 Offen</option>
+        <option value="work">🔵 In Arbeit</option>
+        <option value="done">🟢 Fertig</option>
+        <option value="paid">💰 Bezahlt</option>
+      </select>
+    </div>
+
+    <div class="order-detail-grid">
+      <div class="detail-stat"><span>💰 Verkaufspreis</span><strong id="detailPrice">0,00 €</strong></div>
+      <div class="detail-stat"><span>📉 Selbstkosten</span><strong id="detailSelf">0,00 €</strong></div>
+      <div class="detail-stat"><span>📈 Gewinn</span><strong id="detailProfit">0,00 €</strong></div>
+      <div class="detail-stat"><span>🖨️ Drucke</span><strong id="detailPlates">0</strong></div>
+      <div class="detail-stat"><span>⚖️ Material</span><strong id="detailGrams">0 g</strong></div>
+      <div class="detail-stat"><span>⏱️ Druckzeit</span><strong id="detailTime">0 Std. 0 Min.</strong></div>
+    </div>
+
+    <div class="detail-section">
+      <h3>💶 Kostenaufstellung</h3>
+      <div id="detailCosts" class="detail-cost-list"></div>
+    </div>
+
+    <div class="detail-section">
+      <h3>📝 Notiz</h3>
+      <textarea id="orderDetailNote" rows="4" placeholder="Notiz zum Auftrag ..."></textarea>
+    </div>
+
+    <div class="detail-section">
+      <h3>📅 Auftrag</h3>
+      <div class="detail-meta" id="detailMeta"></div>
+    </div>
+
+    <div class="order-detail-actions">
+      <button type="button" class="load-order" id="detailLoadOrder">↗ Auftrag laden</button>
+      <button type="button" id="detailSaveChanges">💾 Änderungen speichern</button>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="page-finance" hidden>
+  <div class="page-title">💶 Finanzen</div>
+  <div class="page-subtitle">Einnahmen, Ausgaben und Gewinn deiner Aufträge auf einen Blick.</div>
+
+  <div class="finance-filter card">
+    <div class="sectiontitle">Zeitraum</div>
+    <div class="finance-periods" id="financePeriods">
+      <button type="button" data-period="month" class="active">Dieser Monat</button>
+      <button type="button" data-period="lastMonth">Letzter Monat</button>
+      <button type="button" data-period="year">Dieses Jahr</button>
+      <button type="button" data-period="all">Gesamt</button>
+    </div>
+  </div>
+
+  <div class="finance-summary">
+    <div class="finance-summary-card income">
+      <span>💰 Einnahmen</span>
+      <strong id="financeIncome">0,00 €</strong>
+    </div>
+    <div class="finance-summary-card expense">
+      <span>💸 Ausgaben</span>
+      <strong id="financeExpenses">0,00 €</strong>
+    </div>
+    <div class="finance-summary-card profit">
+      <span>📈 Gewinn</span>
+      <strong id="financeProfit">0,00 €</strong>
+    </div>
+    <div class="finance-summary-card count">
+      <span>📦 Bezahlte Aufträge</span>
+      <strong id="financeOrderCount">0</strong>
+    </div>
+  </div>
+
+  <div class="card finance-chart-card">
+    <div class="sectiontitle">Finanzübersicht</div>
+    <div class="finance-bars">
+      <div class="finance-bar-row">
+        <span>Einnahmen</span>
+        <div class="finance-bar-track"><i id="barIncome"></i></div>
+        <strong id="barIncomeValue">0,00 €</strong>
+      </div>
+      <div class="finance-bar-row">
+        <span>Ausgaben</span>
+        <div class="finance-bar-track"><i id="barExpenses"></i></div>
+        <strong id="barExpensesValue">0,00 €</strong>
+      </div>
+      <div class="finance-bar-row">
+        <span>Gewinn</span>
+        <div class="finance-bar-track"><i id="barProfit"></i></div>
+        <strong id="barProfitValue">0,00 €</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card finance-add-card">
+    <div class="sectiontitle">Ausgabe hinzufügen</div>
+    <div class="finance-form-grid">
+      <div>
+        <label>Bezeichnung</label>
+        <input id="expenseName" type="text" placeholder="z. B. Filament">
+      </div>
+      <div>
+        <label>Kategorie</label>
+        <select id="expenseCategory">
+          <option>Filament</option>
+          <option>Drucker / Ersatzteile</option>
+          <option>Werkzeug</option>
+          <option>Verpackung</option>
+          <option>Software / Lizenz</option>
+          <option>Sonstiges</option>
+        </select>
+      </div>
+      <div>
+        <label>Betrag €</label>
+        <input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
+      </div>
+      <div>
+        <label>Datum</label>
+        <input id="expenseDate" type="date">
+      </div>
+    </div>
+    <button type="button" class="save-order-main finance-save-btn" id="addExpense">➕ Ausgabe speichern</button>
+  </div>
+
+  <div class="card">
+    <div class="sectiontitle">Einnahmen aus Aufträgen</div>
+    <div id="financeOrdersList" class="finance-list"></div>
+  </div>
+
+  <div class="card">
+    <div class="sectiontitle">Gespeicherte Ausgaben</div>
+    <div id="expensesList" class="finance-list"></div>
   </div>
 </div>
 
@@ -769,6 +1275,7 @@ body:not(.dark) .header-reset{
   <button type="button" class="nav-item active" data-page="calculator"><span>▣</span><small>Kalkulator</small></button>
   <button type="button" class="nav-item" data-page="overview"><span>☷</span><small>Übersicht</small></button>
   <button type="button" class="nav-item" data-page="orders"><span>📁</span><small>Aufträge</small></button>
+  <button type="button" class="nav-item" data-page="finance"><span>💶</span><small>Finanzen</small></button>
   <button type="button" class="nav-item" data-page="settings"><span>⚙️</span><small>Einstellungen</small></button>
 </nav>
 </div>
@@ -1012,6 +1519,7 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       window.scrollTo({top:0,behavior:'smooth'});
       if(name==='overview') calc();
       if(name==='orders') renderOrders();
+      if(name==='finance') renderFinance();
     }
     document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 
@@ -1040,15 +1548,25 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       try{return JSON.parse(localStorage.getItem('3dcalc-orders')||'[]')}catch(e){return []}
     }
     function writeOrders(items){localStorage.setItem('3dcalc-orders',JSON.stringify(items))}
-    function snapshotOrder(name){
+    function snapshotOrder(name, customer, status, note){
       calc();
       const get=id=>$(id)?.value ?? '';
+      const days=Math.floor(num('days'));
+      const hours=Math.min(23,Math.floor(num('hours')));
+      const minutes=Math.min(59,Math.floor(num('minutes')));
+      const totalMinutes=days*24*60+hours*60+minutes;
+      const totalGrams=currentRows().reduce((sum,r)=>sum+Math.max(0,parseNum(r.g,0)),0);
       return {
-        id:Date.now(),
+        id:Date.now()+Math.random(),
         name:name || 'Unbenannter Auftrag',
+        customer:customer || 'Kein Kunde angegeben',
+        status:status || 'open',
+        note:note || '',
         date:new Date().toLocaleDateString('de-DE'),
+        dateISO:new Date().toISOString().slice(0,10),
         mode,
         days:get('days'),hours:get('hours'),minutes:get('minutes'),
+        totalMinutes,totalGrams,
         plates:get('plates'),file:get('file'),extra:get('extra'),
         design:get('design'),finish:get('finish'),
         markup:get('markupInput'),rounding:get('rounding'),
@@ -1058,13 +1576,44 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         filaments:currentRows()
       };
     }
-    function saveOrder(name){
+    const ORDER_STATUSES = {
+      open:{label:'Offen',icon:'◉',cls:'open'},
+      work:{label:'In Arbeit',icon:'▷',cls:'work'},
+      done:{label:'Fertig',icon:'✓',cls:'done'},
+      paid:{label:'Bezahlt',icon:'€',cls:'paid'}
+    };
+
+    function statusInfo(status){
+      return ORDER_STATUSES[status] || ORDER_STATUSES.open;
+    }
+
+    function saveOrder(name, customer, status, note){
       const items=readOrders();
-      items.unshift(snapshotOrder(name));
+      items.unshift(snapshotOrder(name, customer, status, note));
       writeOrders(items.slice(0,100));
       if($('orderName')) $('orderName').value='';
+      if($('orderCustomer')) $('orderCustomer').value='';
+      if($('orderStatus')) $('orderStatus').value='open';
+      if($('orderNote')) $('orderNote').value='';
       renderOrders();
+      renderFinance();
     }
+
+    function formatPrintTime(o){
+      if(o.totalMinutes!==undefined){
+        const mins=Math.max(0,Math.round(Number(o.totalMinutes)||0));
+        const d=Math.floor(mins/1440), h=Math.floor((mins%1440)/60), m=mins%60;
+        return d ? `${d} Tg. ${h} Std. ${m} Min.` : `${h} Std. ${m} Min.`;
+      }
+      const d=Number(o.days)||0, h=Number(o.hours)||0, m=Number(o.minutes)||0;
+      return d ? `${d} Tg. ${h} Std. ${m} Min.` : `${h} Std. ${m} Min.`;
+    }
+
+    function totalOrderGrams(o){
+      if(o.totalGrams!==undefined) return Math.round(Number(o.totalGrams)||0);
+      return (o.filaments||[]).reduce((sum,r)=>sum+Math.max(0,parseNum(r.g,0)),0);
+    }
+
     function renderOrders(){
       const list=$('ordersList'); if(!list) return;
       const items=readOrders();
@@ -1072,26 +1621,74 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         list.innerHTML='<div class="empty-orders">📁 Noch keine Aufträge gespeichert.<br><span>Speichere deine aktuelle Kalkulation über den Button oben.</span></div>';
         return;
       }
-      list.innerHTML=items.map(o=>`
-        <div class="order-item">
-          <div class="order-info">
-            <strong>${escapeAttr(o.name)}</strong>
-            <span>${escapeAttr(o.date)} · ${escapeAttr(o.mode||'')}</span>
-            <span>${escapeAttr(o.price)} · Selbstkosten ${escapeAttr(o.self)}</span>
+      list.innerHTML=items.map(o=>{
+        const st=statusInfo(o.status);
+        return `
+        <article class="order-item status-${st.cls}">
+          <div class="order-card-main">
+            <div class="order-card-head">
+              <div class="order-card-title">
+                <strong>${escapeAttr(o.name)}</strong>
+                <div class="order-card-customer">♙ <span>${escapeAttr(o.customer || 'Kein Kunde angegeben')}</span></div>
+              </div>
+              <select class="order-status-select status-${st.cls}" data-status="${o.id}" aria-label="Auftragsstatus">
+                <option value="open" ${o.status==='open'?'selected':''}>◉ Offen</option>
+                <option value="work" ${o.status==='work'?'selected':''}>▷ In Arbeit</option>
+                <option value="done" ${o.status==='done'?'selected':''}>✓ Fertig</option>
+                <option value="paid" ${o.status==='paid'?'selected':''}>€ Bezahlt</option>
+              </select>
+            </div>
+            <div class="order-price-row">
+              <span class="self-label">Selbstkosten</span>
+              <span class="self-value">${escapeAttr(o.self || '0,00 €')}</span>
+              <span class="separator">•</span>
+              <span class="price-label">Preis</span>
+              <span class="price-value">${escapeAttr(o.price || '0,00 €')}</span>
+            </div>
+            <div class="order-stats">
+              <div class="order-stat"><span class="stat-icon">🖨️</span><strong>${escapeAttr(o.plates || '0')}</strong><span>Drucke</span></div>
+              <div class="order-stat"><span class="stat-icon">⚖️</span><strong>${totalOrderGrams(o)} g</strong></div>
+              <div class="order-stat"><span class="stat-icon">⏱️</span><span>${escapeAttr(formatPrintTime(o))}</span></div>
+            </div>
+            <div class="order-date">Gespeichert am ${escapeAttr(o.date || '')}</div>
           </div>
-          <div class="order-actions-small">
-            <button type="button" data-load="${o.id}">Laden</button>
-            <button type="button" class="danger" data-delete="${o.id}">Löschen</button>
+          <div class="order-card-actions">
+            <button type="button" class="order-details-btn" data-details="${o.id}">ⓘ Details</button>
+            <button type="button" class="load-order" data-load="${o.id}">↗ Laden</button>
+            <button type="button" class="danger" data-delete="${o.id}">🗑 Löschen</button>
           </div>
-        </div>`).join('');
-      list.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>{
-        writeOrders(readOrders().filter(o=>String(o.id)!==String(b.dataset.delete))); renderOrders();
+        </article>`;
+      }).join('');
+
+      list.querySelectorAll('[data-status]').forEach(sel=>sel.addEventListener('change',()=>{
+        const id=sel.dataset.status;
+        const items=readOrders();
+        const item=items.find(x=>String(x.id)===String(id));
+        if(!item) return;
+        item.status=sel.value;
+        writeOrders(items);
+        renderOrders();
+        renderFinance();
       }));
+      list.querySelectorAll('[data-details]').forEach(b=>b.addEventListener('click',()=>{
+        openOrderDetails(b.dataset.details);
+      }));
+
+      list.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>{
+        if(confirm('Diesen Auftrag wirklich löschen?')){
+          writeOrders(readOrders().filter(o=>String(o.id)!==String(b.dataset.delete)));
+          renderOrders();
+          renderFinance();
+        }
+      }));
+
       list.querySelectorAll('[data-load]').forEach(b=>b.addEventListener('click',()=>{
         const o=readOrders().find(x=>String(x.id)===String(b.dataset.load)); if(!o)return;
         ['days','hours','minutes','plates','file','extra','design','finish','markupInput','rounding'].forEach(id=>{if($(id)&&o[id]!==undefined)$(id).value=o[id]});
         mode=o.mode||'stranger';
         document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('active',x.dataset.v===mode));
+        if($('orderStatus')) $('orderStatus').value=o.status||'open';
+        if($('orderNote')) $('orderNote').value=o.note||'';
         renderFilaments();
         const area=$('filamentArea');
         if(area && o.filaments?.length){
@@ -1104,10 +1701,251 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         calc(); showPage('calculator');
       }));
     }
-    $('saveOrder')?.addEventListener('click',()=>saveOrder('Auftrag '+new Date().toLocaleDateString('de-DE')));
+
+
+    // ---------- Auftragsdetails ----------
+    let activeDetailOrderId = null;
+
+    function openOrderDetails(id){
+      const o=readOrders().find(x=>String(x.id)===String(id));
+      if(!o) return;
+      activeDetailOrderId=id;
+
+      const st=statusInfo(o.status);
+      $('orderDetailTitle').textContent=o.name || 'Unbenannter Auftrag';
+      $('orderDetailCustomer').textContent='♙ ' + (o.customer || 'Kein Kunde angegeben');
+      $('orderDetailStatus').value=o.status||'open';
+      $('orderDetailNote').value=o.note||'';
+
+      const price=parseMoney(o.price);
+      const self=parseMoney(o.self);
+      const profit=price-self;
+      $('detailPrice').textContent=money(price);
+      $('detailSelf').textContent=money(self);
+      $('detailProfit').textContent=money(profit);
+      $('detailProfit').className=profit>=0?'positive-profit':'negative-profit';
+      $('detailPlates').textContent=o.plates || '0';
+      $('detailGrams').textContent=totalOrderGrams(o)+' g';
+      $('detailTime').textContent=formatPrintTime(o);
+      $('detailMeta').innerHTML=
+        `<span>Gespeichert am ${escapeAttr(o.date||'')}</span>`+
+        `<span>Status: ${escapeAttr(st.label)}</span>`;
+
+      const costs=[
+        ['Material',o.material],
+        ['Strom',o.power],
+        ['Abschreibung',o.depreciation],
+        ['Verschleiß',o.wear],
+        ['Drucker / Maschinenzeit',o.printer],
+        ['Aufbau / Handarbeit',o.build],
+        ['Nachbearbeitung',o.post],
+        ['Lizenz / Datei',o.license],
+        ['Sonstige Kosten',o.other],
+        ['Gemeinkosten',o.overhead]
+      ];
+      const available=costs.filter(x=>x[1]!==undefined && x[1]!==null && String(x[1]).trim()!=='');
+      $('detailCosts').innerHTML=available.length
+        ? available.map(x=>`<div><span>${escapeAttr(x[0])}</span><strong>${escapeAttr(x[1])}</strong></div>`).join('')
+        : '<div><span>Selbstkosten</span><strong>'+escapeAttr(o.self||'0,00 €')+'</strong></div>';
+
+      $('orderDetailModal').hidden=false;
+      document.body.classList.add('modal-open');
+    }
+
+    function closeOrderDetails(){
+      const modal=$('orderDetailModal');
+      if(modal) modal.hidden=true;
+      document.body.classList.remove('modal-open');
+      activeDetailOrderId=null;
+    }
+
+    function saveOrderDetailChanges(){
+      if(activeDetailOrderId===null) return;
+      const items=readOrders();
+      const o=items.find(x=>String(x.id)===String(activeDetailOrderId));
+      if(!o) return;
+      o.status=$('orderDetailStatus').value;
+      o.note=$('orderDetailNote').value.trim();
+      writeOrders(items);
+      renderOrders();
+      renderFinance();
+      openOrderDetails(o.id);
+    }
+
+    document.querySelectorAll('[data-close-order-detail]').forEach(el=>el.addEventListener('click',closeOrderDetails));
+    $('detailSaveChanges')?.addEventListener('click',saveOrderDetailChanges);
+    $('detailLoadOrder')?.addEventListener('click',()=>{
+      const id=activeDetailOrderId;
+      if(id===null) return;
+      const o=readOrders().find(x=>String(x.id)===String(id));
+      if(!o) return;
+      closeOrderDetails();
+      const fields=['days','hours','minutes','plates','file','extra','design','finish','markupInput','rounding'];
+      fields.forEach(id=>{if($(id)&&o[id]!==undefined)$(id).value=o[id]});
+      mode=o.mode||'stranger';
+      document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('active',x.dataset.v===mode));
+      if($('orderStatus')) $('orderStatus').value=o.status||'open';
+      if($('orderNote')) $('orderNote').value=o.note||'';
+      renderFilaments();
+      const area=$('filamentArea');
+      if(area && o.filaments?.length){
+        area.innerHTML='';
+        const intro=document.createElement('div'); intro.className='filament-intro';
+        intro.innerHTML='🧵 <strong>So trägst du es ein:</strong> Gramm = tatsächlicher Verbrauch · €/kg = Preis deiner Filamentrolle · Farbe/Art = z. B. Schwarz PLA';
+        area.appendChild(intro);
+        o.filaments.forEach(r=>area.appendChild(makeRow(r)));
+      }
+      calc(); showPage('calculator');
+    });
+
+    $('orderDetailStatus')?.addEventListener('change',saveOrderDetailChanges);
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && !$('orderDetailModal')?.hidden) closeOrderDetails();
+    });
+
+    // ---------- Finanzen ----------
+    function readExpenses(){
+      try{return JSON.parse(localStorage.getItem('3dcalc-expenses')||'[]')}catch(e){return []}
+    }
+    function writeExpenses(items){localStorage.setItem('3dcalc-expenses',JSON.stringify(items))}
+
+    function parseMoney(text){
+      if(typeof text==='number') return text;
+      const cleaned=String(text||'').replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(?:,|$))/g,'').replace(',','.');
+      const n=parseFloat(cleaned);
+      return Number.isFinite(n)?n:0;
+    }
+
+    function orderDateISO(o){
+      if(o.dateISO) return o.dateISO;
+      // Old saved orders only had DD.MM.YYYY.
+      const m=String(o.date||'').match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+      return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+    }
+
+    function inFinancePeriod(dateISO, period){
+      if(period==='all') return true;
+      if(!dateISO) return false;
+      const d=new Date(dateISO+'T12:00:00');
+      const now=new Date();
+      if(period==='year') return d.getFullYear()===now.getFullYear();
+      if(period==='lastMonth'){
+        const y=now.getFullYear(), m=now.getMonth();
+        const last=new Date(y,m-1,1);
+        return d.getFullYear()===last.getFullYear() && d.getMonth()===last.getMonth();
+      }
+      return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+    }
+
+    function currentFinancePeriod(){
+      return document.querySelector('#financePeriods button.active')?.dataset.period || 'month';
+    }
+
+    function financeOrderIncome(o){
+      return o.status==='paid' ? parseMoney(o.price) : 0;
+    }
+
+    function renderFinance(){
+      const incomeEl=$('financeIncome'); if(!incomeEl) return;
+      const period=currentFinancePeriod();
+      const orders=readOrders();
+      const expenses=readExpenses();
+
+      const paidOrders=orders.filter(o=>o.status==='paid' && inFinancePeriod(orderDateISO(o),period));
+      const periodExpenses=expenses.filter(e=>inFinancePeriod(e.date,period));
+
+      const income=paidOrders.reduce((sum,o)=>sum+financeOrderIncome(o),0);
+      const expenseTotal=periodExpenses.reduce((sum,e)=>sum+Number(e.amount||0),0);
+      const profit=income-expenseTotal;
+
+      incomeEl.textContent=money(income);
+      $('financeExpenses').textContent=money(expenseTotal);
+      $('financeProfit').textContent=money(profit);
+      $('financeOrderCount').textContent=String(paidOrders.length);
+
+      $('barIncomeValue').textContent=money(income);
+      $('barExpensesValue').textContent=money(expenseTotal);
+      $('barProfitValue').textContent=money(profit);
+
+      const max=Math.max(income,expenseTotal,Math.max(profit,0),1);
+      $('barIncome').style.width=(income/max*100)+'%';
+      $('barExpenses').style.width=(expenseTotal/max*100)+'%';
+      $('barProfit').style.width=(Math.max(profit,0)/max*100)+'%';
+
+      const fo=$('financeOrdersList');
+      if(fo){
+        if(!paidOrders.length){
+          fo.innerHTML='<div class="finance-empty">Noch keine bezahlten Aufträge im gewählten Zeitraum.</div>';
+        }else{
+          fo.innerHTML=paidOrders.map(o=>`
+            <div class="finance-row">
+              <div><strong>${escapeAttr(o.name)}</strong><small>${escapeAttr(o.customer||'Kein Kunde angegeben')} · ${escapeAttr(o.date||'')}</small></div>
+              <strong class="finance-positive">+${money(financeOrderIncome(o))}</strong>
+            </div>`).join('');
+        }
+      }
+
+      const el=$('expensesList');
+      if(el){
+        if(!periodExpenses.length){
+          el.innerHTML='<div class="finance-empty">Keine Ausgaben im gewählten Zeitraum.</div>';
+        }else{
+          el.innerHTML=periodExpenses.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(e=>`
+            <div class="finance-row">
+              <div><strong>${escapeAttr(e.name)}</strong><small>${escapeAttr(e.category||'Sonstiges')} · ${escapeAttr(e.date||'')}</small></div>
+              <div class="finance-row-right"><strong class="finance-negative">-${money(e.amount)}</strong><button type="button" class="finance-delete" data-expense="${e.id}">🗑</button></div>
+            </div>`).join('');
+          el.querySelectorAll('[data-expense]').forEach(b=>b.addEventListener('click',()=>{
+            writeExpenses(readExpenses().filter(e=>String(e.id)!==String(b.dataset.expense)));
+            renderFinance();
+          }));
+        }
+      }
+    }
+
+    $('saveOrder')?.addEventListener('click',()=>{
+      saveOrder(
+        $('orderName')?.value.trim() || 'Auftrag '+new Date().toLocaleDateString('de-DE'),
+        $('orderCustomer')?.value.trim() || 'Kein Kunde angegeben',
+        $('orderStatus')?.value || 'open',
+        $('orderNote')?.value.trim() || ''
+      );
+    });
+
     $('saveOrderMain')?.addEventListener('click',()=>{
       const name=$('orderName')?.value.trim();
-      saveOrder(name || 'Auftrag '+new Date().toLocaleDateString('de-DE'));
+      const customer=$('orderCustomer')?.value.trim();
+      saveOrder(
+        name || 'Auftrag '+new Date().toLocaleDateString('de-DE'),
+        customer || 'Kein Kunde angegeben',
+        $('orderStatus')?.value || 'open',
+        $('orderNote')?.value.trim() || ''
+      );
+    });
+
+    $('financePeriods')?.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      $('financePeriods').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      renderFinance();
+    }));
+
+    const expenseDate=$('expenseDate');
+    if(expenseDate && !expenseDate.value) expenseDate.value=new Date().toISOString().slice(0,10);
+
+    $('addExpense')?.addEventListener('click',()=>{
+      const name=$('expenseName')?.value.trim();
+      const amount=parseFloat(String($('expenseAmount')?.value||'').replace(',','.'));
+      const date=$('expenseDate')?.value || new Date().toISOString().slice(0,10);
+      const category=$('expenseCategory')?.value || 'Sonstiges';
+      if(!name){alert('Bitte eine Bezeichnung für die Ausgabe eingeben.'); return;}
+      if(!Number.isFinite(amount) || amount<=0){alert('Bitte einen gültigen Betrag eingeben.'); return;}
+      const items=readExpenses();
+      items.unshift({id:Date.now()+Math.random(),name,amount:Number(amount.toFixed(2)),date,category});
+      writeExpenses(items.slice(0,500));
+      if($('expenseName')) $('expenseName').value='';
+      if($('expenseAmount')) $('expenseAmount').value='';
+      renderFinance();
     });
 
     // Initial calculation after the DOM and all inputs exist.
