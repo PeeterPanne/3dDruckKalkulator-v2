@@ -498,6 +498,126 @@ input:focus,select:focus{border-color:#19a8ff!important;box-shadow:0 0 0 3px rgb
 }
 </style>
 
+
+<style id="theme-fix">
+/* Final theme fix: dark is the default, light mode overrides all v21 dark surfaces. */
+body:not(.dark){
+  --bg:#f3f5f8;
+  --card:#ffffff;
+  --card2:#ffffff;
+  --text:#111827;
+  --muted:#667085;
+  --line:#d9e0e8;
+  --soft:#eef2f6;
+  --input:#ffffff;
+  background:linear-gradient(180deg,#f7f9fb,#eef2f6)!important;
+  color:#111827!important;
+}
+body:not(.dark) .app{
+  background:transparent!important;
+}
+body:not(.dark) .card,
+body:not(.dark) .result{
+  background:linear-gradient(145deg,#ffffff,#f8fafc)!important;
+  border-color:#d8e0e8!important;
+  box-shadow:0 8px 24px rgba(16,24,40,.08)!important;
+  color:#111827!important;
+}
+body:not(.dark) .page-title,
+body:not(.dark) .sectiontitle,
+body:not(.dark) h1,
+body:not(.dark) strong{
+  color:#111827!important;
+}
+body:not(.dark) .brand-copy .sub,
+body:not(.dark) .page-subtitle,
+body:not(.dark) .muted,
+body:not(.dark) label,
+body:not(.dark) .filament-field .field-help,
+body:not(.dark) .order-info span,
+body:not(.dark) .empty-orders{
+  color:#667085!important;
+}
+body:not(.dark) input,
+body:not(.dark) select{
+  background:#fff!important;
+  color:#111827!important;
+  border-color:#d5dde7!important;
+}
+body:not(.dark) input:focus,
+body:not(.dark) select:focus{
+  border-color:#1590ff!important;
+  box-shadow:0 0 0 3px rgba(21,144,255,.12)!important;
+}
+body:not(.dark) .mode,
+body:not(.dark) .multi-head,
+body:not(.dark) .filament-row,
+body:not(.dark) .hint,
+body:not(.dark) .filament-intro{
+  background:#f5f7fa!important;
+  border-color:#d8e0e8!important;
+}
+body:not(.dark) .mode button{
+  color:#667085!important;
+}
+body:not(.dark) .mode button.active{
+  background:#fff!important;
+  border-color:#d8e0e8!important;
+  color:#111827!important;
+  box-shadow:0 3px 12px rgba(16,24,40,.08)!important;
+}
+body:not(.dark) .result{
+  background:linear-gradient(145deg,#eef8ff,#ffffff)!important;
+  border-color:rgba(21,144,255,.28)!important;
+}
+body:not(.dark) .result .label{
+  color:#667085!important;
+}
+body:not(.dark) .bottom-nav{
+  background:rgba(255,255,255,.96)!important;
+  border-top-color:#d8e0e8!important;
+  box-shadow:0 -6px 22px rgba(16,24,40,.08)!important;
+}
+body:not(.dark) .nav-item{
+  color:#667085!important;
+}
+body:not(.dark) .nav-item.active{
+  color:#1590ff!important;
+}
+body:not(.dark) .order-item{
+  background:#f7f9fb!important;
+  border-color:#d8e0e8!important;
+}
+body:not(.dark) .order-actions-small button{
+  background:#fff!important;
+  color:#344054!important;
+  border-color:#d5dde7!important;
+}
+body:not(.dark) .save-order-main,
+body:not(.dark) .order-actions button{
+  background:rgba(21,144,255,.08)!important;
+  color:#0879d1!important;
+  border-color:rgba(21,144,255,.35)!important;
+}
+body:not(.dark) .setting-row .switch{
+  background:#cbd5e1!important;
+}
+body:not(.dark) .setting-row .switch.on{
+  background:#1590ff!important;
+}
+body:not(.dark) details.card{
+  background:linear-gradient(145deg,#ffffff,#f8fafc)!important;
+}
+body:not(.dark) .breakdown>div{
+  border-bottom-color:#dce3ea!important;
+}
+body:not(.dark) .header-reset{
+  background:#eef2f6!important;
+  color:#111827!important;
+  border-color:#d5dde7!important;
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -681,6 +801,7 @@ input:focus,select:focus{border-color:#19a8ff!important;box-shadow:0 0 0 3px rgb
     // Theme
     const savedTheme=localStorage.getItem('3dcalc-theme');
     if(savedTheme==='dark' || savedTheme===null) document.body.classList.add('dark');
+    document.documentElement.style.colorScheme=document.body.classList.contains('dark')?'dark':'light';
     function updateThemeButton(){ setText('theme',document.body.classList.contains('dark')?'☀️':'☾'); }
     updateThemeButton();
     $('theme')?.addEventListener('click',()=>{
@@ -879,10 +1000,18 @@ input:focus,select:focus{border-color:#19a8ff!important;box-shadow:0 0 0 3px rgb
       themeSwitch?.classList.toggle('on',document.body.classList.contains('dark'));
     }
     syncThemeSwitch();
+    function applyTheme(){
+      const dark=document.body.classList.contains('dark');
+      localStorage.setItem('3dcalc-theme',dark?'dark':'light');
+      document.documentElement.style.colorScheme=dark?'dark':'light';
+      const meta=document.querySelector('meta[name="theme-color"]');
+      if(meta) meta.setAttribute('content',dark?'#020914':'#f7f9fb');
+      syncThemeSwitch();
+    }
+    applyTheme();
     themeSwitch?.addEventListener('click',()=>{
       document.body.classList.toggle('dark');
-      localStorage.setItem('3dcalc-theme',document.body.classList.contains('dark')?'dark':'light');
-      syncThemeSwitch();
+      applyTheme();
     });
 
     // Saved orders live locally on the iPhone/browser.
