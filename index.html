@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="3D Kalkulator">
+<link rel="manifest" href="manifest.json">
+<title>3D Druck Kalkulator</title>
+<style>
+:root{
+  --bg:#070b12;--card:#0e1520;--card2:#111a27;--text:#f5f7fb;--muted:#9aa7ba;
+  --line:#253247;--soft:#141d2a;--orange:#ff7a18;--blue:#1590ff;--green:#35d07f;
+  --purple:#a970ff;--input:#0b111b
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#142033 0,#070b12 42%);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--text);transition:.2s}
+body:not(.dark){--bg:#f3f4f6;--card:#fff;--card2:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--soft:#eef0f3;--input:#fafafa}
+.app{max-width:720px;margin:auto;padding:env(safe-area-inset-top) 18px calc(30px + env(safe-area-inset-bottom))}
+header{padding:24px 4px 20px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:34px;margin:0 0 2px;letter-spacing:-1.1px;font-weight:850}.sub{color:var(--muted);font-size:15px}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:24px;padding:20px;margin-bottom:15px;box-shadow:0 8px 28px rgba(0,0,0,.12)}
+.sectiontitle{font-size:23px;font-weight:850;margin-bottom:16px;letter-spacing:-.4px}
+label{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 0 7px}
+input{width:100%;height:52px;border:1px solid var(--line);border-radius:15px;background:var(--input);padding:0 14px;font-size:17px;color:var(--text);outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,144,255,.14)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}
+.mode{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--soft);padding:5px;border-radius:16px}
+.mode button{border:1px solid transparent;background:transparent;border-radius:12px;padding:12px 4px;font-weight:800;color:var(--muted);font-size:13px}
+.mode button.active{background:var(--card);color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.18);border-color:var(--line)}
+.mode button[data-v="friend"].active{color:var(--green)}.mode button[data-v="colleague"].active{color:var(--blue)}
+.mode button[data-v="stranger"].active{color:var(--orange)}.mode button[data-v="business"].active{color:var(--purple)}
+.timebox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.theme,.reset{border:1px solid var(--line);background:var(--soft);border-radius:13px;padding:10px 12px;font-weight:800;color:var(--text)}
+.hint{background:var(--soft);border:1px solid var(--line);border-radius:15px;padding:12px 13px;margin-top:13px;color:var(--muted);font-size:13px;line-height:1.45}
+.muted{color:var(--muted);font-size:12px;line-height:1.45}
+.result{background:linear-gradient(145deg,#0e1520,#0a1019);border:1px solid #24344a;color:#fff;border-radius:24px;padding:22px;margin-bottom:15px}
+.result .label{font-size:14px;color:#9aa7ba}.price{font-size:48px;font-weight:900;letter-spacing:-2px;margin-top:4px}
+.resultrow{display:flex;justify-content:space-between;padding-top:14px;margin-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:15px}
+.breakdown{display:flex;flex-direction:column;gap:0}.breakdown>div{display:flex;justify-content:space-between;gap:20px;padding:10px 0;border-bottom:1px solid var(--line)}
+.breakdown>div span{color:var(--muted)}.breakdown>div strong{font-variant-numeric:tabular-nums;color:var(--text)}
+.breakdown .total{font-weight:850;border-bottom:0;padding-top:13px}.breakdown .total strong{font-size:1.05em}
+.multi-head{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border:1px solid var(--line);background:var(--soft);border-radius:17px;margin:14px 0 14px}
+.multi-title{font-size:17px;font-weight:800}.multi-title span{font-weight:500;color:var(--muted);font-size:14px}
+.switch{position:relative;width:46px;height:27px;border:0;border-radius:18px;background:#344154;padding:0;cursor:pointer}.switch i{position:absolute;top:3px;left:3px;width:21px;height:21px;background:#fff;border-radius:50%;transition:.18s}.switch.on{background:var(--blue)}.switch.on i{left:22px}
+.filaments-head,.filament-row{display:grid;grid-template-columns:1fr 1fr 1.45fr 40px;gap:9px;align-items:center}
+.filaments-head{color:var(--muted);font-size:12px;font-weight:800;padding:0 8px 6px}.filament-row{padding:8px;margin-bottom:8px;background:var(--soft);border:1px solid var(--line);border-radius:16px}
+.filament-row input{height:46px}.unit{color:var(--muted);font-size:12px;text-align:center;margin-left:-38px;pointer-events:none}
+.note-input{min-width:0}.delete{height:40px;width:40px;border:0;background:transparent;color:#8b98aa;font-size:22px}
+.add-filament{width:100%;height:48px;border:1px solid var(--line);border-radius:14px;background:transparent;color:var(--text);font-weight:800;font-size:15px}
+.material-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(21,144,255,.08);border:1px solid rgba(21,144,255,.18)}
+.material-total span{color:var(--muted)}.material-total strong{color:var(--blue);font-size:18px}
+details summary{cursor:pointer;font-weight:850;list-style:none}details summary::-webkit-details-marker{display:none}
+@media(max-width:520px){.mode button{font-size:11px}.filaments-head,.filament-row{grid-template-columns:1fr 1fr 1.25fr 34px}.filament-row input{font-size:15px;padding:0 10px}.sectiontitle{font-size:21px}}
+@media(max-width:390px){.app{padding-left:12px;padding-right:12px}.mode{gap:3px}.mode button{font-size:10px}.filaments-head{font-size:10px}}
+</style>
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+
+<style>
+@media (max-width:430px){
+  .mode button{min-height:44px}
+  .multi-head{min-height:48px}
+  .switch{flex:0 0 auto}
+}
+</style>
+
+<style id="v14-iphone-design">
+/* v14 – iPhone 16 Pro visual refinement */
+:root{
+  --v14-blue:#18a8ff;
+  --v14-orange:#ff9d2e;
+  --v14-green:#32d583;
+  --v14-purple:#a970ff;
+}
+html{background:#070b12}
+body{
+  -webkit-text-size-adjust:100%;
+  text-rendering:optimizeLegibility;
+}
+button,input,select,textarea{font:inherit}
+input,select,textarea{min-height:44px;font-size:16px}
+button{min-height:44px;-webkit-tap-highlight-color:transparent}
+.container,.app,.wrap,main{
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.card,.panel,.section,.box{
+  border-radius:18px !important;
+}
+input[type="number"],input[type="text"],input[type="time"],select{
+  border-radius:13px !important;
+}
+.mode-buttons,.customer-buttons,.tabs{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px !important;
+}
+.mode-buttons button,.customer-buttons button,.tabs button{
+  min-width:0 !important;
+  padding:10px 5px !important;
+  border-radius:13px !important;
+  font-size:13px !important;
+  line-height:1.15 !important;
+  white-space:normal !important;
+}
+@media (max-width:430px){
+  body{font-size:15px}
+  h1{font-size:30px !important;letter-spacing:-.7px}
+  h2{font-size:19px !important}
+  h3{font-size:16px !important}
+  .container,.app,.wrap,main{width:auto;max-width:none;margin:0 12px}
+  .card,.panel,.section,.box{padding:14px !important;margin-bottom:10px !important}
+  .mode-buttons,.customer-buttons,.tabs{gap:6px !important}
+  .mode-buttons button,.customer-buttons button,.tabs button{
+    min-height:48px !important;
+    font-size:12px !important;
+  }
+  /* Keep paired inputs side-by-side on iPhone */
+  .row,.grid-2,.two-col,.form-row,.inputs-row{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:9px !important;
+  }
+  /* Common time pair */
+  input[placeholder*="Stunden"],input[placeholder*="Minuten"]{
+    width:100% !important;
+  }
+  label{line-height:1.2}
+  .result,.price,.sale-price,.recommended-price{
+    font-size:28px !important;
+  }
+}
+@media (max-width:350px){
+  .mode-buttons button,.customer-buttons button,.tabs button{font-size:11px !important;padding:8px 3px !important}
+  .container,.app,.wrap,main{margin:0 9px}
+}
+</style>
+
+<style id="v15-ui">
+/* VERSION 15 – App-like iPhone 16 Pro layout. Calculation/JS untouched. */
+:root{
+  --v15-blue:#19a8ff;
+  --v15-orange:#ff8a25;
+  --v15-green:#32d583;
+  --v15-purple:#a970ff;
+}
+body{
+  background:
+    radial-gradient(700px 300px at 50% -80px,rgba(25,168,255,.13),transparent 65%),
+    var(--bg) !important;
+}
+.app{
+  max-width:560px !important;
+  padding-left:14px !important;
+  padding-right:14px !important;
+}
+header{
+  padding:18px 2px 14px !important;
+  align-items:flex-start !important;
+}
+h1{
+  font-size:32px !important;
+  line-height:1.02 !important;
+  letter-spacing:-1.3px !important;
+}
+.sub{font-size:13px !important;margin-top:5px}
+.theme,.reset{
+  width:44px;height:44px;padding:0 !important;
+  display:grid;place-items:center;
+  border-radius:14px !important;
+}
+.card{
+  border-radius:20px !important;
+  padding:16px !important;
+  margin-bottom:11px !important;
+  box-shadow:0 7px 22px rgba(0,0,0,.10) !important;
+}
+.sectiontitle{
+  font-size:19px !important;
+  margin-bottom:12px !important;
+}
+.muted{font-size:13px !important}
+
+/* Customer selector */
+.mode{
+  padding:4px !important;
+  gap:4px !important;
+  border-radius:15px !important;
+}
+.mode button{
+  min-height:46px !important;
+  padding:7px 3px !important;
+  font-size:12px !important;
+  border-radius:11px !important;
+}
+.mode button.active{
+  transform:none !important;
+}
+
+/* Inputs */
+.grid{gap:10px !important}
+label{
+  font-size:12px !important;
+  margin-bottom:5px !important;
+}
+input{
+  height:48px !important;
+  min-height:48px !important;
+  border-radius:13px !important;
+  font-size:16px !important;
+}
+
+/* Druckzeit */
+.timebox{gap:9px !important}
+
+/* Multi color */
+.multi-head{
+  margin:12px 0 !important;
+  padding:11px 12px !important;
+  min-height:52px !important;
+  border-radius:15px !important;
+}
+.multi-title{font-size:15px !important}
+.multi-title span{font-size:12px !important}
+.switch{width:46px !important;height:27px !important}
+.switch i{width:21px !important;height:21px !important;top:3px !important;left:3px !important}
+.switch.on i{left:22px !important}
+
+.material-total{
+  margin-top:10px !important;
+  padding:11px 13px !important;
+  border-radius:13px !important;
+}
+.material-total strong{font-size:17px !important}
+.hint{margin-top:9px !important;padding:10px 11px !important}
+
+/* Filament rows: readable on a phone */
+.filaments-head{display:none !important}
+.filament-row{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 42px !important;
+  grid-template-areas:
+    "g kg del"
+    "note note del" !important;
+  gap:7px !important;
+  padding:9px !important;
+  border-radius:15px !important;
+}
+.filament-row > div:nth-child(1){grid-area:g}
+.filament-row > div:nth-child(2){grid-area:kg}
+.filament-row > .fn{grid-area:note}
+.filament-row > .delete{grid-area:del;align-self:center}
+.filament-row input{height:44px !important;min-height:44px !important;font-size:15px !important}
+.add-filament{
+  height:46px !important;
+  border-radius:13px !important;
+}
+
+/* Handarbeit */
+.result{
+  border-radius:20px !important;
+  padding:18px !important;
+  margin-bottom:11px !important;
+  background:
+    linear-gradient(145deg,rgba(25,168,255,.13),rgba(14,21,32,.98) 55%) !important;
+  border-color:rgba(25,168,255,.28) !important;
+}
+.result .label{
+  font-size:12px !important;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+.price{
+  font-size:43px !important;
+  line-height:1 !important;
+  margin-top:7px !important;
+  letter-spacing:-1.8px !important;
+}
+.resultrow{
+  padding-top:11px !important;
+  margin-top:11px !important;
+  font-size:14px !important;
+}
+
+/* Cost breakdown */
+.breakdown>div{
+  padding:8px 0 !important;
+  font-size:13px !important;
+}
+.breakdown .total{padding-top:10px !important}
+.breakdown .total strong{font-size:14px !important}
+
+/* Keep the settings area compact */
+details.card{padding:15px !important}
+details summary{font-size:16px !important}
+
+/* iPhone 16 Pro / narrow phones */
+@media (max-width:430px){
+  .app{width:auto !important;margin:0 auto !important}
+  .full{grid-column:1/-1 !important}
+}
+@media (max-width:360px){
+  .app{padding-left:10px !important;padding-right:10px !important}
+  .card{padding:13px !important}
+  .mode button{font-size:10.5px !important}
+  .price{font-size:39px !important}
+}
+</style>
+<style id="v16-finish">
+:root{--v16-blue:#19a8ff;--v16-blue-soft:rgba(25,168,255,.14)}
+body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),transparent 68%),var(--bg)!important}
+.card{border-color:rgba(54,76,105,.72)!important}
+.multi-head{min-height:48px!important;padding:9px 12px!important;margin:11px 0!important}
+.multi-head .switch{width:50px!important;height:29px!important}
+.multi-head .switch i{width:21px!important;height:21px!important;top:4px!important;left:4px!important}
+.multi-head .switch.on i{left:25px!important}
+.material-total{background:linear-gradient(100deg,rgba(25,168,255,.08),rgba(25,168,255,.15))!important;border-color:rgba(25,168,255,.42)!important}
+.material-total strong,.result strong{font-variant-numeric:tabular-nums}
+.filament-row .delete{opacity:.72!important;font-size:18px!important}.filament-row .delete:active{opacity:1!important}
+.result{padding:17px!important}.result .label{letter-spacing:1px!important}.price{font-size:39px!important;letter-spacing:-1.5px!important;font-variant-numeric:tabular-nums}
+.resultrow{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:14px!important}
+.breakdown .total{margin-top:5px!important;padding-top:13px!important;border-top:1px solid rgba(100,120,145,.38)!important}
+.breakdown .total strong{font-size:15px!important}
+.breakdown .sale,.breakdown .selling,.breakdown .verkaufspreis{margin-top:4px!important;padding-top:11px!important}
+.breakdown .sale strong,.breakdown .selling strong,.breakdown .verkaufspreis strong{font-size:16px!important}
+.hint{border-radius:15px!important;font-size:13px!important;line-height:1.45!important}
+@media(max-width:430px){.price{font-size:38px!important}.result .label{font-size:11px!important}}
+</style>
+<style id="v17-price-controls">
+.price-control{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  font-weight:700;
+  color:var(--text,#f3f6fb);
+}
+.price-control input{
+  width:76px !important;
+  height:40px !important;
+  min-height:40px !important;
+  text-align:right;
+  padding:7px 9px !important;
+  font-weight:700;
+  border-radius:11px !important;
+}
+.resultrow select{
+  max-width:175px;
+  height:40px;
+  min-height:40px;
+  border-radius:11px;
+  padding:0 9px;
+  font-size:13px;
+}
+.standard-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+.standard-actions button{
+  min-height:44px;
+  border:1px solid rgba(54,76,105,.85);
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  color:inherit;
+  padding:8px 10px;
+  font-size:13px;
+}
+.standard-actions button:active{transform:scale(.98)}
+@media(max-width:430px){
+  .price-control input{width:72px !important}
+  .resultrow select{max-width:155px;font-size:12px}
+  .standard-actions{grid-template-columns:1fr}
+}
+</style>
+
+<style id="v19-filament-fix">
+.filament-field{min-width:0}
+.filament-field label{display:block;color:var(--muted);font-size:11px!important;font-weight:800;margin:0 0 4px!important;line-height:1.1}
+.filament-field input{width:100%}
+@media(max-width:430px){
+  .multi-head{padding:9px 11px!important;min-height:46px!important}
+  .multi-title{font-size:14px!important}
+  .multi-title span{font-size:11px!important}
+  .filament-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px!important;grid-template-areas:"g kg del" "note note del"!important;gap:7px!important;padding:9px!important}
+  .filament-field label{font-size:10px!important}
+  .filament-row input{height:42px!important;min-height:42px!important;font-size:15px!important}
+  .filament-field.note-field{grid-area:note}
+}
+</style>
+
+<style id="v20-polish">
+/* v20 – compact Multi-Color switch + clearer filament inputs + robust calculation */
+.multi-head{
+  min-height:44px !important;
+  padding:8px 11px !important;
+  margin:10px 0 !important;
+  border-radius:14px !important;
+}
+.multi-title{font-size:14px !important;line-height:1.2 !important}
+.multi-title span{font-size:11px !important}
+.multi-head .switch{
+  width:40px !important;
+  height:24px !important;
+  min-height:24px !important;
+  flex:0 0 40px !important;
+  border-radius:20px !important;
+}
+.multi-head .switch i{
+  width:18px !important;
+  height:18px !important;
+  top:3px !important;
+  left:3px !important;
+}
+.multi-head .switch.on i{left:19px !important}
+.filament-row{
+  padding:10px !important;
+  gap:8px !important;
+}
+.filament-field label{
+  color:var(--text) !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  margin-bottom:4px !important;
+}
+.filament-field .field-help{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.2;
+  margin:3px 1px 0;
+}
+.filament-row input{
+  height:43px !important;
+  min-height:43px !important;
+  font-size:15px !important;
+}
+.filament-row .delete{
+  width:34px !important;
+  height:40px !important;
+  padding:0 !important;
+}
+.filament-intro{
+  margin:-3px 0 9px;
+  padding:9px 10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.35;
+}
+.calc-live{font-size:11px;color:var(--muted);margin-top:4px}
+@media(max-width:430px){
+  .multi-head{min-height:42px !important;padding:7px 10px !important}
+  .multi-head .switch{width:38px !important;height:23px !important;flex-basis:38px !important}
+  .multi-head .switch i{width:17px !important;height:17px !important;top:3px !important;left:3px !important}
+  .multi-head .switch.on i{left:18px !important}
+  .filament-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 34px !important}
+  .filament-field label{font-size:10px !important}
+  .filament-field .field-help{font-size:9px !important}
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+<header><div><h1>3D Kalkulator</h1><div class="sub">Dein Bambu Lab Druckkostenrechner</div></div><div style="display:flex;gap:7px"><button class="theme" id="theme" aria-label="Darkmodus">☾</button><button class="reset" id="reset" aria-label="Zurücksetzen">↺</button></div></header>
+
+<div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
+<button data-v="friend">Freund</button><button data-v="colleague">Kollege</button><button data-v="stranger" class="active">Fremder</button><button data-v="business">Gewerblich</button>
+</div></div>
+
+<div class="card">
+  <div class="sectiontitle">🖨️ Druckdetails</div>
+  <div class="muted" style="font-size:15px;margin-top:-8px">Gib die Werte für deinen geplanten Druck ein.</div>
+
+  <div class="grid" style="margin-top:17px">
+    <div class="full"><label>🕒 Druckzeit</label><div class="timebox">
+      <div><label style="font-size:11px">Stunden</label><input id="hours" type="number" value="13" min="0" step="1" inputmode="numeric"></div>
+      <div><label style="font-size:11px">Minuten</label><input id="minutes" type="number" value="37" min="0" max="59" step="1" inputmode="numeric"></div>
+    </div></div>
+    <div><label>Druckplatten / Starts</label><input id="plates" type="number" value="1" min="0" step="1" inputmode="numeric"></div>
+    <div><label>Modelldatei / Lizenz (€)</label><input id="file" type="number" value="0" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="full"><label>Sonstige Kosten (€)</label><input id="extra" type="number" value="0" min="0" step="0.01" inputmode="decimal"></div>
+  </div>
+
+  <div class="multi-head">
+    <div class="multi-title">🎨 Multi-Color Druck <span>(mehrere Filamente)</span></div>
+    <button class="switch" id="multiToggle" type="button" aria-label="Multi-Color ein/aus"><i></i></button>
+  </div>
+
+  <div id="filamentArea"></div>
+  <div class="material-total"><span>Materialkosten</span><strong id="materialCalc">2,82 €</strong></div>
+  <div class="hint">💡 Trage je Filament die Menge in Gramm und den Rollenpreis in €/kg ein. Bei Multi-Color kannst du für jede Farbe/Filamentart eine eigene Zeile anlegen.</div>
+</div>
+<div class="card"><div class="sectiontitle">Handarbeit</div><div class="grid">
+<div><label>Konstruktion (Std.)</label><input id="design" type="number" value="0" min="0" step="0.1" inputmode="decimal"></div>
+<div><label>Nachbearbeitung (Std.)</label><input id="finish" type="number" value="0" min="0" step="0.1" inputmode="decimal"></div>
+</div></div>
+
+<div class="result">
+  <div class="label">Empfohlener Verkaufspreis</div>
+  <div class="price" id="price">0,00 €</div>
+  <div class="resultrow"><span>Selbstkosten</span><strong id="self">0,00 €</strong></div>
+  <div class="resultrow">
+    <span>Aufschlag / Rabatt</span>
+    <div class="price-control"><input id="markupInput" type="number" value="35" step="1" inputmode="decimal" aria-label="Aufschlag oder Rabatt in Prozent"> <span>%</span></div>
+  </div>
+  <div class="resultrow">
+    <span>Verkaufspreis runden</span>
+    <select id="rounding" aria-label="Verkaufspreis runden">
+      <option value="0">Keine Rundung</option>
+      <option value="0.1">auf 0,10 €</option>
+      <option value="0.5">auf 0,50 €</option>
+      <option value="1">auf 1,00 €</option>
+      <option value="5">auf 5,00 €</option>
+    </select>
+  </div>
+</div>
+
+
+<div class="card" id="breakdownCard">
+  <div class="sectiontitle">⚙️ Kostenaufstellung</div>
+  <div class="breakdown">
+    <div><span>Material</span><strong id="bMaterial">0,00 €</strong></div>
+    <div><span>Strom</span><strong id="bPower">0,00 €</strong></div>
+    <div><span>Drucker-Abschreibung</span><strong id="bDep">0,00 €</strong></div>
+    <div><span>Verschleiß</span><strong id="bWear">0,00 €</strong></div>
+    <div><span>Druckerarbeit / Setup</span><strong id="bPrinter">0,00 €</strong></div>
+    <div><span>Konstruktion</span><strong id="bBuild">0,00 €</strong></div>
+    <div><span>Nachbearbeitung</span><strong id="bPost">0,00 €</strong></div>
+    <div><span>Modelldatei / Lizenz</span><strong id="bLicense">0,00 €</strong></div>
+    <div><span>Sonstige Kosten</span><strong id="bOther">0,00 €</strong></div>
+    <div id="bOverheadRow"><span>Betriebskosten</span><strong id="bOverhead">0,00 €</strong></div>
+    <div class="total"><span>Selbstkosten</span><strong id="bSelf">0,00 €</strong></div>
+    <div class="total"><span>Aufschlag / Rabatt</span><strong id="bMarkup">0,00 €</strong></div>
+    <div class="total"><span>Verkaufspreis</span><strong id="bSale">0,00 €</strong></div>
+  </div>
+</div>
+
+<details class="card"><summary>⚙️ Kalkulationswerte</summary><div class="grid" style="margin-top:16px">
+<div><label>Strom €/kWh</label><input id="powerprice" value="0.35" type="number" step=".01"></div>
+<div><label>Druckerleistung W</label><input id="watts" value="180" type="number"></div>
+<div><label>Abschreibung privat €/h</label><input id="depP" value="0.20" type="number" step=".01"></div>
+<div><label>Verschleiß privat €/h</label><input id="wearP" value="0.05" type="number" step=".01"></div>
+<div><label>Druckarbeit privat €/h</label><input id="laborP" value="3.50" type="number" step=".1"></div>
+<div><label>Handarbeit privat €/h</label><input id="handP" value="25" type="number" step=".5"></div>
+<div><label>Abschreibung gew. €/h</label><input id="depB" value="0.30" type="number" step=".01"></div>
+<div><label>Verschleiß gew. €/h</label><input id="wearB" value="0.12" type="number" step=".01"></div>
+<div><label>Druckarbeit gew. €/h</label><input id="laborB" value="15" type="number" step=".1"></div>
+<div><label>Handarbeit gew. €/h</label><input id="handB" value="30" type="number" step=".5"></div>
+<div><label>Setup je Platte (min.)</label><input id="setup" value="15" type="number"></div>
+<div><label>Betriebskosten gew. (%)</label><input id="overhead" value="8" type="number"></div>
+</div>
+<div class="standard-actions">
+  <button type="button" id="saveDefaults">💾 Standardwerte speichern</button>
+  <button type="button" id="loadDefaults">↥ Gespeicherte Standards laden</button>
+</div>
+<p class="muted">Privat: 10 % der Druckzeit + Setup je Druckplatte. Gewerblich: 15 min Grundsetup + 10 min je Druckplatte.</p></details>
+<div class="card muted">💡 <strong>Darkmodus:</strong> Mit ☾/☀️ oben kannst du zwischen Hell und Dunkel wechseln. Die Einstellung wird auf deinem iPhone gespeichert.</div><div class="card muted">Hinweis: Die Werte sind kalkulatorische Startwerte. Bei gekauften STL-Dateien immer die Lizenz für Verkäufe prüfen.</div>
+</div>
+<script>
+(function(){
+  'use strict';
+
+  function init(){
+    const $ = id => document.getElementById(id);
+    const modeMarkup = {friend:-20, colleague:10, stranger:35, business:35};
+    const defaultRows = [{g:163, kg:17.30, note:'PLA'}];
+    let mode = 'stranger';
+    let multi = false;
+
+    function parseNum(value, fallback=0){
+      if(value === null || value === undefined || value === '') return fallback;
+      const n = parseFloat(String(value).trim().replace(',', '.'));
+      return Number.isFinite(n) ? n : fallback;
+    }
+    function num(id){
+      const el=$(id); return el ? Math.max(0, parseNum(el.value,0)) : 0;
+    }
+    function euro(x){
+      return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number.isFinite(x)?x:0);
+    }
+    function setText(id,value){ const el=$(id); if(el) el.textContent=value; }
+
+    // Theme
+    const savedTheme=localStorage.getItem('3dcalc-theme');
+    if(savedTheme==='dark' || savedTheme===null) document.body.classList.add('dark');
+    function updateThemeButton(){ setText('theme',document.body.classList.contains('dark')?'☀️':'☾'); }
+    updateThemeButton();
+    $('theme')?.addEventListener('click',()=>{
+      document.body.classList.toggle('dark');
+      localStorage.setItem('3dcalc-theme',document.body.classList.contains('dark')?'dark':'light');
+      updateThemeButton();
+    });
+
+    function escapeAttr(v){
+      return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function currentRows(){
+      return Array.from(document.querySelectorAll('.filament-row')).map(r=>({
+        g:r.querySelector('.fg')?.value ?? '',
+        kg:r.querySelector('.fkg')?.value ?? '',
+        note:r.querySelector('.fn')?.value ?? ''
+      }));
+    }
+
+    function makeRow(r){
+      const row=document.createElement('div');
+      row.className='filament-row';
+      const g=r?.g ?? '', kg=r?.kg ?? '', note=r?.note ?? '';
+      row.innerHTML=`
+        <div class="filament-field" style="grid-area:g">
+          <label>Menge (g)</label>
+          <input class="fg" type="number" min="0" step="1" inputmode="decimal" value="${escapeAttr(g)}" placeholder="z. B. 163">
+          <div class="field-help">Verbrauchte Gramm</div>
+        </div>
+        <div class="filament-field" style="grid-area:kg">
+          <label>Preis €/kg</label>
+          <input class="fkg" type="number" min="0" step="0.01" inputmode="decimal" value="${escapeAttr(kg)}" placeholder="z. B. 17,30">
+          <div class="field-help">Preis der 1-kg-Rolle</div>
+        </div>
+        <div class="filament-field note-field">
+          <label>Farbe / Art</label>
+          <input class="fn note-input" type="text" value="${escapeAttr(note)}" placeholder="z. B. Schwarz PLA">
+          <div class="field-help">z. B. Schwarz PLA</div>
+        </div>
+        <button class="delete" type="button" aria-label="Filament löschen">🗑️</button>`;
+      row.querySelector('.delete').addEventListener('click',()=>{
+        row.remove();
+        if(!document.querySelector('.filament-row')){
+          const area=$('filamentArea'); area?.prepend(makeRow({g:'',kg:'',note:''}));
+        }
+        calc();
+      });
+      row.querySelectorAll('input').forEach(input=>{
+        input.addEventListener('input',calc);
+        input.addEventListener('change',calc);
+      });
+      return row;
+    }
+
+    function renderFilaments(){
+      const area=$('filamentArea'); if(!area) return;
+      let rows=currentRows();
+      if(!rows.length) rows=defaultRows.map(x=>({...x}));
+      if(!multi) rows=rows.slice(0,1);
+      area.innerHTML='';
+      const intro=document.createElement('div');
+      intro.className='filament-intro';
+      intro.innerHTML='🧵 <strong>So trägst du es ein:</strong> Gramm = tatsächlicher Verbrauch · €/kg = Preis deiner Filamentrolle · Farbe/Art = z. B. Schwarz PLA';
+      area.appendChild(intro);
+      rows.forEach(r=>area.appendChild(makeRow(r)));
+      if(multi){
+        const add=document.createElement('button');
+        add.className='add-filament'; add.type='button'; add.textContent='＋ Weiteres Filament hinzufügen';
+        add.addEventListener('click',()=>{
+          area.insertBefore(makeRow({g:'',kg:'',note:''}),add);
+          calc();
+          area.lastElementChild?.scrollIntoView({behavior:'smooth',block:'nearest'});
+        });
+        area.appendChild(add);
+      }
+    }
+
+    function materialCost(){
+      let total=0;
+      document.querySelectorAll('.filament-row').forEach(r=>{
+        const g=Math.max(0,parseNum(r.querySelector('.fg')?.value,0));
+        const kg=Math.max(0,parseNum(r.querySelector('.fkg')?.value,0));
+        total += g*kg/1000;
+      });
+      return total;
+    }
+
+    function updateBreakdown(self,price,material,power,dep,wear,labor,design,finish,file,extra,overhead,markupEuro){
+      const vals={
+        bMaterial:material,bPower:power,bDep:dep,bWear:wear,bPrinter:labor,
+        bBuild:design,bPost:finish,bLicense:file,bOther:extra,bOverhead:overhead,
+        bSelf:self,bMarkup:markupEuro,bSale:price
+      };
+      Object.entries(vals).forEach(([id,val])=>setText(id,euro(val)));
+      const overheadRow=$('bOverheadRow');
+      if(overheadRow) overheadRow.style.display=mode==='business'?'flex':'none';
+    }
+
+    function calc(){
+      try{
+        const business=mode==='business';
+        const hours=num('hours');
+        const minutes=Math.min(59,num('minutes'));
+        const h=hours+minutes/60;
+        const plates=Math.floor(num('plates'));
+        const material=materialCost();
+        const power=h*num('watts')/1000*num('powerprice');
+        const dep=h*(business?num('depB'):num('depP'));
+        const wear=h*(business?num('wearB'):num('wearP'));
+        const work=business ? (plates>0?0.25:0)+plates*10/60 : h*0.10+plates*num('setup')/60;
+        const printerLabor=work*(business?num('laborB'):num('laborP'));
+        const handRate=business?num('handB'):num('handP');
+        const design=num('design')*handRate;
+        const finish=num('finish')*handRate;
+        const file=num('file');
+        const extra=num('extra');
+        const direct=material+power+dep+wear+printerLabor+design+finish+file+extra;
+        const overhead=business?direct*num('overhead')/100:0;
+        const self=direct+overhead;
+        let m=parseNum($('markupInput')?.value,modeMarkup[mode]);
+        m=Math.max(-100,m);
+        const rawPrice=self*(1+m/100);
+        const step=Math.max(0,parseNum($('rounding')?.value,0));
+        const price=step>0 ? Math.round(rawPrice/step)*step : rawPrice;
+        const markupEuro=price-self;
+
+        setText('price',euro(price));
+        setText('self',euro(self));
+        setText('markup',(m>=0?'+':'')+m+' %');
+        setText('materialCalc',euro(material));
+        updateBreakdown(self,price,material,power,dep,wear,printerLabor,design,finish,file,extra,overhead,markupEuro);
+      }catch(err){
+        console.error('3D Kalkulator Berechnungsfehler:',err);
+      }
+    }
+
+    renderFilaments();
+    $('multiToggle')?.addEventListener('click',()=>{
+      multi=!multi;
+      $('multiToggle').classList.toggle('on',multi);
+      renderFilaments();
+      calc();
+    });
+
+    document.querySelectorAll('#modes button').forEach(button=>button.addEventListener('click',()=>{
+      mode=button.dataset.v || 'stranger';
+      document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('active'));
+      button.classList.add('active');
+      if($('markupInput')) $('markupInput').value=modeMarkup[mode];
+      calc();
+    }));
+
+    document.querySelectorAll('input,select').forEach(el=>{
+      el.addEventListener('input',calc);
+      el.addEventListener('change',calc);
+    });
+
+    const defaultIds=['powerprice','watts','depP','wearP','laborP','handP','depB','wearB','laborB','handB','setup','overhead'];
+    $('saveDefaults')?.addEventListener('click',()=>{
+      const data={};
+      defaultIds.forEach(id=>{if($(id)) data[id]=$(id).value;});
+      if($('rounding')) data.rounding=$('rounding').value;
+      localStorage.setItem('3dcalc-defaults',JSON.stringify(data));
+      const btn=$('saveDefaults'); btn.textContent='✓ Standards gespeichert';
+      setTimeout(()=>btn.textContent='💾 Standardwerte speichern',1400);
+    });
+    $('loadDefaults')?.addEventListener('click',()=>{
+      try{
+        const data=JSON.parse(localStorage.getItem('3dcalc-defaults')||'null');
+        if(!data) return;
+        defaultIds.forEach(id=>{if($(id)&&data[id]!==undefined) $(id).value=data[id];});
+        if($('rounding')&&data.rounding!==undefined) $('rounding').value=data.rounding;
+        calc();
+      }catch(err){console.warn(err);}
+    });
+    $('reset')?.addEventListener('click',()=>location.reload());
+
+    // Initial calculation after the DOM and all inputs exist.
+    requestAnimationFrame(calc);
+    setTimeout(calc,50);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
+</script></body></html>
