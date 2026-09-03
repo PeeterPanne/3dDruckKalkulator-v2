@@ -763,8 +763,6 @@ body:not(.dark) .header-reset{
 </div>
 <p class="muted">Privat: 10 % der Druckzeit + Setup je Druckplatte. Gewerblich: 15 min Grundsetup + 10 min je Druckplatte.</p></details>
 <div class="card muted">💡 <strong>Darkmodus:</strong> Mit ☾/☀️ oben kannst du zwischen Hell und Dunkel wechseln. Die Einstellung wird auf deinem iPhone gespeichert.</div><div class="card muted">Hinweis: Die Werte sind kalkulatorische Startwerte. Bei gekauften STL-Dateien immer die Lizenz für Verkäufe prüfen.</div>
-<div class="card muted">💡 <strong>Darkmodus:</strong> Mit dem Schalter oben kannst du zwischen Hell und Dunkel wechseln. Die Einstellung wird auf deinem iPhone gespeichert.</div>
-<div class="card muted">Hinweis: Die Werte sind kalkulatorische Startwerte. Bei gekauften STL-Dateien immer die Lizenz für Verkäufe prüfen.</div>
 </div>
 
 <nav class="bottom-nav" aria-label="App-Navigation">
@@ -774,6 +772,29 @@ body:not(.dark) .header-reset{
   <button type="button" class="nav-item" data-page="settings"><span>⚙️</span><small>Einstellungen</small></button>
 </nav>
 </div>
+<style id="final-theme-fix">
+/* Final fix: v21 contains hard-coded dark backgrounds with !important. */
+html:has(body:not(.dark)){background:#f3f5f8 !important;color-scheme:light !important}
+body:not(.dark){background:linear-gradient(180deg,#f7f9fb 0%,#eef2f6 100%) !important;color:#111827 !important}
+body:not(.dark) .page-title,body:not(.dark) .sectiontitle,body:not(.dark) h1,body:not(.dark) h2,body:not(.dark) h3,body:not(.dark) strong,body:not(.dark) .setting-row strong,body:not(.dark) .brand-copy h1{color:#111827 !important}
+body:not(.dark) .page-subtitle,body:not(.dark) .sub,body:not(.dark) .brand-copy .sub,body:not(.dark) .muted,body:not(.dark) label,body:not(.dark) .filament-field .field-help,body:not(.dark) .order-info span,body:not(.dark) .empty-orders,body:not(.dark) .breakdown>div span,body:not(.dark) .result .label{color:#64748b !important}
+body:not(.dark) .card,body:not(.dark) .result,body:not(.dark) details.card{background:linear-gradient(145deg,#fff,#f8fafc) !important;border-color:#cbd5e1 !important;box-shadow:0 8px 24px rgba(15,23,42,.08) !important;color:#111827 !important}
+body:not(.dark) input,body:not(.dark) select{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important}
+body:not(.dark) input::placeholder{color:#94a3b8 !important}
+body:not(.dark) .mode,body:not(.dark) .multi-head,body:not(.dark) .filament-row,body:not(.dark) .hint,body:not(.dark) .filament-intro{background:#f1f5f9 !important;border-color:#cbd5e1 !important;color:#475569 !important}
+body:not(.dark) .mode button{color:#64748b !important}
+body:not(.dark) .mode button.active{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important;box-shadow:0 3px 12px rgba(15,23,42,.10) !important}
+body:not(.dark) .add-filament,body:not(.dark) .theme,body:not(.dark) .reset,body:not(.dark) .order-actions-small button{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important}
+body:not(.dark) .order-item{background:#f8fafc !important;border-color:#cbd5e1 !important}
+body:not(.dark) .order-actions button,body:not(.dark) .save-order-main{background:rgba(25,168,255,.08) !important;color:#0879c9 !important;border-color:rgba(25,168,255,.35) !important}
+body:not(.dark) .bottom-nav{background:rgba(255,255,255,.97) !important;border-top-color:#cbd5e1 !important}
+body:not(.dark) .nav-item{color:#64748b !important}body:not(.dark) .nav-item.active{color:#0b91e6 !important}
+body:not(.dark) .switch{background:#cbd5e1 !important}body:not(.dark) .switch.on{background:#19a8ff !important}
+body:not(.dark) .breakdown>div{border-bottom-color:#e2e8f0 !important}
+body:not(.dark) .header-reset{background:#f1f5f9 !important;color:#111827 !important;border-color:#cbd5e1 !important}
+body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;border-color:rgba(25,168,255,.18) !important}
+</style>
+
 <script>
 (function(){
   'use strict';
