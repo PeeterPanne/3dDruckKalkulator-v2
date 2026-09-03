@@ -1613,6 +1613,41 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
     let mode = 'stranger';
     let multi = false;
 
+    // Navigation and pricing-mode buttons are initialized FIRST.
+    // This keeps them functional even if another optional section later fails.
+    function showPage(name){
+      document.querySelectorAll('.page').forEach(p=>p.hidden=true);
+      const page=$('page-'+name);
+      if(page) page.hidden=false;
+      document.querySelectorAll('.nav-item').forEach(b=>{
+        b.classList.toggle('active',b.dataset.page===name);
+      });
+      window.scrollTo(0,0);
+      if(name==='spools' && typeof renderSpools==='function') renderSpools();
+      if(name==='orders' && typeof renderOrders==='function') renderOrders();
+      if(name==='finance' && typeof renderFinance==='function') renderFinance();
+    }
+
+    document.querySelectorAll('.nav-item').forEach(button=>{
+      button.addEventListener('click',ev=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        showPage(button.dataset.page);
+      });
+    });
+
+    document.querySelectorAll('#modes button').forEach(button=>{
+      button.addEventListener('click',ev=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        mode=button.dataset.v || 'stranger';
+        document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('active'));
+        button.classList.add('active');
+        if($('markupInput')) $('markupInput').value=modeMarkup[mode];
+        calc();
+      });
+    });
+
     function parseNum(value, fallback=0){
       if(value === null || value === undefined || value === '') return fallback;
       const n = parseFloat(String(value).trim().replace(',', '.'));
@@ -1809,18 +1844,7 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       calc();
     });
 
-    document.querySelectorAll('#modes button').forEach(button=>{
-      button.addEventListener('click',ev=>{
-        ev.preventDefault();
-        mode=button.dataset.v || 'stranger';
-        document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('active'));
-        button.classList.add('active');
-        if($('markupInput')) $('markupInput').value=modeMarkup[mode];
-        calc();
-      });
-    });
-
-    document.querySelectorAll('input,select').forEach(el=>{
+document.querySelectorAll('input,select').forEach(el=>{
       el.addEventListener('input',calc);
       el.addEventListener('change',calc);
     });
@@ -1845,24 +1869,6 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
     });
     $('reset')?.addEventListener('click',()=>location.reload());
 
-
-    // --- App pages / navigation ---
-    function showPage(name){
-      document.querySelectorAll('.page').forEach(p=>p.hidden=true);
-      const page=$('page-'+name);
-      if(page) page.hidden=false;
-      document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
-      window.scrollTo(0,0);
-      if(name==='spools') renderSpools();
-      if(name==='orders') renderOrders();
-      if(name==='finance') renderFinance();
-    }
-    document.querySelectorAll('.nav-item').forEach(b=>{
-  b.addEventListener('click',ev=>{
-    ev.preventDefault();
-    showPage(b.dataset.page);
-  });
-});
 
     // Theme is controlled from Settings.
     const themeSwitch=$('themeSwitch');
