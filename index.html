@@ -1651,7 +1651,7 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       const spoolSelect=row.querySelector('.spool-select');
       if(spoolSelect){
         populateSpoolSelect(spoolSelect);
-        spoolSelect.value=data.spoolId||'';
+        spoolSelect.value=r?.spoolId||'';
         spoolSelect.addEventListener('change',()=>{
           const s=readSpools().find(x=>String(x.id)===String(spoolSelect.value));
           if(!s) return;
@@ -1804,15 +1804,10 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       if(name==='finance') renderFinance();
     }
     document.querySelectorAll('.nav-item').forEach(b=>{
-  const activate=ev=>{
+  b.addEventListener('click',ev=>{
     ev.preventDefault();
-    ev.stopPropagation();
     showPage(b.dataset.page);
-  };
-  b.addEventListener('click',activate,{passive:false});
-  b.addEventListener('pointerup',ev=>{
-    if(ev.pointerType==='touch') activate(ev);
-  },{passive:false});
+  });
 });
 
     // Theme is controlled from Settings.
