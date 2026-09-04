@@ -28,7 +28,7 @@ label{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 0
 input{width:100%;height:52px;border:1px solid var(--line);border-radius:15px;background:var(--input);padding:0 14px;font-size:17px;color:var(--text);outline:none}
 input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,144,255,.14)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}
-.mode{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--soft);padding:5px;border-radius:16px}
+.mode{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;background:var(--soft);padding:5px;border-radius:16px}
 .mode button{border:1px solid transparent;background:transparent;border-radius:12px;padding:12px 4px;font-weight:800;color:var(--muted);font-size:13px}
 .mode button.active{background:var(--card);color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.18);border-color:var(--line)}
 .mode button[data-v="friend"].active{color:var(--green)}.mode button[data-v="colleague"].active{color:var(--blue)}
@@ -772,7 +772,7 @@ body:not(.dark) .order-card-actions .load-order{
 .order-status-select.status-paid{color:#bd8aff;border-color:rgba(166,108,255,.4);background:rgba(166,108,255,.10)}
 
 .finance-filter{padding-bottom:17px}
-.finance-periods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.finance-periods{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .finance-periods button{
   min-height:42px;border:1px solid #24445f;background:rgba(255,255,255,.035);
   color:#9eafc2;border-radius:12px;font-weight:800;font-size:13px;
@@ -1155,6 +1155,29 @@ html{scroll-behavior:auto!important}
 .spool-pick-wrap label{display:block!important;margin:0 0 4px!important;font-size:10px!important;font-weight:800!important}
 .spool-pick-wrap select{min-width:0!important}
 </style>
+
+<script>
+(function(){
+  const allowed = new Set(['calculator','spools','orders','finance','settings']);
+  window.__navigateSafe = function(name){
+    if(!allowed.has(name)) return;
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+    const target = document.getElementById('page-' + name);
+    if(target) target.classList.add('active');
+    document.querySelectorAll('.nav-item[data-page]').forEach(function(n){
+      n.classList.toggle('active', n.dataset.page === name);
+    });
+    window.scrollTo(0,0);
+  };
+  document.addEventListener('click', function(e){
+    const nav = e.target.closest('.nav-item[data-page]');
+    if(!nav) return;
+    e.preventDefault();
+    window.__navigateSafe(nav.dataset.page);
+  }, true);
+})();
+</script>
+
 </head>
 <body>
 <div class="app">
@@ -1656,11 +1679,10 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
     function num(id){
       const el=$(id); return el ? Math.max(0, parseNum(el.value,0)) : 0;
     }
+    const money = (x) => euro(x);
     function euro(x){
       return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number.isFinite(x)?x:0);
     }
-    // Compatibility alias for older order/finance render paths.
-    const money = euro;
     function setText(id,value){ const el=$(id); if(el) el.textContent=value; }
 
     // Theme
