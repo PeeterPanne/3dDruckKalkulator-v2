@@ -1005,156 +1005,6 @@ body:not(.dark) .spool-main strong{color:#111827 !important}
 body:not(.dark) .spool-meta span{color:#475569;border-color:#cbd5e1}
 body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color:#cbd5e1}
 </style>
-
-<style id="nav-icon-polish">
-.bottom-nav .nav-item { gap: 5px; }
-.bottom-nav .nav-icon {
-  width: 40px;
-  height: 40px;
-  padding: 8px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  color: var(--icon-color);
-  background: var(--icon-bg);
-  box-sizing: border-box;
-  transition: transform .18s ease, filter .18s ease, opacity .18s ease;
-}
-.bottom-nav .nav-icon svg { width: 100%; height: 100%; display: block; }
-.bottom-nav .nav-item[data-page="calculator"] .nav-icon { --icon-color:#6eaeff; --icon-bg:rgba(46,113,205,.28); }
-.bottom-nav .nav-item[data-page="spools"] .nav-icon { --icon-color:#c58aff; --icon-bg:rgba(126,65,191,.28); }
-.bottom-nav .nav-item[data-page="orders"] .nav-icon { --icon-color:#4bd9ef; --icon-bg:rgba(18,143,172,.28); }
-.bottom-nav .nav-item[data-page="finance"] .nav-icon { --icon-color:#54e58e; --icon-bg:rgba(25,157,91,.28); }
-.bottom-nav .nav-item[data-page="settings"] .nav-icon { --icon-color:#a8b2c8; --icon-bg:rgba(72,88,118,.25); }
-.bottom-nav .nav-item.active .nav-icon {
-  transform: translateY(-2px) scale(1.05);
-  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--icon-color) 42%, transparent));
-}
-.bottom-nav .nav-item:not(.active) .nav-icon { opacity: .86; }
-.bottom-nav .nav-item:active .nav-icon { transform: scale(.94); }
-.bottom-nav small { font-weight: 600; letter-spacing: .01em; }
-</style>
-
-
-<style id="nav-touch-fix">
-.bottom-nav{
-  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
-  z-index:9999 !important;
-  pointer-events:auto !important;
-  touch-action:manipulation !important;
-  -webkit-tap-highlight-color:transparent;
-}
-.bottom-nav .nav-item{
-  position:relative !important;
-  z-index:10000 !important;
-  min-height:60px !important;
-  height:60px !important;
-  width:100% !important;
-  min-width:0 !important;
-  padding:4px 2px !important;
-  pointer-events:auto !important;
-  touch-action:manipulation !important;
-  cursor:pointer !important;
-  -webkit-user-select:none !important;
-  user-select:none !important;
-}
-.bottom-nav .nav-icon,
-.bottom-nav .nav-icon svg{
-  pointer-events:none !important;
-}
-@media(max-width:520px){
-  .bottom-nav{
-    padding-left:6px !important;
-    padding-right:6px !important;
-  }
-  .bottom-nav .nav-item{
-    min-height:62px !important;
-    height:62px !important;
-  }
-}
-</style>
-
-
-<style id="user-symbol-style">
-.bottom-nav .nav-item{gap:5px!important}
-.bottom-nav .nav-icon{
-  width:40px!important;height:40px!important;padding:8px!important;
-  border-radius:14px!important;display:grid!important;place-items:center!important;
-  box-sizing:border-box!important;color:var(--icon-color)!important;
-  background:var(--icon-bg)!important;
-}
-.bottom-nav .nav-icon svg{width:100%!important;height:100%!important;display:block!important}
-.bottom-nav .nav-item[data-page="calculator"] .nav-icon{--icon-color:#6aaeff;--icon-bg:rgba(43,112,205,.28)}
-.bottom-nav .nav-item[data-page="spools"] .nav-icon{--icon-color:#c184ff;--icon-bg:rgba(126,66,191,.28)}
-.bottom-nav .nav-item[data-page="orders"] .nav-icon{--icon-color:#46d9ef;--icon-bg:rgba(18,143,172,.28)}
-.bottom-nav .nav-item[data-page="finance"] .nav-icon{--icon-color:#51e58b;--icon-bg:rgba(25,157,91,.28)}
-.bottom-nav .nav-item[data-page="settings"] .nav-icon{--icon-color:#aab4ca;--icon-bg:rgba(72,88,118,.25)}
-.bottom-nav .nav-item.active .nav-icon{
-  transform:translateY(-2px) scale(1.04)!important;
-  filter:drop-shadow(0 0 7px color-mix(in srgb,var(--icon-color) 40%,transparent))!important;
-}
-.bottom-nav .nav-item:not(.active) .nav-icon{opacity:.84}
-.bottom-nav .nav-icon,.bottom-nav .nav-icon svg{pointer-events:none!important}
-.bottom-nav .nav-item{position:relative!important;z-index:10000!important;min-height:62px!important;pointer-events:auto!important;touch-action:manipulation!important}
-</style>
-
-
-<style id="reference-symbols-v2">
-.bottom-nav .nav-item{gap:5px!important}
-.bottom-nav .nav-icon{
-  width:42px!important;height:42px!important;padding:8px!important;
-  border-radius:14px!important;box-sizing:border-box!important;
-  display:grid!important;place-items:center!important;
-  color:var(--icon-color)!important;background:var(--icon-bg)!important;
-}
-.bottom-nav .nav-icon svg{width:100%!important;height:100%!important;display:block!important}
-.bottom-nav .nav-item[data-page="calculator"] .nav-icon{--icon-color:#66a9ff;--icon-bg:rgba(44,112,205,.30)}
-.bottom-nav .nav-item[data-page="spools"] .nav-icon{--icon-color:#c084ff;--icon-bg:rgba(126,65,190,.30)}
-.bottom-nav .nav-item[data-page="orders"] .nav-icon{--icon-color:#43d9ef;--icon-bg:rgba(18,143,172,.30)}
-.bottom-nav .nav-item[data-page="finance"] .nav-icon{--icon-color:#51e48b;--icon-bg:rgba(25,157,91,.30)}
-.bottom-nav .nav-item[data-page="settings"] .nav-icon{--icon-color:#aab4c9;--icon-bg:rgba(72,88,118,.26)}
-.bottom-nav .nav-item.active .nav-icon{transform:translateY(-2px) scale(1.04)!important;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--icon-color) 38%,transparent))!important}
-.bottom-nav .nav-item:not(.active) .nav-icon{opacity:.88}
-.bottom-nav .nav-icon,.bottom-nav .nav-icon svg{pointer-events:none!important}
-.bottom-nav .nav-item{position:relative!important;z-index:10000!important;pointer-events:auto!important;touch-action:manipulation!important}
-</style>
-
-
-<style id="layout-time-fix">
-html{scroll-behavior:auto!important}
-.page{width:100%;box-sizing:border-box}
-.app-header{position:relative!important;z-index:2!important}
-.mode{position:relative!important;z-index:5!important;pointer-events:auto!important}
-.mode button{position:relative!important;z-index:6!important;pointer-events:auto!important;touch-action:manipulation!important}
-.time-total{
-  margin-top:7px;
-  padding:7px 10px;
-  border-radius:10px;
-  background:rgba(25,168,255,.07);
-  border:1px solid rgba(25,168,255,.16);
-  color:#aebfd2;
-  font-size:12px;
-  line-height:1.25;
-}
-.time-total strong{color:#19a8ff;font-weight:850}
-@media(max-width:520px){
-  .time-total{font-size:11px;margin-top:6px;padding:6px 9px}
-}
-.filament-row{
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px!important;
-  grid-template-areas:
-    "spool spool spool"
-    "g kg del"
-    "note note del"!important;
-}
-.filament-row > .spool-pick-wrap{grid-area:spool!important;min-width:0!important;margin:0!important}
-.filament-row > .filament-field[style*="grid-area:g"]{grid-area:g!important;min-width:0!important}
-.filament-row > .filament-field[style*="grid-area:kg"]{grid-area:kg!important;min-width:0!important}
-.filament-row > .note-field{grid-area:note!important;min-width:0!important}
-.filament-row > .delete{grid-area:del!important;align-self:center!important}
-.spool-pick-wrap label{display:block!important;margin:0 0 4px!important;font-size:10px!important;font-weight:800!important}
-.spool-pick-wrap select{min-width:0!important}
-</style>
 </head>
 <body>
 <div class="app">
@@ -1169,7 +1019,7 @@ html{scroll-behavior:auto!important}
 
 <div class="page" id="page-calculator">
 <div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
-<button type="button" data-v="friend">Freund</button><button type="button" data-v="colleague">Kollege</button><button type="button" data-v="stranger" class="active">Fremder</button><button type="button" data-v="business">Gewerblich</button>
+<button data-v="friend">Freund</button><button data-v="colleague">Kollege</button><button data-v="stranger" class="active">Fremder</button><button data-v="business">Gewerblich</button>
 </div></div>
 
 <div class="card">
@@ -1181,8 +1031,6 @@ html{scroll-behavior:auto!important}
       <div><label style="font-size:11px">Tage</label><input id="days" type="number" value="0" min="0" step="1" inputmode="numeric"></div>
       <div><label style="font-size:11px">Stunden</label><input id="hours" type="number" value="13" min="0" max="23" step="1" inputmode="numeric"></div>
       <div><label style="font-size:11px">Minuten</label><input id="minutes" type="number" value="37" min="0" max="59" step="1" inputmode="numeric"></div>
-    </div>
-    <div class="time-total" id="timeTotal">Gesamtdauer: <strong>13 Std. 37 Min.</strong></div>
     </div></div>
     <div><label>Druckplatten / Starts</label><input id="plates" type="number" value="1" min="0" step="1" inputmode="numeric"></div>
     <div><label>Modelldatei / Lizenz (€)</label><input id="file" type="number" value="0" min="0" step="0.01" inputmode="decimal"></div>
@@ -1520,63 +1368,11 @@ html{scroll-behavior:auto!important}
 </div>
 
 <nav class="bottom-nav" aria-label="App-Navigation">
-  <button type="button" class="nav-item active" data-page="calculator">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<rect x="9" y="5" width="30" height="38" rx="8" stroke="currentColor" stroke-width="3.8"/>
-<rect x="14" y="10" width="20" height="9" rx="1" fill="currentColor"/>
-<path d="M15 24h5M23 24h5M31 24h2M15 31h5M23 31h5M31 31h2M15 38h5M23 38h5M31 38h2" stroke="currentColor" stroke-width="3.4" stroke-linecap="square"/>
-</svg>
-    </span>
-    <small>Kalkulator</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="spools">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<ellipse cx="14" cy="24" rx="9" ry="16" stroke="currentColor" stroke-width="2.8"/>
-<ellipse cx="34" cy="24" rx="9" ry="16" stroke="currentColor" stroke-width="2.8"/>
-<path d="M14 8c4 4 16 4 20 0M14 40c4-4 16-4 20 0" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
-<path d="M15 12c5 3 13 3 18 0M15 16c5 3 13 3 18 0M15 32c5-3 13-3 18 0M15 36c5-3 13-3 18 0" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
-<circle cx="24" cy="24" r="6.2" stroke="currentColor" stroke-width="2.8"/>
-<path d="M24 18v12M18 24h12" stroke="currentColor" stroke-width="2" opacity=".7"/>
-</svg>
-    </span>
-    <small>Spulen</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="orders">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<path d="M17 8h14v5h3a4 4 0 0 1 4 4v27H10V17a4 4 0 0 1 4-4h3V8Z" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"/>
-<path d="M17 8h14v7H17z" fill="currentColor"/>
-<path d="m15 23 2.5 2.5L21 21M25 24h9M15 30l2.5 2.5L21 28M25 31h9M15 37l2.5 2.5L21 35M25 38h9" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-    </span>
-    <small>Aufträge</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="finance">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<path d="M9 11v20l7-7M9 31l7 7" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M39 37V17l-7 7M39 17l-7-7" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 14v21M27.5 17.5c-1-1-2.4-1.5-4-1.5-2.8 0-4.7 1.4-4.7 3.5 0 5.2 9.4 2.6 9.4 7.3 0 2.2-2.1 3.6-5 3.6-2.1 0-4-.7-5.2-2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-</svg>
-    </span>
-    <small>Finanzen</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="settings">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<path d="M19 7h10l1.4 4.3c1 .3 2 .7 2.9 1.2l3.9-2.2 6.5 6.5-2.2 3.9c.5.9.9 1.9 1.2 2.9L47 25v10l-4.3 1.4c-.3 1-.7 2-1.2 2.9l2.2 3.9-6.5 6.5-3.9-2.2c-.9.5-1.9.9-2.9 1.2L29 53H19l-1.4-4.3c-1-.3-2-.7-2.9-1.2l-3.9 2.2-6.5-6.5 2.2-3.9c-.5-.9-.9-1.9-1.2-2.9L1 35V25l4.3-1.4c.3-1 .7-2 1.2-2.9l-2.2-3.9 6.5-6.5 3.9 2.2c.9-.5 1.9-.9 2.9-1.2L19 7Z" transform="translate(0 -2) scale(.98)" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/>
-<circle cx="24" cy="24" r="7.2" stroke="currentColor" stroke-width="3.2"/>
-<circle cx="24" cy="24" r="2.4" fill="currentColor"/>
-</svg>
-    </span>
-    <small>Einstellungen</small>
-  </button>
+  <button type="button" class="nav-item active" data-page="calculator"><span>▣</span><small>Kalkulator</small></button>
+  <button type="button" class="nav-item" data-page="spools"><span>🧵</span><small>Spulen</small></button>
+  <button type="button" class="nav-item" data-page="orders"><span>📁</span><small>Aufträge</small></button>
+  <button type="button" class="nav-item" data-page="finance"><span>💶</span><small>Finanzen</small></button>
+  <button type="button" class="nav-item" data-page="settings"><span>⚙️</span><small>Einstellungen</small></button>
 </nav>
 </div>
 <style id="final-theme-fix">
@@ -1612,41 +1408,6 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
     const defaultRows = [{g:163, kg:17.30, note:'PLA'}];
     let mode = 'stranger';
     let multi = false;
-
-    // Navigation and pricing-mode buttons are initialized FIRST.
-    // This keeps them functional even if another optional section later fails.
-    function showPage(name){
-      document.querySelectorAll('.page').forEach(p=>p.hidden=true);
-      const page=$('page-'+name);
-      if(page) page.hidden=false;
-      document.querySelectorAll('.nav-item').forEach(b=>{
-        b.classList.toggle('active',b.dataset.page===name);
-      });
-      window.scrollTo(0,0);
-      if(name==='spools' && typeof renderSpools==='function') renderSpools();
-      if(name==='orders' && typeof renderOrders==='function') renderOrders();
-      if(name==='finance' && typeof renderFinance==='function') renderFinance();
-    }
-
-    document.querySelectorAll('.nav-item').forEach(button=>{
-      button.addEventListener('click',ev=>{
-        ev.preventDefault();
-        ev.stopPropagation();
-        showPage(button.dataset.page);
-      });
-    });
-
-    document.querySelectorAll('#modes button').forEach(button=>{
-      button.addEventListener('click',ev=>{
-        ev.preventDefault();
-        ev.stopPropagation();
-        mode=button.dataset.v || 'stranger';
-        document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('active'));
-        button.classList.add('active');
-        if($('markupInput')) $('markupInput').value=modeMarkup[mode];
-        calc();
-      });
-    });
 
     function parseNum(value, fallback=0){
       if(value === null || value === undefined || value === '') return fallback;
@@ -1724,12 +1485,12 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       const spoolSelect=row.querySelector('.spool-select');
       if(spoolSelect){
         populateSpoolSelect(spoolSelect);
-        spoolSelect.value=r?.spoolId||'';
+        spoolSelect.value=data.spoolId||'';
         spoolSelect.addEventListener('change',()=>{
           const s=readSpools().find(x=>String(x.id)===String(spoolSelect.value));
           if(!s) return;
-          const price=row.querySelector('.fkg');
-          const color=row.querySelector('.fn');
+          const price=row.querySelector('input[data-field="p"]');
+          const color=row.querySelector('input[data-field="c"]');
           if(price) price.value=s.price;
           if(color) color.value=(s.color||'') + (s.material ? ' ' + s.material : '');
           row.dataset.spoolId=s.id;
@@ -1791,19 +1552,6 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         const hours=Math.min(23,Math.floor(num('hours')));
         const minutes=Math.min(59,Math.floor(num('minutes')));
         const h=days*24+hours+minutes/60;
-        const totalMinutes=days*24*60+hours*60+minutes;
-        const totalDays=Math.floor(totalMinutes/1440);
-        const remMinutes=totalMinutes%1440;
-        const totalHours=Math.floor(remMinutes/60);
-        const totalMins=remMinutes%60;
-        const timeEl=$('timeTotal');
-        if(timeEl){
-          const parts=[];
-          if(totalDays>0) parts.push(`<strong>${totalDays} ${totalDays===1?'Tag':'Tage'}</strong>`);
-          if(totalHours>0 || totalDays===0) parts.push(`<strong>${totalHours} Std.</strong>`);
-          if(totalMins>0 || totalMinutes===0) parts.push(`<strong>${totalMins} Min.</strong>`);
-          timeEl.innerHTML='Gesamtdauer: '+parts.join(' · ');
-        }
         const plates=Math.floor(num('plates'));
         const material=materialCost();
         const power=h*num('watts')/1000*num('powerprice');
@@ -1844,7 +1592,15 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       calc();
     });
 
-document.querySelectorAll('input,select').forEach(el=>{
+    document.querySelectorAll('#modes button').forEach(button=>button.addEventListener('click',()=>{
+      mode=button.dataset.v || 'stranger';
+      document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('active'));
+      button.classList.add('active');
+      if($('markupInput')) $('markupInput').value=modeMarkup[mode];
+      calc();
+    }));
+
+    document.querySelectorAll('input,select').forEach(el=>{
       el.addEventListener('input',calc);
       el.addEventListener('change',calc);
     });
@@ -1869,6 +1625,19 @@ document.querySelectorAll('input,select').forEach(el=>{
     });
     $('reset')?.addEventListener('click',()=>location.reload());
 
+
+    // --- App pages / navigation ---
+    function showPage(name){
+      document.querySelectorAll('.page').forEach(p=>p.hidden=true);
+      const page=$('page-'+name);
+      if(page) page.hidden=false;
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+      window.scrollTo({top:0,behavior:'smooth'});
+      if(name==='spools') renderSpools();
+      if(name==='orders') renderOrders();
+      if(name==='finance') renderFinance();
+    }
+    document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 
     // Theme is controlled from Settings.
     const themeSwitch=$('themeSwitch');
@@ -2350,7 +2119,7 @@ document.querySelectorAll('input,select').forEach(el=>{
         $('spoolRemaining').value=s.remaining??'';
         $('addSpool').dataset.editId=s.id;
         $('addSpool').textContent='💾 Spule ändern';
-        window.scrollTo(0,0);
+        window.scrollTo({top:0,behavior:'smooth'});
       }));
     }
     $('addSpool')?.addEventListener('click',()=>{
