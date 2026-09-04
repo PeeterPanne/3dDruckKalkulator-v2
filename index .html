@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#111827" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="3D Kalkulator" name="apple-mobile-web-app-title"/>
+<link href="manifest.json" rel="manifest"/>
+<title>3D Druck Kalkulator</title>
+<style>
+:root{
+  --bg:#070b12;--card:#0e1520;--card2:#111a27;--text:#f5f7fb;--muted:#9aa7ba;
+  --line:#253247;--soft:#141d2a;--orange:#ff7a18;--blue:#1590ff;--green:#35d07f;
+  --purple:#a970ff;--input:#0b111b
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#142033 0,#070b12 42%);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--text);transition:.2s}
+body:not(.dark){--bg:#f3f4f6;--card:#fff;--card2:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--soft:#eef0f3;--input:#fafafa}
+.app{max-width:720px;margin:auto;padding:env(safe-area-inset-top) 18px calc(30px + env(safe-area-inset-bottom))}
+header{padding:24px 4px 20px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:34px;margin:0 0 2px;letter-spacing:-1.1px;font-weight:850}.sub{color:var(--muted);font-size:15px}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:24px;padding:20px;margin-bottom:15px;box-shadow:0 8px 28px rgba(0,0,0,.12)}
+.sectiontitle{font-size:23px;font-weight:850;margin-bottom:16px;letter-spacing:-.4px}
+label{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 0 7px}
+input{width:100%;height:52px;border:1px solid var(--line);border-radius:15px;background:var(--input);padding:0 14px;font-size:17px;color:var(--text);outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,144,255,.14)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}
+.mode{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--soft);padding:5px;border-radius:16px}
+.mode button{border:1px solid transparent;background:transparent;border-radius:12px;padding:12px 4px;font-weight:800;color:var(--muted);font-size:13px}
+.mode button.active{background:var(--card);color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.18);border-color:var(--line)}
+.mode button[data-v="friend"].active{color:var(--green)}.mode button[data-v="colleague"].active{color:var(--blue)}
+.mode button[data-v="stranger"].active{color:var(--orange)}.mode button[data-v="business"].active{color:var(--purple)}
+.timebox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.theme,.reset{border:1px solid var(--line);background:var(--soft);border-radius:13px;padding:10px 12px;font-weight:800;color:var(--text)}
+.hint{background:var(--soft);border:1px solid var(--line);border-radius:15px;padding:12px 13px;margin-top:13px;color:var(--muted);font-size:13px;line-height:1.45}
+.muted{color:var(--muted);font-size:12px;line-height:1.45}
+.result{background:linear-gradient(145deg,#0e1520,#0a1019);border:1px solid #24344a;color:#fff;border-radius:24px;padding:22px;margin-bottom:15px}
+.result .label{font-size:14px;color:#9aa7ba}.price{font-size:48px;font-weight:900;letter-spacing:-2px;margin-top:4px}
+.resultrow{display:flex;justify-content:space-between;padding-top:14px;margin-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:15px}
+.breakdown{display:flex;flex-direction:column;gap:0}.breakdown>div{display:flex;justify-content:space-between;gap:20px;padding:10px 0;border-bottom:1px solid var(--line)}
+.breakdown>div span{color:var(--muted)}.breakdown>div strong{font-variant-numeric:tabular-nums;color:var(--text)}
+.breakdown .total{font-weight:850;border-bottom:0;padding-top:13px}.breakdown .total strong{font-size:1.05em}
+.multi-head{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border:1px solid var(--line);background:var(--soft);border-radius:17px;margin:14px 0 14px}
+.multi-title{font-size:17px;font-weight:800}.multi-title span{font-weight:500;color:var(--muted);font-size:14px}
+.switch{position:relative;width:46px;height:27px;border:0;border-radius:18px;background:#344154;padding:0;cursor:pointer}.switch i{position:absolute;top:3px;left:3px;width:21px;height:21px;background:#fff;border-radius:50%;transition:.18s}.switch.on{background:var(--blue)}.switch.on i{left:22px}
+.filaments-head,.filament-row{display:grid;grid-template-columns:1fr 1fr 1.45fr 40px;gap:9px;align-items:center}
+.filaments-head{color:var(--muted);font-size:12px;font-weight:800;padding:0 8px 6px}.filament-row{padding:8px;margin-bottom:8px;background:var(--soft);border:1px solid var(--line);border-radius:16px}
+.filament-row input{height:46px}.unit{color:var(--muted);font-size:12px;text-align:center;margin-left:-38px;pointer-events:none}
+.note-input{min-width:0}.delete{height:40px;width:40px;border:0;background:transparent;color:#8b98aa;font-size:22px}
+.add-filament{width:100%;height:48px;border:1px solid var(--line);border-radius:14px;background:transparent;color:var(--text);font-weight:800;font-size:15px}
+.material-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(21,144,255,.08);border:1px solid rgba(21,144,255,.18)}
+.material-total span{color:var(--muted)}.material-total strong{color:var(--blue);font-size:18px}
+details summary{cursor:pointer;font-weight:850;list-style:none}details summary::-webkit-details-marker{display:none}
+@media(max-width:520px){.mode button{font-size:11px}.filaments-head,.filament-row{grid-template-columns:1fr 1fr 1.25fr 34px}.filament-row input{font-size:15px;padding:0 10px}.sectiontitle{font-size:21px}}
+@media(max-width:390px){.app{padding-left:12px;padding-right:12px}.mode{gap:3px}.mode button{font-size:10px}.filaments-head{font-size:10px}}
+</style>
+<link href="icons/icon-180.png" rel="apple-touch-icon" sizes="180x180"/>
+<style>
+@media (max-width:430px){
+  .mode button{min-height:44px}
+  .multi-head{min-height:48px}
+  .switch{flex:0 0 auto}
+}
+</style>
+<style id="v14-iphone-design">
+/* v14 – iPhone 16 Pro visual refinement */
+:root{
+  --v14-blue:#18a8ff;
+  --v14-orange:#ff9d2e;
+  --v14-green:#32d583;
+  --v14-purple:#a970ff;
+}
+html{background:#070b12}
+body{
+  -webkit-text-size-adjust:100%;
+  text-rendering:optimizeLegibility;
+}
+button,input,select,textarea{font:inherit}
+input,select,textarea{min-height:44px;font-size:16px}
+button{min-height:44px;-webkit-tap-highlight-color:transparent}
+.container,.app,.wrap,main{
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.card,.panel,.section,.box{
+  border-radius:18px !important;
+}
+input[type="number"],input[type="text"],input[type="time"],select{
+  border-radius:13px !important;
+}
+.mode-buttons,.customer-buttons,.tabs{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px !important;
+}
+.mode-buttons button,.customer-buttons button,.tabs button{
+  min-width:0 !important;
+  padding:10px 5px !important;
+  border-radius:13px !important;
+  font-size:13px !important;
+  line-height:1.15 !important;
+  white-space:normal !important;
+}
+@media (max-width:430px){
+  body{font-size:15px}
+  h1{font-size:30px !important;letter-spacing:-.7px}
+  h2{font-size:19px !important}
+  h3{font-size:16px !important}
+  .container,.app,.wrap,main{width:auto;max-width:none;margin:0 12px}
+  .card,.panel,.section,.box{padding:14px !important;margin-bottom:10px !important}
+  .mode-buttons,.customer-buttons,.tabs{gap:6px !important}
+  .mode-buttons button,.customer-buttons button,.tabs button{
+    min-height:48px !important;
+    font-size:12px !important;
+  }
+  /* Keep paired inputs side-by-side on iPhone */
+  .row,.grid-2,.two-col,.form-row,.inputs-row{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:9px !important;
+  }
+  /* Common time pair */
+  input[placeholder*="Stunden"],input[placeholder*="Minuten"]{
+    width:100% !important;
+  }
+  label{line-height:1.2}
+  .result,.price,.sale-price,.recommended-price{
+    font-size:28px !important;
+  }
+}
+@media (max-width:350px){
+  .mode-buttons button,.customer-buttons button,.tabs button{font-size:11px !important;padding:8px 3px !important}
+  .container,.app,.wrap,main{margin:0 9px}
+}
+</style>
+<style id="v15-ui">
+/* VERSION 15 – App-like iPhone 16 Pro layout. Calculation/JS untouched. */
+:root{
+  --v15-blue:#19a8ff;
+  --v15-orange:#ff8a25;
+  --v15-green:#32d583;
+  --v15-purple:#a970ff;
+}
+body{
+  background:
+    radial-gradient(700px 300px at 50% -80px,rgba(25,168,255,.13),transparent 65%),
+    var(--bg) !important;
+}
+.app{
+  max-width:560px !important;
+  padding-left:14px !important;
+  padding-right:14px !important;
+}
+header{
+  padding:18px 2px 14px !important;
+  align-items:flex-start !important;
+}
+h1{
+  font-size:32px !important;
+  line-height:1.02 !important;
+  letter-spacing:-1.3px !important;
+}
+.sub{font-size:13px !important;margin-top:5px}
+.theme,.reset{
+  width:44px;height:44px;padding:0 !important;
+  display:grid;place-items:center;
+  border-radius:14px !important;
+}
+.card{
+  border-radius:20px !important;
+  padding:16px !important;
+  margin-bottom:11px !important;
+  box-shadow:0 7px 22px rgba(0,0,0,.10) !important;
+}
+.sectiontitle{
+  font-size:19px !important;
+  margin-bottom:12px !important;
+}
+.muted{font-size:13px !important}
+
+/* Customer selector */
+.mode{
+  padding:4px !important;
+  gap:4px !important;
+  border-radius:15px !important;
+}
+.mode button{
+  min-height:46px !important;
+  padding:7px 3px !important;
+  font-size:12px !important;
+  border-radius:11px !important;
+}
+.mode button.active{
+  transform:none !important;
+}
+
+/* Inputs */
+.grid{gap:10px !important}
+label{
+  font-size:12px !important;
+  margin-bottom:5px !important;
+}
+input{
+  height:48px !important;
+  min-height:48px !important;
+  border-radius:13px !important;
+  font-size:16px !important;
+}
+
+/* Druckzeit */
+.timebox{gap:9px !important}
+
+/* Multi color */
+.multi-head{
+  margin:12px 0 !important;
+  padding:11px 12px !important;
+  min-height:52px !important;
+  border-radius:15px !important;
+}
+.multi-title{font-size:15px !important}
+.multi-title span{font-size:12px !important}
+.switch{width:46px !important;height:27px !important}
+.switch i{width:21px !important;height:21px !important;top:3px !important;left:3px !important}
+.switch.on i{left:22px !important}
+
+.material-total{
+  margin-top:10px !important;
+  padding:11px 13px !important;
+  border-radius:13px !important;
+}
+.material-total strong{font-size:17px !important}
+.hint{margin-top:9px !important;padding:10px 11px !important}
+
+/* Filament rows: readable on a phone */
+.filaments-head{display:none !important}
+.filament-row{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 42px !important;
+  grid-template-areas:
+    "g kg del"
+    "note note del" !important;
+  gap:7px !important;
+  padding:9px !important;
+  border-radius:15px !important;
+}
+.filament-row > div:nth-child(1){grid-area:g}
+.filament-row > div:nth-child(2){grid-area:kg}
+.filament-row > .fn{grid-area:note}
+.filament-row > .delete{grid-area:del;align-self:center}
+.filament-row input{height:44px !important;min-height:44px !important;font-size:15px !important}
+.add-filament{
+  height:46px !important;
+  border-radius:13px !important;
+}
+
+/* Handarbeit */
+.result{
+  border-radius:20px !important;
+  padding:18px !important;
+  margin-bottom:11px !important;
+  background:
+    linear-gradient(145deg,rgba(25,168,255,.13),rgba(14,21,32,.98) 55%) !important;
+  border-color:rgba(25,168,255,.28) !important;
+}
+.result .label{
+  font-size:12px !important;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+.price{
+  font-size:43px !important;
+  line-height:1 !important;
+  margin-top:7px !important;
+  letter-spacing:-1.8px !important;
+}
+.resultrow{
+  padding-top:11px !important;
+  margin-top:11px !important;
+  font-size:14px !important;
+}
+
+/* Cost breakdown */
+.breakdown>div{
+  padding:8px 0 !important;
+  font-size:13px !important;
+}
+.breakdown .total{padding-top:10px !important}
+.breakdown .total strong{font-size:14px !important}
+
+/* Keep the settings area compact */
+details.card{padding:15px !important}
+details summary{font-size:16px !important}
+
+/* iPhone 16 Pro / narrow phones */
+@media (max-width:430px){
+  .app{width:auto !important;margin:0 auto !important}
+  .full{grid-column:1/-1 !important}
+}
+@media (max-width:360px){
+  .app{padding-left:10px !important;padding-right:10px !important}
+  .card{padding:13px !important}
+  .mode button{font-size:10.5px !important}
+  .price{font-size:39px !important}
+}
+</style>
+<style id="v16-finish">
+:root{--v16-blue:#19a8ff;--v16-blue-soft:rgba(25,168,255,.14)}
+body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),transparent 68%),var(--bg)!important}
+.card{border-color:rgba(54,76,105,.72)!important}
+.multi-head{min-height:48px!important;padding:9px 12px!important;margin:11px 0!important}
+.multi-head .switch{width:50px!important;height:29px!important}
+.multi-head .switch i{width:21px!important;height:21px!important;top:4px!important;left:4px!important}
+.multi-head .switch.on i{left:25px!important}
+.material-total{background:linear-gradient(100deg,rgba(25,168,255,.08),rgba(25,168,255,.15))!important;border-color:rgba(25,168,255,.42)!important}
+.material-total strong,.result strong{font-variant-numeric:tabular-nums}
+.filament-row .delete{opacity:.72!important;font-size:18px!important}.filament-row .delete:active{opacity:1!important}
+.result{padding:17px!important}.result .label{letter-spacing:1px!important}.price{font-size:39px!important;letter-spacing:-1.5px!important;font-variant-numeric:tabular-nums}
+.resultrow{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:14px!important}
+.breakdown .total{margin-top:5px!important;padding-top:13px!important;border-top:1px solid rgba(100,120,145,.38)!important}
+.breakdown .total strong{font-size:15px!important}
+.breakdown .sale,.breakdown .selling,.breakdown .verkaufspreis{margin-top:4px!important;padding-top:11px!important}
+.breakdown .sale strong,.breakdown .selling strong,.breakdown .verkaufspreis strong{font-size:16px!important}
+.hint{border-radius:15px!important;font-size:13px!important;line-height:1.45!important}
+@media(max-width:430px){.price{font-size:38px!important}.result .label{font-size:11px!important}}
+</style>
+<style id="v17-price-controls">
+.price-control{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  font-weight:700;
+  color:var(--text,#f3f6fb);
+}
+.price-control input{
+  width:76px !important;
+  height:40px !important;
+  min-height:40px !important;
+  text-align:right;
+  padding:7px 9px !important;
+  font-weight:700;
+  border-radius:11px !important;
+}
+.resultrow select{
+  max-width:175px;
+  height:40px;
+  min-height:40px;
+  border-radius:11px;
+  padding:0 9px;
+  font-size:13px;
+}
+.standard-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+.standard-actions button{
+  min-height:44px;
+  border:1px solid rgba(54,76,105,.85);
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  color:inherit;
+  padding:8px 10px;
+  font-size:13px;
+}
+.standard-actions button:active{transform:scale(.98)}
+@media(max-width:430px){
+  .price-control input{width:72px !important}
+  .resultrow select{max-width:155px;font-size:12px}
+  .standard-actions{grid-template-columns:1fr}
+}
+</style>
+<style id="v19-filament-fix">
+.filament-field{min-width:0}
+.filament-field label{display:block;color:var(--muted);font-size:11px!important;font-weight:800;margin:0 0 4px!important;line-height:1.1}
+.filament-field input{width:100%}
+@media(max-width:430px){
+  .multi-head{padding:9px 11px!important;min-height:46px!important}
+  .multi-title{font-size:14px!important}
+  .multi-title span{font-size:11px!important}
+  .filament-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px!important;grid-template-areas:"g kg del" "note note del"!important;gap:7px!important;padding:9px!important}
+  .filament-field label{font-size:10px!important}
+  .filament-row input{height:42px!important;min-height:42px!important;font-size:15px!important}
+  .filament-field.note-field{grid-area:note}
+}
+</style>
+<style id="v20-polish">
+/* v20 – compact Multi-Color switch + clearer filament inputs + robust calculation */
+.multi-head{
+  min-height:44px !important;
+  padding:8px 11px !important;
+  margin:10px 0 !important;
+  border-radius:14px !important;
+}
+.multi-title{font-size:14px !important;line-height:1.2 !important}
+.multi-title span{font-size:11px !important}
+.multi-head .switch{
+  width:40px !important;
+  height:24px !important;
+  min-height:24px !important;
+  flex:0 0 40px !important;
+  border-radius:20px !important;
+}
+.multi-head .switch i{
+  width:18px !important;
+  height:18px !important;
+  top:3px !important;
+  left:3px !important;
+}
+.multi-head .switch.on i{left:19px !important}
+.filament-row{
+  padding:10px !important;
+  gap:8px !important;
+}
+.filament-field label{
+  color:var(--text) !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  margin-bottom:4px !important;
+}
+.filament-field .field-help{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.2;
+  margin:3px 1px 0;
+}
+.filament-row input{
+  height:43px !important;
+  min-height:43px !important;
+  font-size:15px !important;
+}
+.filament-row .delete{
+  width:34px !important;
+  height:40px !important;
+  padding:0 !important;
+}
+.filament-intro{
+  margin:-3px 0 9px;
+  padding:9px 10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.35;
+}
+.calc-live{font-size:11px;color:var(--muted);margin-top:4px}
+@media(max-width:430px){
+  .multi-head{min-height:42px !important;padding:7px 10px !important}
+  .multi-head .switch{width:38px !important;height:23px !important;flex-basis:38px !important}
+  .multi-head .switch i{width:17px !important;height:17px !important;top:3px !important;left:3px !important}
+  .multi-head .switch.on i{left:18px !important}
+  .filament-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 34px !important}
+  .filament-field label{font-size:10px !important}
+  .filament-field .field-help{font-size:9px !important}
+}
+</style>
+<style id="v21-pages">
+html,body{background:#020914!important}
+body{background:radial-gradient(620px 300px at 50% -90px,rgba(25,168,255,.18),transparent 68%),linear-gradient(180deg,#020914,#06111e)!important}
+.app{max-width:760px!important;padding:calc(74px + env(safe-area-inset-top)) 14px calc(104px + env(safe-area-inset-bottom))!important}
+.app-header{padding:12px 2px 24px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important}
+.brand{display:flex;align-items:center;gap:15px;min-width:0}.brand-icon{width:88px;height:88px;object-fit:cover;border-radius:21px;box-shadow:0 0 28px rgba(25,168,255,.28);flex:0 0 auto}
+.brand-copy h1{margin:0!important;font-size:31px!important;line-height:1.04!important;letter-spacing:-1.2px!important;white-space:nowrap!important}.brand-copy h1 span{color:#19a8ff}
+.brand-copy .sub{margin-top:8px!important;font-size:14px!important;line-height:1.35!important;color:#b7c5d7!important}
+.header-reset{width:42px!important;height:42px!important;min-height:42px!important;padding:0!important;border-radius:13px!important}
+.page-title{font-size:29px;font-weight:900;letter-spacing:-.8px;margin:4px 2px 4px}.page-subtitle{color:#aebdce;font-size:14px;margin:0 2px 15px}
+.card,.result{background:linear-gradient(145deg,rgba(8,25,42,.98),rgba(3,14,25,.99))!important;border:1px solid #17344e!important;box-shadow:0 10px 30px rgba(0,0,0,.22)!important;border-radius:22px!important}
+.card{padding:17px!important;margin-bottom:12px!important}.sectiontitle{font-size:21px!important}.muted{color:#aab9cb!important}
+input,select{background:linear-gradient(180deg,#061421,#03101b)!important;color:#f7fbff!important;border-color:#1c3a55!important;border-radius:14px!important}
+input:focus,select:focus{border-color:#19a8ff!important;box-shadow:0 0 0 3px rgba(25,168,255,.13)!important}
+.timebox-3{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}.timebox-3 input{text-align:center!important;font-weight:800!important}
+.order-actions{margin-top:12px}.order-actions button,.save-order-main{border:1px solid rgba(25,168,255,.45)!important;background:rgba(25,168,255,.10)!important;color:#19a8ff!important}
+.save-order-main{width:100%;min-height:50px;border-radius:14px;padding:10px 14px;font-weight:850;margin-top:13px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.setting-row strong{font-size:16px}.switch{position:relative!important;width:48px!important;height:28px!important;min-height:28px!important;border:0!important;border-radius:18px!important;background:#344154!important;padding:0!important}.switch i{position:absolute!important;top:4px!important;left:4px!important;width:20px!important;height:20px!important;background:#fff!important;border-radius:50%!important;transition:.18s}.switch.on{background:#19a8ff!important}.switch.on i{left:24px!important}
+.orders-list{display:flex;flex-direction:column;gap:9px}.order-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px;border:1px solid #17344e;background:rgba(255,255,255,.025);border-radius:15px}
+.order-info{display:flex;flex-direction:column;gap:3px;min-width:0}.order-info strong{font-size:15px}.order-info span{color:#9eafc2;font-size:12px}.order-actions-small{display:flex;flex-direction:column;gap:5px;flex:0 0 auto}.order-actions-small button{border:1px solid #24445f;background:rgba(255,255,255,.04);color:#dbe7f4;border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800}.order-actions-small .danger{color:#ff7d7d}
+.empty-orders{text-align:center;color:#9eafc2;padding:25px 8px;line-height:1.6}.empty-orders span{font-size:12px}
+.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:100;width:min(760px,100%);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:rgba(3,12,21,.97);border-top:1px solid #18344d;backdrop-filter:blur(18px)}
+.nav-item{border:0;background:transparent;color:#8999ad;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55px;border-radius:12px;gap:2px;font-weight:800}.nav-item span{font-size:21px;line-height:1}.nav-item small{font-size:11px}.nav-item.active{color:#19a8ff}
+
+@media(max-width:520px){
+ .app{padding-left:12px!important;padding-right:12px!important}.app-header{padding-top:4px!important}
+ .brand{gap:11px}.brand-icon{width:82px;height:82px;border-radius:20px}.brand-copy h1{font-size:25px!important;white-space:normal!important}.brand-copy .sub{font-size:12px!important}
+ .header-reset{display:none}.card{padding:14px!important}.page-title{font-size:27px}.order-item{align-items:flex-start}
+}
+</style>
+<style id="theme-fix">
+/* Final theme fix: dark is the default, light mode overrides all v21 dark surfaces. */
+body:not(.dark){
+  --bg:#f3f5f8;
+  --card:#ffffff;
+  --card2:#ffffff;
+  --text:#111827;
+  --muted:#667085;
+  --line:#d9e0e8;
+  --soft:#eef2f6;
+  --input:#ffffff;
+  background:linear-gradient(180deg,#f7f9fb,#eef2f6)!important;
+  color:#111827!important;
+}
+body:not(.dark) .app{
+  background:transparent!important;
+}
+body:not(.dark) .card,
+body:not(.dark) .result{
+  background:linear-gradient(145deg,#ffffff,#f8fafc)!important;
+  border-color:#d8e0e8!important;
+  box-shadow:0 8px 24px rgba(16,24,40,.08)!important;
+  color:#111827!important;
+}
+body:not(.dark) .page-title,
+body:not(.dark) .sectiontitle,
+body:not(.dark) h1,
+body:not(.dark) strong{
+  color:#111827!important;
+}
+body:not(.dark) .brand-copy .sub,
+body:not(.dark) .page-subtitle,
+body:not(.dark) .muted,
+body:not(.dark) label,
+body:not(.dark) .filament-field .field-help,
+body:not(.dark) .order-info span,
+body:not(.dark) .empty-orders{
+  color:#667085!important;
+}
+body:not(.dark) input,
+body:not(.dark) select{
+  background:#fff!important;
+  color:#111827!important;
+  border-color:#d5dde7!important;
+}
+body:not(.dark) input:focus,
+body:not(.dark) select:focus{
+  border-color:#1590ff!important;
+  box-shadow:0 0 0 3px rgba(21,144,255,.12)!important;
+}
+body:not(.dark) .mode,
+body:not(.dark) .multi-head,
+body:not(.dark) .filament-row,
+body:not(.dark) .hint,
+body:not(.dark) .filament-intro{
+  background:#f5f7fa!important;
+  border-color:#d8e0e8!important;
+}
+body:not(.dark) .mode button{
+  color:#667085!important;
+}
+body:not(.dark) .mode button.active{
+  background:#fff!important;
+  border-color:#d8e0e8!important;
+  color:#111827!important;
+  box-shadow:0 3px 12px rgba(16,24,40,.08)!important;
+}
+body:not(.dark) .result{
+  background:linear-gradient(145deg,#eef8ff,#ffffff)!important;
+  border-color:rgba(21,144,255,.28)!important;
+}
+body:not(.dark) .result .label{
+  color:#667085!important;
+}
+body:not(.dark) .bottom-nav{
+  background:rgba(255,255,255,.96)!important;
+  border-top-color:#d8e0e8!important;
+  box-shadow:0 -6px 22px rgba(16,24,40,.08)!important;
+}
+body:not(.dark) .nav-item{
+  color:#667085!important;
+}
+body:not(.dark) .nav-item.active{
+  color:#1590ff!important;
+}
+body:not(.dark) .order-item{
+  background:#f7f9fb!important;
+  border-color:#d8e0e8!important;
+}
+body:not(.dark) .order-actions-small button{
+  background:#fff!important;
+  color:#344054!important;
+  border-color:#d5dde7!important;
+}
+body:not(.dark) .save-order-main,
+body:not(.dark) .order-actions button{
+  background:rgba(21,144,255,.08)!important;
+  color:#0879d1!important;
+  border-color:rgba(21,144,255,.35)!important;
+}
+body:not(.dark) .setting-row .switch{
+  background:#cbd5e1!important;
+}
+body:not(.dark) .setting-row .switch.on{
+  background:#1590ff!important;
+}
+body:not(.dark) details.card{
+  background:linear-gradient(145deg,#ffffff,#f8fafc)!important;
+}
+body:not(.dark) .breakdown>div{
+  border-bottom-color:#dce3ea!important;
+}
+body:not(.dark) .header-reset{
+  background:#eef2f6!important;
+  color:#111827!important;
+  border-color:#d5dde7!important;
+}
+</style>
+<style id="orders-ui">
+.order-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.order-form-grid>div{min-width:0}
+
+.order-item{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  padding:0 !important;
+  border:1px solid #17344e;
+  background:linear-gradient(145deg,#0a1422,#070f1a);
+  border-radius:20px;
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+.order-item::before{
+  content:"";
+  display:block;
+  height:4px;
+  background:#19a8ff;
+}
+.order-card-main{padding:18px 18px 15px}
+.order-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.order-card-title{min-width:0}
+.order-card-title strong{
+  display:block;
+  font-size:20px;
+  line-height:1.2;
+  margin-bottom:6px;
+}
+.order-card-customer{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#9eafc2;
+  font-size:15px;
+}
+.order-status{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid rgba(25,168,255,.35);
+  background:rgba(25,168,255,.09);
+  color:#19a8ff;
+  border-radius:999px;
+  padding:7px 11px;
+  font-weight:800;
+  font-size:13px;
+}
+.order-price-row{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:20px;
+  color:#9eafc2;
+  font-size:16px;
+}
+.order-price-row .self-label{margin-right:2px}
+.order-price-row .self-value{color:#f7fbff;font-weight:800;font-size:21px}
+.order-price-row .separator{opacity:.45}
+.order-price-row .price-label{margin-left:2px}
+.order-price-row .price-value{color:#19a8ff;font-weight:900;font-size:22px}
+.order-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:22px;
+  margin-top:20px;
+  color:#9eafc2;
+}
+.order-stat{display:flex;align-items:center;gap:8px;font-size:16px}
+.order-stat .stat-icon{font-size:23px;line-height:1}
+.order-stat strong{color:#f7fbff;font-size:17px}
+.order-date{margin-top:12px;color:#71839a;font-size:12px}
+.order-card-actions{
+  display:flex;
+  gap:9px;
+  padding:12px 18px 15px;
+  border-top:1px solid rgba(54,76,105,.55);
+}
+.order-card-actions button{
+  flex:1;
+  min-height:40px;
+  border:1px solid #24445f;
+  background:rgba(255,255,255,.035);
+  color:#dbe7f4;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:850;
+}
+.order-card-actions .load-order{color:#19a8ff;border-color:rgba(25,168,255,.35);background:rgba(25,168,255,.07)}
+.order-card-actions .danger{color:#ff8585}
+
+@media (max-width:600px){
+  .order-form-grid{grid-template-columns:1fr;gap:10px}
+  .order-card-head{gap:8px}
+  .order-card-title strong{font-size:18px}
+  .order-status{font-size:12px;padding:6px 9px}
+  .order-price-row{margin-top:17px}
+  .order-stats{gap:16px}
+}
+
+body:not(.dark) .order-item{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;
+  border-color:#cbd5e1 !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.08) !important;
+}
+body:not(.dark) .order-card-customer,
+body:not(.dark) .order-price-row,
+body:not(.dark) .order-stats,
+body:not(.dark) .order-date{color:#64748b !important}
+body:not(.dark) .order-price-row .self-value,
+body:not(.dark) .order-stat strong{color:#111827 !important}
+body:not(.dark) .order-card-actions{border-top-color:#e2e8f0 !important}
+body:not(.dark) .order-card-actions button{
+  background:#fff !important;
+  border-color:#cbd5e1 !important;
+  color:#334155 !important;
+}
+body:not(.dark) .order-card-actions .load-order{
+  color:#0879c9 !important;
+  border-color:rgba(21,144,255,.35) !important;
+  background:rgba(21,144,255,.06) !important;
+}
+</style>
+<style id="finance-ui">
+/* Auftragsstatus */
+.order-item.status-open::before{background:#ff8a22}
+.order-item.status-work::before{background:#19a8ff}
+.order-item.status-done::before{background:#31c46c}
+.order-item.status-paid::before{background:#a66cff}
+
+.order-status-select{
+  flex:0 0 auto;
+  appearance:none;
+  border-radius:999px;
+  padding:8px 12px;
+  font:inherit;
+  font-size:13px;
+  font-weight:850;
+  cursor:pointer;
+  outline:none;
+  background:#101b2b;
+  border:1px solid #24445f;
+  color:#dbe7f4;
+}
+.order-status-select.status-open{color:#ff9b4a;border-color:rgba(255,138,34,.4);background:rgba(255,138,34,.10)}
+.order-status-select.status-work{color:#35b3ff;border-color:rgba(25,168,255,.4);background:rgba(25,168,255,.10)}
+.order-status-select.status-done{color:#48d37c;border-color:rgba(49,196,108,.4);background:rgba(49,196,108,.10)}
+.order-status-select.status-paid{color:#bd8aff;border-color:rgba(166,108,255,.4);background:rgba(166,108,255,.10)}
+
+.finance-filter{padding-bottom:17px}
+.finance-periods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.finance-periods button{
+  min-height:42px;border:1px solid #24445f;background:rgba(255,255,255,.035);
+  color:#9eafc2;border-radius:12px;font-weight:800;font-size:13px;
+}
+.finance-periods button.active{background:#159cff;border-color:#159cff;color:#fff}
+
+.finance-summary{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0;
+}
+.finance-summary-card{
+  min-height:102px;border-radius:18px;padding:16px;border:1px solid #17344e;
+  background:linear-gradient(145deg,#0a1422,#070f1a);display:flex;flex-direction:column;justify-content:space-between;
+}
+.finance-summary-card span{color:#9eafc2;font-size:14px;font-weight:750}
+.finance-summary-card strong{font-size:25px;color:#f7fbff}
+.finance-summary-card.income strong{color:#45d67b}
+.finance-summary-card.expense strong{color:#ff8c8c}
+.finance-summary-card.profit strong{color:#19a8ff}
+.finance-summary-card.count strong{color:#f7fbff}
+
+.finance-bars{display:grid;gap:16px;margin-top:16px}
+.finance-bar-row{display:grid;grid-template-columns:82px 1fr auto;align-items:center;gap:10px;color:#9eafc2;font-size:13px}
+.finance-bar-row strong{color:#f7fbff;font-size:13px;min-width:72px;text-align:right}
+.finance-bar-track{height:10px;border-radius:999px;background:#101d2d;overflow:hidden}
+.finance-bar-track i{display:block;height:100%;width:0;border-radius:999px;background:#19a8ff;transition:width .25s ease}
+#barExpenses{background:#ff7373}
+#barProfit{background:#45d67b}
+
+.finance-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.finance-form-grid select{
+  width:100%;min-height:50px;border-radius:14px;border:1px solid #24445f;background:#091525;color:#edf5ff;
+  padding:0 13px;font-size:16px;
+}
+.finance-save-btn{margin-top:14px}
+
+.finance-list{display:grid;gap:8px;margin-top:14px}
+.finance-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 0;border-bottom:1px solid rgba(54,76,105,.45);
+}
+.finance-row:last-child{border-bottom:0}
+.finance-row div:first-child{min-width:0}
+.finance-row strong{display:block;font-size:15px;color:#f2f7fc}
+.finance-row small{display:block;margin-top:3px;color:#71839a;font-size:12px}
+.finance-positive{color:#45d67b !important;white-space:nowrap}
+.finance-negative{color:#ff8585 !important;white-space:nowrap}
+.finance-row-right{display:flex;align-items:center;gap:10px}
+.finance-delete{border:0;background:transparent;color:#ff8585;font-size:16px;padding:6px}
+.finance-empty{padding:16px 0;color:#71839a;text-align:center}
+
+@media(max-width:600px){
+  .finance-periods{grid-template-columns:repeat(2,1fr)}
+  .finance-summary{grid-template-columns:1fr 1fr}
+  .finance-summary-card{min-height:94px;padding:14px}
+  .finance-summary-card strong{font-size:21px}
+  .finance-form-grid{grid-template-columns:1fr}
+  .finance-bar-row{grid-template-columns:70px 1fr auto}
+  .order-status-select{font-size:12px;padding:7px 8px;max-width:118px}
+}
+
+body:not(.dark) .finance-summary-card{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;
+  border-color:#cbd5e1 !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.07)
+}
+body:not(.dark) .finance-summary-card span,
+body:not(.dark) .finance-bar-row,
+body:not(.dark) .finance-row small{color:#64748b !important}
+body:not(.dark) .finance-summary-card strong,
+body:not(.dark) .finance-bar-row strong,
+body:not(.dark) .finance-row strong{color:#111827}
+body:not(.dark) .finance-bar-track{background:#e2e8f0}
+body:not(.dark) .finance-periods button{
+  background:#fff !important;border-color:#cbd5e1 !important;color:#475569 !important
+}
+body:not(.dark) .finance-periods button.active{background:#159cff !important;border-color:#159cff !important;color:#fff !important}
+body:not(.dark) .finance-form-grid select{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .finance-row{border-bottom-color:#e2e8f0 !important}
+body:not(.dark) .order-status-select{background:#fff !important}
+</style>
+<style id="five-nav">
+.bottom-nav{grid-template-columns:repeat(5,1fr)}
+.bottom-nav .nav-item{min-width:0}
+.bottom-nav .nav-item small{font-size:11px}
+@media(max-width:600px){
+  .bottom-nav .nav-item span{font-size:24px}
+  .bottom-nav .nav-item small{font-size:10px}
+}
+</style>
+<style id="order-detail-ui">
+.order-note-field{grid-column:1/-1}
+.order-note-field label span{font-weight:500;opacity:.65}
+.order-form-grid textarea,
+.order-detail-sheet textarea{
+  width:100%;box-sizing:border-box;resize:vertical;min-height:70px;
+  border-radius:14px;border:1px solid #24445f;background:#091525;color:#edf5ff;
+  padding:12px 13px;font:inherit;font-size:15px;outline:none;
+}
+.order-form-grid textarea:focus,
+.order-detail-sheet textarea:focus{border-color:#159cff;box-shadow:0 0 0 3px rgba(21,156,255,.10)}
+
+.order-details-btn{color:#dbe7f4 !important}
+body.modal-open{overflow:hidden}
+.order-detail-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center}
+.order-detail-modal[hidden]{display:none}
+.order-detail-backdrop{position:absolute;inset:0;background:rgba(0,5,12,.72);backdrop-filter:blur(6px)}
+.order-detail-sheet{
+  position:relative;width:min(720px,100%);max-height:90vh;overflow:auto;
+  background:linear-gradient(145deg,#0b1727,#07111e);
+  border:1px solid #24445f;border-bottom:0;border-radius:26px 26px 0 0;
+  padding:22px 22px 28px;box-shadow:0 -15px 50px rgba(0,0,0,.35)
+}
+.order-detail-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.order-detail-kicker{display:block;color:#19a8ff;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.order-detail-sheet h2{margin:4px 0 5px;font-size:27px;color:#f7fbff}
+.order-detail-customer{color:#9eafc2;font-size:15px}
+.order-detail-close{
+  width:42px;height:42px;border-radius:50%;border:1px solid #24445f;background:#101d2d;color:#dbe7f4;font-size:28px;line-height:1
+}
+.order-detail-status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 15px}
+.order-detail-status-row label{font-weight:800;color:#9eafc2}
+.order-detail-status-row select{
+  border-radius:999px;padding:9px 13px;background:#101d2d;border:1px solid #24445f;color:#edf5ff;font-weight:850
+}
+.order-detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.detail-stat{padding:14px;border:1px solid #17344e;border-radius:15px;background:rgba(255,255,255,.025)}
+.detail-stat span{display:block;color:#8fa2b8;font-size:12px}
+.detail-stat strong{display:block;margin-top:5px;color:#f7fbff;font-size:19px}
+.detail-stat:nth-child(1) strong{color:#19a8ff}
+.detail-stat:nth-child(3) strong.positive-profit{color:#45d67b}
+.detail-stat:nth-child(3) strong.negative-profit{color:#ff8585}
+.detail-section{margin-top:19px;padding-top:17px;border-top:1px solid rgba(54,76,105,.55)}
+.detail-section h3{margin:0 0 11px;color:#f2f7fc;font-size:16px}
+.detail-cost-list{display:grid;gap:0}
+.detail-cost-list>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(54,76,105,.35);color:#9eafc2;font-size:14px}
+.detail-cost-list>div:last-child{border-bottom:0}
+.detail-cost-list strong{color:#edf5ff}
+.detail-meta{display:flex;flex-wrap:wrap;gap:8px;color:#9eafc2;font-size:13px}
+.detail-meta span{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid #17344e}
+.order-detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.order-detail-actions button{min-height:46px;border-radius:13px;border:1px solid #24445f;background:#101d2d;color:#dbe7f4;font-weight:850}
+.order-detail-actions .load-order{color:#19a8ff;border-color:rgba(25,168,255,.4);background:rgba(25,168,255,.08)}
+
+@media(max-width:600px){
+  .order-detail-sheet{padding:19px 16px 24px;border-radius:23px 23px 0 0}
+  .order-detail-grid{grid-template-columns:1fr 1fr}
+  .order-detail-sheet h2{font-size:23px}
+  .order-detail-actions{grid-template-columns:1fr}
+}
+
+body:not(.dark) .order-form-grid textarea,
+body:not(.dark) .order-detail-sheet textarea{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .order-detail-sheet{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .order-detail-sheet h2,
+body:not(.dark) .detail-stat strong,
+body:not(.dark) .detail-section h3,
+body:not(.dark) .detail-cost-list strong{color:#111827 !important}
+body:not(.dark) .order-detail-customer,
+body:not(.dark) .order-detail-status-row label,
+body:not(.dark) .detail-stat span,
+body:not(.dark) .detail-cost-list,
+body:not(.dark) .detail-meta{color:#64748b !important}
+body:not(.dark) .detail-stat{background:#fff !important;border-color:#cbd5e1 !important}
+body:not(.dark) .detail-cost-list>div,
+body:not(.dark) .detail-section{border-color:#e2e8f0 !important}
+body:not(.dark) .order-detail-status-row select{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .order-detail-close,
+body:not(.dark) .order-detail-actions button{background:#fff !important;color:#334155 !important;border-color:#cbd5e1 !important}
+body:not(.dark) .order-detail-actions .load-order{color:#0879c9 !important}
+</style>
+<style id="spools-ui">
+.spool-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.spool-form-grid input,.spool-form-grid select,.spool-search{
+  width:100%;box-sizing:border-box;min-height:50px;border-radius:14px;border:1px solid #24445f;
+  background:#091525;color:#edf5ff;padding:0 13px;font-size:16px
+}
+.spool-form-grid select{appearance:auto}
+.optional-label{opacity:.6;font-weight:500}
+.spool-list-head{display:flex;justify-content:space-between;align-items:end;gap:15px}
+.spool-list-head .sectiontitle{margin-bottom:2px}
+.spool-count{color:#71839a;font-size:12px}
+.spool-search{max-width:230px;min-height:42px}
+.spools-list{display:grid;gap:10px;margin-top:16px}
+.spool-card{
+  display:grid;grid-template-columns:14px 1fr auto;gap:13px;align-items:center;
+  padding:14px;border:1px solid #17344e;border-radius:17px;background:linear-gradient(145deg,#0a1422,#070f1a)
+}
+.spool-color-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.35)}
+.spool-main{min-width:0}
+.spool-main strong{display:block;color:#f4f8fc;font-size:16px}
+.spool-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px}
+.spool-meta span{font-size:12px;color:#9eafc2;border:1px solid #24445f;border-radius:999px;padding:4px 7px}
+.spool-price{margin-top:7px;color:#19a8ff;font-weight:850;font-size:14px}
+.spool-actions{display:flex;gap:6px}
+.spool-actions button{width:40px;height:40px;border-radius:11px;border:1px solid #24445f;background:#101d2d;color:#dbe7f4}
+.spool-actions .danger{color:#ff8585}
+.spool-empty{text-align:center;color:#71839a;padding:25px 10px}
+.spool-pick-wrap{grid-column:1/-1;margin-bottom:2px}
+.spool-pick-wrap select{
+  width:100%;box-sizing:border-box;min-height:46px;border-radius:13px;border:1px solid #24445f;background:#091525;color:#edf5ff;padding:0 12px;font-size:15px
+}
+@media(max-width:600px){
+  .spool-form-grid{grid-template-columns:1fr}
+  .spool-list-head{align-items:stretch;flex-direction:column}
+  .spool-search{max-width:none}
+  .spool-card{grid-template-columns:14px 1fr}
+  .spool-actions{grid-column:2}
+}
+body:not(.dark) .spool-form-grid input,
+body:not(.dark) .spool-form-grid select,
+body:not(.dark) .spool-search,
+body:not(.dark) .spool-pick-wrap select{
+  background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .spool-card{
+  background:linear-gradient(145deg,#fff,#f8fafc) !important;border-color:#cbd5e1 !important
+}
+body:not(.dark) .spool-main strong{color:#111827 !important}
+body:not(.dark) .spool-meta span{color:#475569;border-color:#cbd5e1}
+body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color:#cbd5e1}
+</style>
+<style id="nav-icon-polish">
+.bottom-nav .nav-item { gap: 5px; }
+.bottom-nav .nav-icon {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--icon-color);
+  background: var(--icon-bg);
+  box-sizing: border-box;
+  transition: transform .18s ease, filter .18s ease, opacity .18s ease;
+}
+.bottom-nav .nav-icon svg { width: 100%; height: 100%; display: block; }
+.bottom-nav .nav-item[data-page="calculator"] .nav-icon { --icon-color:#6eaeff; --icon-bg:rgba(46,113,205,.28); }
+.bottom-nav .nav-item[data-page="spools"] .nav-icon { --icon-color:#c58aff; --icon-bg:rgba(126,65,191,.28); }
+.bottom-nav .nav-item[data-page="orders"] .nav-icon { --icon-color:#4bd9ef; --icon-bg:rgba(18,143,172,.28); }
+.bottom-nav .nav-item[data-page="finance"] .nav-icon { --icon-color:#54e58e; --icon-bg:rgba(25,157,91,.28); }
+.bottom-nav .nav-item[data-page="settings"] .nav-icon { --icon-color:#a8b2c8; --icon-bg:rgba(72,88,118,.25); }
+.bottom-nav .nav-item.active .nav-icon {
+  transform: translateY(-2px) scale(1.05);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--icon-color) 42%, transparent));
+}
+.bottom-nav .nav-item:not(.active) .nav-icon { opacity: .86; }
+.bottom-nav .nav-item:active .nav-icon { transform: scale(.94); }
+.bottom-nav small { font-weight: 600; letter-spacing: .01em; }
+</style>
+<style id="nav-touch-fix">
+.bottom-nav{
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  z-index:9999 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent;
+}
+.bottom-nav .nav-item{
+  position:relative !important;
+  z-index:10000 !important;
+  min-height:60px !important;
+  height:60px !important;
+  width:100% !important;
+  min-width:0 !important;
+  padding:4px 2px !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  cursor:pointer !important;
+  -webkit-user-select:none !important;
+  user-select:none !important;
+}
+.bottom-nav .nav-icon,
+.bottom-nav .nav-icon svg{
+  pointer-events:none !important;
+}
+@media(max-width:520px){
+  .bottom-nav{
+    padding-left:6px !important;
+    padding-right:6px !important;
+  }
+  .bottom-nav .nav-item{
+    min-height:62px !important;
+    height:62px !important;
+  }
+}
+</style>
+<style id="user-symbol-style">
+.bottom-nav .nav-item{gap:5px!important}
+.bottom-nav .nav-icon{
+  width:40px!important;height:40px!important;padding:8px!important;
+  border-radius:14px!important;display:grid!important;place-items:center!important;
+  box-sizing:border-box!important;color:var(--icon-color)!important;
+  background:var(--icon-bg)!important;
+}
+.bottom-nav .nav-icon svg{width:100%!important;height:100%!important;display:block!important}
+.bottom-nav .nav-item[data-page="calculator"] .nav-icon{--icon-color:#6aaeff;--icon-bg:rgba(43,112,205,.28)}
+.bottom-nav .nav-item[data-page="spools"] .nav-icon{--icon-color:#c184ff;--icon-bg:rgba(126,66,191,.28)}
+.bottom-nav .nav-item[data-page="orders"] .nav-icon{--icon-color:#46d9ef;--icon-bg:rgba(18,143,172,.28)}
+.bottom-nav .nav-item[data-page="finance"] .nav-icon{--icon-color:#51e58b;--icon-bg:rgba(25,157,91,.28)}
+.bottom-nav .nav-item[data-page="settings"] .nav-icon{--icon-color:#aab4ca;--icon-bg:rgba(72,88,118,.25)}
+.bottom-nav .nav-item.active .nav-icon{
+  transform:translateY(-2px) scale(1.04)!important;
+  filter:drop-shadow(0 0 7px color-mix(in srgb,var(--icon-color) 40%,transparent))!important;
+}
+.bottom-nav .nav-item:not(.active) .nav-icon{opacity:.84}
+.bottom-nav .nav-icon,.bottom-nav .nav-icon svg{pointer-events:none!important}
+.bottom-nav .nav-item{position:relative!important;z-index:10000!important;min-height:62px!important;pointer-events:auto!important;touch-action:manipulation!important}
+</style>
+<style id="reference-symbols-v2">
+.bottom-nav .nav-item{gap:5px!important}
+.bottom-nav .nav-icon{
+  width:42px!important;height:42px!important;padding:8px!important;
+  border-radius:14px!important;box-sizing:border-box!important;
+  display:grid!important;place-items:center!important;
+  color:var(--icon-color)!important;background:var(--icon-bg)!important;
+}
+.bottom-nav .nav-icon svg{width:100%!important;height:100%!important;display:block!important}
+.bottom-nav .nav-item[data-page="calculator"] .nav-icon{--icon-color:#66a9ff;--icon-bg:rgba(44,112,205,.30)}
+.bottom-nav .nav-item[data-page="spools"] .nav-icon{--icon-color:#c084ff;--icon-bg:rgba(126,65,190,.30)}
+.bottom-nav .nav-item[data-page="orders"] .nav-icon{--icon-color:#43d9ef;--icon-bg:rgba(18,143,172,.30)}
+.bottom-nav .nav-item[data-page="finance"] .nav-icon{--icon-color:#51e48b;--icon-bg:rgba(25,157,91,.30)}
+.bottom-nav .nav-item[data-page="settings"] .nav-icon{--icon-color:#aab4c9;--icon-bg:rgba(72,88,118,.26)}
+.bottom-nav .nav-item.active .nav-icon{transform:translateY(-2px) scale(1.04)!important;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--icon-color) 38%,transparent))!important}
+.bottom-nav .nav-item:not(.active) .nav-icon{opacity:.88}
+.bottom-nav .nav-icon,.bottom-nav .nav-icon svg{pointer-events:none!important}
+.bottom-nav .nav-item{position:relative!important;z-index:10000!important;pointer-events:auto!important;touch-action:manipulation!important}
+</style>
+<style id="layout-time-fix">
+html{scroll-behavior:auto!important}
+.page{width:100%;box-sizing:border-box}
+.app-header{position:relative!important;z-index:2!important}
+.mode{position:relative!important;z-index:5!important;pointer-events:auto!important}
+.mode button{position:relative!important;z-index:6!important;pointer-events:auto!important;touch-action:manipulation!important}
+.time-total{
+  margin-top:7px;
+  padding:7px 10px;
+  border-radius:10px;
+  background:rgba(25,168,255,.07);
+  border:1px solid rgba(25,168,255,.16);
+  color:#aebfd2;
+  font-size:12px;
+  line-height:1.25;
+}
+.time-total strong{color:#19a8ff;font-weight:850}
+@media(max-width:520px){
+  .time-total{font-size:11px;margin-top:6px;padding:6px 9px}
+}
+.filament-row{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px!important;
+  grid-template-areas:
+    "spool spool spool"
+    "g kg del"
+    "note note del"!important;
+}
+.filament-row > .spool-pick-wrap{grid-area:spool!important;min-width:0!important;margin:0!important}
+.filament-row > .filament-field[style*="grid-area:g"]{grid-area:g!important;min-width:0!important}
+.filament-row > .filament-field[style*="grid-area:kg"]{grid-area:kg!important;min-width:0!important}
+.filament-row > .note-field{grid-area:note!important;min-width:0!important}
+.filament-row > .delete{grid-area:del!important;align-self:center!important}
+.spool-pick-wrap label{display:block!important;margin:0 0 4px!important;font-size:10px!important;font-weight:800!important}
+.spool-pick-wrap select{min-width:0!important}
+</style>
+<style id="final-page-visibility-fix">
+/* FINAL FIX: exactly one application page is visible at a time. */
+.page{display:none !important;width:100%;box-sizing:border-box}
+.page.active{display:block !important}
+</style>
+<style id="page-switch-final">
+.page{width:100%;box-sizing:border-box}
+</style>
+<script id="absolute-page-navigation">
+(function(){
+  const pages=['calculator','spools','orders','finance','settings'];
+  function switchPage(name){
+    if(!pages.includes(name)) return;
+    document.querySelectorAll('.page').forEach(function(p){
+      p.classList.remove('active');
+      p.hidden=true;
+      p.style.setProperty('display','none','important');
+    });
+    const target=document.getElementById('page-'+name);
+    if(target){
+      target.hidden=false;
+      target.classList.add('active');
+      target.style.setProperty('display','block','important');
+    }
+    document.querySelectorAll('.nav-item[data-page]').forEach(function(n){
+      n.classList.toggle('active',n.dataset.page===name);
+    });
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('DOMContentLoaded',function(){
+    switchPage('calculator');
+  },{once:true});
+  document.addEventListener('click',function(e){
+    const nav=e.target.closest('.nav-item[data-page]');
+    if(!nav) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    switchPage(nav.dataset.page);
+    if(nav.dataset.page==='spools' && typeof window.renderSpools==='function') window.renderSpools();
+    if(nav.dataset.page==='orders' && typeof window.renderOrders==='function') window.renderOrders();
+    if(nav.dataset.page==='finance' && typeof window.renderFinance==='function') window.renderFinance();
+  },true);
+})();
+</script>
+<style id="absolute-page-fix-final">
+/* FINAL PAGE STRUCTURE FIX: exactly one app page is visible */
+.app > .page { display:none !important; width:100%; box-sizing:border-box; }
+.app > .page.active { display:block !important; }
+</style></head>
+<body>
+<div class="app">
+<header class="app-header">
+<div class="brand">
+<img alt="3D Kalkulator" class="brand-icon" src="icons/icon-180.png"/>
+<div class="brand-copy"><h1><span>3D</span> Druck Kalkulator</h1><div class="sub">Berechne deine Druckkosten<br/>einfach und genau</div></div>
+</div>
+<button aria-label="Zurücksetzen" class="reset header-reset" id="reset">↺</button>
+</header>
+<div class="page active" id="page-calculator">
+<div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
+<button data-v="friend" type="button">Freund</button><button data-v="colleague" type="button">Kollege</button><button class="active" data-v="stranger" type="button">Fremder</button><button data-v="business" type="button">Gewerblich</button>
+</div></div>
+<div class="card">
+<div class="sectiontitle">🖨️ Druckdetails</div>
+<div class="muted" style="font-size:15px;margin-top:-8px">Gib die Werte für deinen geplanten Druck ein.</div>
+<div class="grid" style="margin-top:17px">
+<div class="full"><label>🕒 Druckzeit</label><div class="timebox timebox-3">
+<div><label style="font-size:11px">Tage</label><input id="days" inputmode="numeric" min="0" step="1" type="number" value="0"/></div>
+<div><label style="font-size:11px">Stunden</label><input id="hours" inputmode="numeric" max="23" min="0" step="1" type="number" value="13"/></div>
+<div><label style="font-size:11px">Minuten</label><input id="minutes" inputmode="numeric" max="59" min="0" step="1" type="number" value="37"/></div>
+</div>
+<div class="time-total" id="timeTotal">Gesamtdauer: <strong>13 Std. 37 Min.</strong></div>
+</div></div>
+<div><label>Druckplatten / Starts</label><input id="plates" inputmode="numeric" min="0" step="1" type="number" value="1"/></div>
+<div><label>Modelldatei / Lizenz (€)</label><input id="file" inputmode="decimal" min="0" step="0.01" type="number" value="0"/></div>
+<div class="full"><label>Sonstige Kosten (€)</label><input id="extra" inputmode="decimal" min="0" step="0.01" type="number" value="0"/></div>
+</div>
+<div class="multi-head">
+<div class="multi-title">🎨 Multi-Color Druck <span>(mehrere Filamente)</span></div>
+<button aria-label="Multi-Color ein/aus" class="switch" id="multiToggle" type="button"><i></i></button>
+</div>
+<div id="filamentArea"></div>
+<div class="material-total"><span>Materialkosten</span><strong id="materialCalc">2,82 €</strong></div>
+<div class="hint">💡 Trage je Filament die Menge in Gramm und den Rollenpreis in €/kg ein. Bei Multi-Color kannst du für jede Farbe/Filamentart eine eigene Zeile anlegen.</div>
+<div class="card"><div class="sectiontitle">Handarbeit</div><div class="grid">
+<div><label>Konstruktion (Std.)</label><input id="design" inputmode="decimal" min="0" step="0.1" type="number" value="0"/></div>
+<div><label>Nachbearbeitung (Std.)</label><input id="finish" inputmode="decimal" min="0" step="0.1" type="number" value="0"/></div>
+</div></div><div class="card calculator-breakdown" id="breakdownCard">
+<div class="sectiontitle">⚙️ Kostenaufstellung</div>
+<div class="breakdown">
+<div><span>Material</span><strong id="bMaterial">0,00 €</strong></div>
+<div><span>Strom</span><strong id="bPower">0,00 €</strong></div>
+<div><span>Drucker-Abschreibung</span><strong id="bDep">0,00 €</strong></div>
+<div><span>Verschleiß</span><strong id="bWear">0,00 €</strong></div>
+<div><span>Druckerarbeit / Setup</span><strong id="bPrinter">0,00 €</strong></div>
+<div><span>Konstruktion</span><strong id="bBuild">0,00 €</strong></div>
+<div><span>Nachbearbeitung</span><strong id="bPost">0,00 €</strong></div>
+<div><span>Modelldatei / Lizenz</span><strong id="bLicense">0,00 €</strong></div>
+<div><span>Sonstige Kosten</span><strong id="bOther">0,00 €</strong></div>
+<div id="bOverheadRow"><span>Betriebskosten</span><strong id="bOverhead">0,00 €</strong></div>
+<div class="total"><span>Selbstkosten</span><strong id="bSelf">0,00 €</strong></div>
+<div class="total"><span>Aufschlag / Rabatt</span><strong id="bMarkup">0,00 €</strong></div>
+<div class="total"><span>Verkaufspreis</span><strong id="bSale">0,00 €</strong></div>
+</div>
+</div><div class="result">
+<div class="label">Empfohlener Verkaufspreis</div>
+<div class="price" id="price">0,00 €</div>
+<div class="resultrow"><span>Selbstkosten</span><strong id="self">0,00 €</strong></div>
+<div class="resultrow">
+<span>Aufschlag / Rabatt</span>
+<div class="price-control"><input aria-label="Aufschlag oder Rabatt in Prozent" id="markupInput" inputmode="decimal" step="1" type="number" value="35"/> <span>%</span></div>
+</div>
+<div class="resultrow">
+<span>Verkaufspreis runden</span>
+<select aria-label="Verkaufspreis runden" id="rounding">
+<option value="0">Keine Rundung</option>
+<option value="0.1">auf 0,10 €</option>
+<option value="0.5">auf 0,50 €</option>
+<option value="1">auf 1,00 €</option>
+<option value="5">auf 5,00 €</option>
+</select>
+</div>
+<div class="standard-actions order-actions">
+<button id="saveOrder" type="button">💾 Auftrag speichern</button>
+</div>
+</div></div>
+
+
+
+<div class="page" hidden="True" id="page-spools">
+<div class="page-title">🧵 Filament &amp; Spulen</div>
+<div class="page-subtitle">Speichere deine Filamentspulen und wähle sie direkt im Kalkulator aus.</div>
+<div class="card">
+<div class="sectiontitle">Neue Spule</div>
+<div class="spool-form-grid">
+<div>
+<label>Spulenname</label>
+<input id="spoolName" placeholder="z. B. Bambu PLA Basic Schwarz" type="text"/>
+</div>
+<div>
+<label>Material</label>
+<select id="spoolMaterial">
+<option>PLA</option><option>PETG</option><option>ABS</option><option>ASA</option>
+<option>TPU</option><option>PC</option><option>PA</option><option>PLA-CF</option>
+<option>PETG-CF</option><option>Andere</option>
+</select>
+</div>
+<div>
+<label>Farbe</label>
+<input id="spoolColor" placeholder="z. B. Schwarz" type="text"/>
+</div>
+<div>
+<label>Preis € / kg</label>
+<input id="spoolPrice" inputmode="decimal" min="0" placeholder="24,99" step="0.01" type="number"/>
+</div>
+<div>
+<label>Restmenge g <span class="optional-label">(optional)</span></label>
+<input id="spoolRemaining" inputmode="decimal" min="0" placeholder="1000" step="1" type="number"/>
+</div>
+</div>
+<button class="save-order-main" id="addSpool" type="button">➕ Spule speichern</button>
+</div>
+<div class="card">
+<div class="spool-list-head">
+<div>
+<div class="sectiontitle">Meine Spulen</div>
+<div class="spool-count" id="spoolCount">0 Spulen</div>
+</div>
+<input class="spool-search" id="spoolSearch" placeholder="🔎 Suchen ..." type="search"/>
+</div>
+<div class="spools-list" id="spoolsList"></div>
+</div>
+</div><div class="page" hidden="True" id="page-orders">
+<div class="page-title">📁 Aufträge</div>
+<div class="page-subtitle">Speichere fertige Kalkulationen und rufe sie später wieder auf.</div>
+<div class="card order-create">
+<div class="sectiontitle">Neuen Auftrag speichern</div>
+<div class="order-form-grid">
+<div>
+<label>Auftragsname</label>
+<input id="orderName" placeholder="z. B. Ersatzteil Halterung" type="text"/>
+</div>
+<div>
+<label>Kunde</label>
+<input id="orderCustomer" placeholder="z. B. Max Mustermann" type="text"/>
+</div>
+<div>
+<label>Status</label>
+<select id="orderStatus">
+<option value="open">🟠 Offen</option>
+<option value="work">🔵 In Arbeit</option>
+<option value="done">🟢 Fertig</option>
+<option value="paid">💰 Bezahlt</option>
+</select>
+</div>
+<div class="order-note-field">
+<label>Notiz <span>(optional)</span></label>
+<textarea id="orderNote" placeholder="z. B. Abholung am Freitag, Farbe Schwarz ..." rows="2"></textarea>
+</div>
+</div>
+<button class="save-order-main" id="saveOrderMain" type="button">💾 Aktuelle Kalkulation speichern</button>
+</div>
+<div class="card">
+<div class="sectiontitle">Gespeicherte Aufträge</div>
+<div class="orders-list" id="ordersList"></div>
+</div>
+</div><div class="page" hidden="True" id="page-finance">
+<div class="page-title">💶 Finanzen</div>
+<div class="page-subtitle">Einnahmen, Ausgaben und Gewinn deiner Aufträge auf einen Blick.</div>
+<div class="finance-filter card">
+<div class="sectiontitle">Zeitraum</div>
+<div class="finance-periods" id="financePeriods">
+<button class="active" data-period="month" type="button">Dieser Monat</button>
+<button data-period="lastMonth" type="button">Letzter Monat</button>
+<button data-period="year" type="button">Dieses Jahr</button>
+<button data-period="all" type="button">Gesamt</button>
+</div>
+</div>
+<div class="finance-summary">
+<div class="finance-summary-card income">
+<span>💰 Einnahmen</span>
+<strong id="financeIncome">0,00 €</strong>
+</div>
+<div class="finance-summary-card expense">
+<span>💸 Ausgaben</span>
+<strong id="financeExpenses">0,00 €</strong>
+</div>
+<div class="finance-summary-card profit">
+<span>📈 Gewinn</span>
+<strong id="financeProfit">0,00 €</strong>
+</div>
+<div class="finance-summary-card count">
+<span>📦 Bezahlte Aufträge</span>
+<strong id="financeOrderCount">0</strong>
+</div>
+</div>
+<div class="card finance-chart-card">
+<div class="sectiontitle">Finanzübersicht</div>
+<div class="finance-bars">
+<div class="finance-bar-row">
+<span>Einnahmen</span>
+<div class="finance-bar-track"><i id="barIncome"></i></div>
+<strong id="barIncomeValue">0,00 €</strong>
+</div>
+<div class="finance-bar-row">
+<span>Ausgaben</span>
+<div class="finance-bar-track"><i id="barExpenses"></i></div>
+<strong id="barExpensesValue">0,00 €</strong>
+</div>
+<div class="finance-bar-row">
+<span>Gewinn</span>
+<div class="finance-bar-track"><i id="barProfit"></i></div>
+<strong id="barProfitValue">0,00 €</strong>
+</div>
+</div>
+</div>
+<div class="card finance-add-card">
+<div class="sectiontitle">Ausgabe hinzufügen</div>
+<div class="finance-form-grid">
+<div>
+<label>Bezeichnung</label>
+<input id="expenseName" placeholder="z. B. Filament" type="text"/>
+</div>
+<div>
+<label>Kategorie</label>
+<select id="expenseCategory">
+<option>Filament</option>
+<option>Drucker / Ersatzteile</option>
+<option>Werkzeug</option>
+<option>Verpackung</option>
+<option>Software / Lizenz</option>
+<option>Sonstiges</option>
+</select>
+</div>
+<div>
+<label>Betrag €</label>
+<input id="expenseAmount" inputmode="decimal" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+<div>
+<label>Datum</label>
+<input id="expenseDate" type="date"/>
+</div>
+</div>
+<button class="save-order-main finance-save-btn" id="addExpense" type="button">➕ Ausgabe speichern</button>
+</div>
+<div class="card">
+<div class="sectiontitle">Einnahmen aus Aufträgen</div>
+<div class="finance-list" id="financeOrdersList"></div>
+</div>
+<div class="card">
+<div class="sectiontitle">Gespeicherte Ausgaben</div>
+<div class="finance-list" id="expensesList"></div>
+</div>
+</div><div class="page" hidden="True" id="page-settings">
+<div class="page-title">⚙️ Einstellungen</div>
+<div class="page-subtitle">App-Darstellung und Kalkulationswerte.</div>
+<div class="card settings-theme">
+<div class="sectiontitle">Darstellung</div>
+<div class="setting-row">
+<div><strong>🌙 Dunkelmodus</strong><div class="muted">Hell / Dunkel für die App</div></div>
+<button aria-label="Hell- oder Dunkelmodus" class="switch" id="themeSwitch" type="button"><i></i></button>
+</div>
+</div>
+<details class="card"><summary>⚙️ Kalkulationswerte</summary><div class="grid" style="margin-top:16px">
+<div><label>Strom €/kWh</label><input id="powerprice" step=".01" type="number" value="0.35"/></div>
+<div><label>Druckerleistung W</label><input id="watts" type="number" value="180"/></div>
+<div><label>Abschreibung privat €/h</label><input id="depP" step=".01" type="number" value="0.20"/></div>
+<div><label>Verschleiß privat €/h</label><input id="wearP" step=".01" type="number" value="0.05"/></div>
+<div><label>Druckarbeit privat €/h</label><input id="laborP" step=".1" type="number" value="3.50"/></div>
+<div><label>Handarbeit privat €/h</label><input id="handP" step=".5" type="number" value="25"/></div>
+<div><label>Abschreibung gew. €/h</label><input id="depB" step=".01" type="number" value="0.30"/></div>
+<div><label>Verschleiß gew. €/h</label><input id="wearB" step=".01" type="number" value="0.12"/></div>
+<div><label>Druckarbeit gew. €/h</label><input id="laborB" step=".1" type="number" value="15"/></div>
+<div><label>Handarbeit gew. €/h</label><input id="handB" step=".5" type="number" value="30"/></div>
+<div><label>Setup je Platte (min.)</label><input id="setup" type="number" value="15"/></div>
+<div><label>Betriebskosten gew. (%)</label><input id="overhead" type="number" value="8"/></div>
+</div>
+<div class="standard-actions">
+<button id="saveDefaults" type="button">💾 Standardwerte speichern</button>
+<button id="loadDefaults" type="button">↥ Gespeicherte Standards laden</button>
+</div>
+<p class="muted">Privat: 10 % der Druckzeit + Setup je Druckplatte. Gewerblich: 15 min Grundsetup + 10 min je Druckplatte.</p></details>
+<div class="card muted">💡 <strong>Darkmodus:</strong> Mit ☾/☀️ oben kannst du zwischen Hell und Dunkel wechseln. Die Einstellung wird auf deinem iPhone gespeichert.</div><div class="card muted">Hinweis: Die Werte sind kalkulatorische Startwerte. Bei gekauften STL-Dateien immer die Lizenz für Verkäufe prüfen.</div>
+</div></div>
+
+
+
+<div class="order-detail-modal" hidden="" id="orderDetailModal">
+<div class="order-detail-backdrop" data-close-order-detail=""></div>
+<section aria-labelledby="orderDetailTitle" aria-modal="true" class="order-detail-sheet" role="dialog">
+<div class="order-detail-head">
+<div>
+<span class="order-detail-kicker">Auftragsdetails</span>
+<h2 id="orderDetailTitle">Auftrag</h2>
+<div class="order-detail-customer" id="orderDetailCustomer"></div>
+</div>
+<button aria-label="Schließen" class="order-detail-close" data-close-order-detail="" type="button">×</button>
+</div>
+<div class="order-detail-status-row">
+<label>Status</label>
+<select id="orderDetailStatus">
+<option value="open">🟠 Offen</option>
+<option value="work">🔵 In Arbeit</option>
+<option value="done">🟢 Fertig</option>
+<option value="paid">💰 Bezahlt</option>
+</select>
+</div>
+<div class="order-detail-grid">
+<div class="detail-stat"><span>💰 Verkaufspreis</span><strong id="detailPrice">0,00 €</strong></div>
+<div class="detail-stat"><span>📉 Selbstkosten</span><strong id="detailSelf">0,00 €</strong></div>
+<div class="detail-stat"><span>📈 Gewinn</span><strong id="detailProfit">0,00 €</strong></div>
+<div class="detail-stat"><span>🖨️ Drucke</span><strong id="detailPlates">0</strong></div>
+<div class="detail-stat"><span>⚖️ Material</span><strong id="detailGrams">0 g</strong></div>
+<div class="detail-stat"><span>⏱️ Druckzeit</span><strong id="detailTime">0 Std. 0 Min.</strong></div>
+</div>
+<div class="detail-section">
+<h3>💶 Kostenaufstellung</h3>
+<div class="detail-cost-list" id="detailCosts"></div>
+</div>
+<div class="detail-section">
+<h3>📝 Notiz</h3>
+<textarea id="orderDetailNote" placeholder="Notiz zum Auftrag ..." rows="4"></textarea>
+</div>
+<div class="detail-section">
+<h3>📅 Auftrag</h3>
+<div class="detail-meta" id="detailMeta"></div>
+</div>
+<div class="order-detail-actions">
+<button class="load-order" id="detailLoadOrder" type="button">↗ Auftrag laden</button>
+<button id="detailSaveChanges" type="button">💾 Änderungen speichern</button>
+</div>
+</section>
+</div>
+
+
+<nav aria-label="App-Navigation" class="bottom-nav">
+<button class="nav-item active" data-page="calculator" type="button">
+<span aria-hidden="true" class="nav-icon">
+<img alt="" class="nav-icon-img nav-icon-dark" src="data:image/png;base64,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">
+<img alt="" class="nav-icon-img nav-icon-light" src="data:image/png;base64,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">
+</span>
+<small>Kalkulator</small>
+</button>
+<button class="nav-item" data-page="spools" type="button">
+<span aria-hidden="true" class="nav-icon">
+<img alt="" class="nav-icon-img nav-icon-dark" src="data:image/png;base64,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">
+<img alt="" class="nav-icon-img nav-icon-light" src="data:image/png;base64,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">
+</span>
+<small>Spulen</small>
+</button>
+<button class="nav-item" data-page="orders" type="button">
+<span aria-hidden="true" class="nav-icon">
+<img alt="" class="nav-icon-img nav-icon-dark" src="data:image/png;base64,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">
+<img alt="" class="nav-icon-img nav-icon-light" src="data:image/png;base64,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">
+</span>
+<small>Aufträge</small>
+</button>
+<button class="nav-item" data-page="finance" type="button">
+<span aria-hidden="true" class="nav-icon">
+<img alt="" class="nav-icon-img nav-icon-dark" src="data:image/png;base64,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">
+<img alt="" class="nav-icon-img nav-icon-light" src="data:image/png;base64,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">
+</span>
+<small>Finanzen</small>
+</button>
+<button class="nav-item" data-page="settings" type="button">
+<span aria-hidden="true" class="nav-icon">
+<img alt="" class="nav-icon-img nav-icon-dark" src="data:image/png;base64,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">
+<img alt="" class="nav-icon-img nav-icon-light" src="data:image/png;base64,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">
+</span>
+<small>Einstellungen</small>
+</button>
+</nav>
+
+<style id="page-visibility-fix">
+/* Pages are controlled individually; never hide the whole app. */
+</style>
+<style id="final-theme-fix">
+/* Final fix: v21 contains hard-coded dark backgrounds with !important. */
+html:has(body:not(.dark)){background:#f3f5f8 !important;color-scheme:light !important}
+body:not(.dark){background:linear-gradient(180deg,#f7f9fb 0%,#eef2f6 100%) !important;color:#111827 !important}
+body:not(.dark) .page-title,body:not(.dark) .sectiontitle,body:not(.dark) h1,body:not(.dark) h2,body:not(.dark) h3,body:not(.dark) strong,body:not(.dark) .setting-row strong,body:not(.dark) .brand-copy h1{color:#111827 !important}
+body:not(.dark) .page-subtitle,body:not(.dark) .sub,body:not(.dark) .brand-copy .sub,body:not(.dark) .muted,body:not(.dark) label,body:not(.dark) .filament-field .field-help,body:not(.dark) .order-info span,body:not(.dark) .empty-orders,body:not(.dark) .breakdown>div span,body:not(.dark) .result .label{color:#64748b !important}
+body:not(.dark) .card,body:not(.dark) .result,body:not(.dark) details.card{background:linear-gradient(145deg,#fff,#f8fafc) !important;border-color:#cbd5e1 !important;box-shadow:0 8px 24px rgba(15,23,42,.08) !important;color:#111827 !important}
+body:not(.dark) input,body:not(.dark) select{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important}
+body:not(.dark) input::placeholder{color:#94a3b8 !important}
+body:not(.dark) .mode,body:not(.dark) .multi-head,body:not(.dark) .filament-row,body:not(.dark) .hint,body:not(.dark) .filament-intro{background:#f1f5f9 !important;border-color:#cbd5e1 !important;color:#475569 !important}
+body:not(.dark) .mode button{color:#64748b !important}
+body:not(.dark) .mode button.active{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important;box-shadow:0 3px 12px rgba(15,23,42,.10) !important}
+body:not(.dark) .add-filament,body:not(.dark) .theme,body:not(.dark) .reset,body:not(.dark) .order-actions-small button{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important}
+body:not(.dark) .order-item{background:#f8fafc !important;border-color:#cbd5e1 !important}
+body:not(.dark) .order-actions button,body:not(.dark) .save-order-main{background:rgba(25,168,255,.08) !important;color:#0879c9 !important;border-color:rgba(25,168,255,.35) !important}
+body:not(.dark) .bottom-nav{background:rgba(255,255,255,.97) !important;border-top-color:#cbd5e1 !important}
+body:not(.dark) .nav-item{color:#64748b !important}body:not(.dark) .nav-item.active{color:#0b91e6 !important}
+body:not(.dark) .switch{background:#cbd5e1 !important}body:not(.dark) .switch.on{background:#19a8ff !important}
+body:not(.dark) .breakdown>div{border-bottom-color:#e2e8f0 !important}
+body:not(.dark) .header-reset{background:#f1f5f9 !important;color:#111827 !important;border-color:#cbd5e1 !important}
+body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;border-color:rgba(25,168,255,.18) !important}
+</style>
+<script>
+(function(){
+  'use strict';
+
+  function init(){
+    const $ = id => document.getElementById(id);
+    const modeMarkup = {friend:-20, colleague:10, stranger:35, business:35};
+    const defaultRows = [{g:163, kg:17.30, note:'PLA'}];
+    let mode = 'stranger';
+    let multi = false;
+
+    // Navigation and pricing-mode buttons are initialized FIRST.
+    // This keeps them functional even if another optional section later fails.
+    function showPage(name){
+      const validPages=['calculator','spools','orders','finance','settings'];
+      if(!validPages.includes(name)) return;
+
+      document.querySelectorAll('.page').forEach(p=>{
+        p.classList.remove('active');
+        p.hidden=true;
+        p.style.setProperty('display','none','important');
+      });
+
+      const page=$('page-'+name);
+      if(page){
+        page.hidden=false;
+        page.classList.add('active');
+        page.style.setProperty('display','block','important');
+      }
+
+      document.querySelectorAll('.nav-item').forEach(b=>{
+        b.classList.toggle('active',b.dataset.page===name);
+      });
+
+      window.scrollTo(0,0);
+
+      if(name==='spools' && typeof renderSpools==='function') renderSpools();
+      if(name==='orders' && typeof renderOrders==='function') renderOrders();
+      if(name==='finance' && typeof renderFinance==='function') renderFinance();
+    }
+
+    document.querySelectorAll('.nav-item').forEach(button=>{
+      button.addEventListener('click',ev=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        showPage(button.dataset.page);
+      });
+    });
+
+    document.querySelectorAll('#modes button').forEach(button=>{
+      button.addEventListener('click',ev=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        mode=button.dataset.v || 'stranger';
+        document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('active'));
+        button.classList.add('active');
+        if($('markupInput')) $('markupInput').value=modeMarkup[mode];
+        calc();
+      });
+    });
+
+    function parseNum(value, fallback=0){
+      if(value === null || value === undefined || value === '') return fallback;
+      const n = parseFloat(String(value).trim().replace(',', '.'));
+      return Number.isFinite(n) ? n : fallback;
+    }
+    function num(id){
+      const el=$(id); return el ? Math.max(0, parseNum(el.value,0)) : 0;
+    }
+    function euro(x){
+      return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number.isFinite(x)?x:0);
+    }
+    function setText(id,value){ const el=$(id); if(el) el.textContent=value; }
+
+    // Theme
+    const savedTheme=localStorage.getItem('3dcalc-theme');
+    if(savedTheme==='dark' || savedTheme===null) document.body.classList.add('dark');
+    document.documentElement.style.colorScheme=document.body.classList.contains('dark')?'dark':'light';
+    function updateThemeButton(){ setText('theme',document.body.classList.contains('dark')?'☀️':'☾'); }
+    updateThemeButton();
+    $('theme')?.addEventListener('click',()=>{
+      document.body.classList.toggle('dark');
+      localStorage.setItem('3dcalc-theme',document.body.classList.contains('dark')?'dark':'light');
+      updateThemeButton();
+    });
+
+    function escapeAttr(v){
+      return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function currentRows(){
+      return Array.from(document.querySelectorAll('.filament-row')).map(r=>({
+        g:r.querySelector('.fg')?.value ?? '',
+        kg:r.querySelector('.fkg')?.value ?? '',
+        note:r.querySelector('.fn')?.value ?? '',
+        spoolId:r.dataset.spoolId || ''
+      }));
+    }
+
+    function makeRow(r){
+      const row=document.createElement('div');
+      row.className='filament-row';
+      const g=r?.g ?? '', kg=r?.kg ?? '', note=r?.note ?? '';
+      row.innerHTML=`<div class="spool-pick-wrap">
+          <label>Spule</label>
+          <select class="spool-select"><option value="">Manuell eingeben</option></select>
+        </div>
+        <div class="filament-field" style="grid-area:g">
+          <label>Menge (g)</label>
+          <input class="fg" type="number" min="0" step="1" inputmode="decimal" value="${escapeAttr(g)}" placeholder="z. B. 163">
+          <div class="field-help">Verbrauchte Gramm</div>
+        </div>
+        <div class="filament-field" style="grid-area:kg">
+          <label>Preis €/kg</label>
+          <input class="fkg" type="number" min="0" step="0.01" inputmode="decimal" value="${escapeAttr(kg)}" placeholder="z. B. 17,30">
+          <div class="field-help">Preis der 1-kg-Rolle</div>
+        </div>
+        <div class="filament-field note-field">
+          <label>Farbe / Art</label>
+          <input class="fn note-input" type="text" value="${escapeAttr(note)}" placeholder="z. B. Schwarz PLA">
+          <div class="field-help">z. B. Schwarz PLA</div>
+        </div>
+        <button class="delete" type="button" aria-label="Filament löschen">🗑️</button>`;
+      row.querySelector('.delete').addEventListener('click',()=>{
+        row.remove();
+        if(!document.querySelector('.filament-row')){
+          const area=$('filamentArea'); area?.prepend(makeRow({g:'',kg:'',note:''}));
+        }
+        calc();
+      });
+      row.querySelectorAll('input').forEach(input=>{
+        input.addEventListener('input',()=>{ if(input.classList.contains('fkg') || input.classList.contains('fn')) row.dataset.spoolId=''; calc(); });
+        input.addEventListener('change',()=>{ if(input.classList.contains('fkg') || input.classList.contains('fn')) row.dataset.spoolId=''; calc(); });
+      });
+      const spoolSelect=row.querySelector('.spool-select');
+      if(spoolSelect){
+        populateSpoolSelect(spoolSelect);
+        spoolSelect.value=r?.spoolId||'';
+        spoolSelect.addEventListener('change',()=>{
+          const s=readSpools().find(x=>String(x.id)===String(spoolSelect.value));
+          if(!s) return;
+          const price=row.querySelector('.fkg');
+          const color=row.querySelector('.fn');
+          if(price) price.value=s.price;
+          if(color) color.value=(s.color||'') + (s.material ? ' ' + s.material : '');
+          row.dataset.spoolId=s.id;
+          row.querySelectorAll('input').forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true})));
+          calc();
+        });
+      }
+      return row;
+    }
+
+    function renderFilaments(){
+      const area=$('filamentArea'); if(!area) return;
+      let rows=currentRows();
+      if(!rows.length) rows=defaultRows.map(x=>({...x}));
+      if(!multi) rows=rows.slice(0,1);
+      area.innerHTML='';
+      const intro=document.createElement('div');
+      intro.className='filament-intro';
+      intro.innerHTML='🧵 <strong>So trägst du es ein:</strong> Gramm = tatsächlicher Verbrauch · €/kg = Preis deiner Filamentrolle · Farbe/Art = z. B. Schwarz PLA';
+      area.appendChild(intro);
+      rows.forEach(r=>area.appendChild(makeRow(r)));
+      if(multi){
+        const add=document.createElement('button');
+        add.className='add-filament'; add.type='button'; add.textContent='＋ Weiteres Filament hinzufügen';
+        add.addEventListener('click',()=>{
+          area.insertBefore(makeRow({g:'',kg:'',note:''}),add);
+          calc();
+          area.lastElementChild?.scrollIntoView({behavior:'smooth',block:'nearest'});
+        });
+        area.appendChild(add);
+      }
+    }
+
+    function materialCost(){
+      let total=0;
+      document.querySelectorAll('.filament-row').forEach(r=>{
+        const g=Math.max(0,parseNum(r.querySelector('.fg')?.value,0));
+        const kg=Math.max(0,parseNum(r.querySelector('.fkg')?.value,0));
+        total += g*kg/1000;
+      });
+      return total;
+    }
+
+    function updateBreakdown(self,price,material,power,dep,wear,labor,design,finish,file,extra,overhead,markupEuro){
+      const vals={
+        bMaterial:material,bPower:power,bDep:dep,bWear:wear,bPrinter:labor,
+        bBuild:design,bPost:finish,bLicense:file,bOther:extra,bOverhead:overhead,
+        bSelf:self,bMarkup:markupEuro,bSale:price
+      };
+      Object.entries(vals).forEach(([id,val])=>setText(id,euro(val)));
+      const overheadRow=$('bOverheadRow');
+      if(overheadRow) overheadRow.style.display=mode==='business'?'flex':'none';
+    }
+
+    function calc(){
+      try{
+        const business=mode==='business';
+        const days=Math.floor(num('days'));
+        const hours=Math.min(23,Math.floor(num('hours')));
+        const minutes=Math.min(59,Math.floor(num('minutes')));
+        const h=days*24+hours+minutes/60;
+        const totalMinutes=days*24*60+hours*60+minutes;
+        const totalDays=Math.floor(totalMinutes/1440);
+        const remMinutes=totalMinutes%1440;
+        const totalHours=Math.floor(remMinutes/60);
+        const totalMins=remMinutes%60;
+        const timeEl=$('timeTotal');
+        if(timeEl){
+          const parts=[];
+          if(totalDays>0) parts.push(`<strong>${totalDays} ${totalDays===1?'Tag':'Tage'}</strong>`);
+          if(totalHours>0 || totalDays===0) parts.push(`<strong>${totalHours} Std.</strong>`);
+          if(totalMins>0 || totalMinutes===0) parts.push(`<strong>${totalMins} Min.</strong>`);
+          timeEl.innerHTML='Gesamtdauer: '+parts.join(' · ');
+        }
+        const plates=Math.floor(num('plates'));
+        const material=materialCost();
+        const power=h*num('watts')/1000*num('powerprice');
+        const dep=h*(business?num('depB'):num('depP'));
+        const wear=h*(business?num('wearB'):num('wearP'));
+        const work=business ? (plates>0?0.25:0)+plates*10/60 : h*0.10+plates*num('setup')/60;
+        const printerLabor=work*(business?num('laborB'):num('laborP'));
+        const handRate=business?num('handB'):num('handP');
+        const design=num('design')*handRate;
+        const finish=num('finish')*handRate;
+        const file=num('file');
+        const extra=num('extra');
+        const direct=material+power+dep+wear+printerLabor+design+finish+file+extra;
+        const overhead=business?direct*num('overhead')/100:0;
+        const self=direct+overhead;
+        let m=parseNum($('markupInput')?.value,modeMarkup[mode]);
+        m=Math.max(-100,m);
+        const rawPrice=self*(1+m/100);
+        const step=Math.max(0,parseNum($('rounding')?.value,0));
+        const price=step>0 ? Math.round(rawPrice/step)*step : rawPrice;
+        const markupEuro=price-self;
+
+        setText('price',euro(price));
+        setText('self',euro(self));
+        setText('markup',(m>=0?'+':'')+m+' %');
+        setText('materialCalc',euro(material));
+        updateBreakdown(self,price,material,power,dep,wear,printerLabor,design,finish,file,extra,overhead,markupEuro);
+      }catch(err){
+        console.error('3D Kalkulator Berechnungsfehler:',err);
+      }
+    }
+
+    renderFilaments();
+    $('multiToggle')?.addEventListener('click',()=>{
+      multi=!multi;
+      $('multiToggle').classList.toggle('on',multi);
+      renderFilaments();
+      calc();
+    });
+
+document.querySelectorAll('input,select').forEach(el=>{
+      el.addEventListener('input',calc);
+      el.addEventListener('change',calc);
+    });
+
+    const defaultIds=['powerprice','watts','depP','wearP','laborP','handP','depB','wearB','laborB','handB','setup','overhead'];
+    $('saveDefaults')?.addEventListener('click',()=>{
+      const data={};
+      defaultIds.forEach(id=>{if($(id)) data[id]=$(id).value;});
+      if($('rounding')) data.rounding=$('rounding').value;
+      localStorage.setItem('3dcalc-defaults',JSON.stringify(data));
+      const btn=$('saveDefaults'); btn.textContent='✓ Standards gespeichert';
+      setTimeout(()=>btn.textContent='💾 Standardwerte speichern',1400);
+    });
+    $('loadDefaults')?.addEventListener('click',()=>{
+      try{
+        const data=JSON.parse(localStorage.getItem('3dcalc-defaults')||'null');
+        if(!data) return;
+        defaultIds.forEach(id=>{if($(id)&&data[id]!==undefined) $(id).value=data[id];});
+        if($('rounding')&&data.rounding!==undefined) $('rounding').value=data.rounding;
+        calc();
+      }catch(err){console.warn(err);}
+    });
+    $('reset')?.addEventListener('click',()=>location.reload());
+
+
+    // Theme is controlled from Settings.
+    const themeSwitch=$('themeSwitch');
+    function syncThemeSwitch(){
+      themeSwitch?.classList.toggle('on',document.body.classList.contains('dark'));
+    }
+    syncThemeSwitch();
+    function applyTheme(){
+      const dark=document.body.classList.contains('dark');
+      localStorage.setItem('3dcalc-theme',dark?'dark':'light');
+      document.documentElement.style.colorScheme=dark?'dark':'light';
+      const meta=document.querySelector('meta[name="theme-color"]');
+      if(meta) meta.setAttribute('content',dark?'#020914':'#f7f9fb');
+      syncThemeSwitch();
+    }
+    applyTheme();
+    themeSwitch?.addEventListener('click',()=>{
+      document.body.classList.toggle('dark');
+      applyTheme();
+    });
+
+    // Saved orders live locally on the iPhone/browser.
+    function readOrders(){
+      try{return JSON.parse(localStorage.getItem('3dcalc-orders')||'[]')}catch(e){return []}
+    }
+    function writeOrders(items){localStorage.setItem('3dcalc-orders',JSON.stringify(items))}
+    function snapshotOrder(name, customer, status, note){
+      calc();
+      const get=id=>$(id)?.value ?? '';
+      const days=Math.floor(num('days'));
+      const hours=Math.min(23,Math.floor(num('hours')));
+      const minutes=Math.min(59,Math.floor(num('minutes')));
+      const totalMinutes=days*24*60+hours*60+minutes;
+      const totalGrams=currentRows().reduce((sum,r)=>sum+Math.max(0,parseNum(r.g,0)),0);
+      return {
+        id:Date.now()+Math.random(),
+        name:name || 'Unbenannter Auftrag',
+        customer:customer || 'Kein Kunde angegeben',
+        status:status || 'open',
+        note:note || '',
+        date:new Date().toLocaleDateString('de-DE'),
+        dateISO:new Date().toISOString().slice(0,10),
+        mode,
+        days:get('days'),hours:get('hours'),minutes:get('minutes'),
+        totalMinutes,totalGrams,
+        plates:get('plates'),file:get('file'),extra:get('extra'),
+        design:get('design'),finish:get('finish'),
+        markup:get('markupInput'),rounding:get('rounding'),
+        price:$('price')?.textContent||'0,00 €',
+        self:$('self')?.textContent||'0,00 €',
+        material:$('materialCalc')?.textContent||'0,00 €',
+        filaments:currentRows()
+      };
+    }
+    const ORDER_STATUSES = {
+      open:{label:'Offen',icon:'◉',cls:'open'},
+      work:{label:'In Arbeit',icon:'▷',cls:'work'},
+      done:{label:'Fertig',icon:'✓',cls:'done'},
+      paid:{label:'Bezahlt',icon:'€',cls:'paid'}
+    };
+
+    function statusInfo(status){
+      return ORDER_STATUSES[status] || ORDER_STATUSES.open;
+    }
+
+    function saveOrder(name, customer, status, note){
+      const items=readOrders();
+      items.unshift(snapshotOrder(name, customer, status, note));
+      writeOrders(items.slice(0,100));
+      if($('orderName')) $('orderName').value='';
+      if($('orderCustomer')) $('orderCustomer').value='';
+      if($('orderStatus')) $('orderStatus').value='open';
+      if($('orderNote')) $('orderNote').value='';
+      renderOrders();
+      renderFinance();
+    }
+
+    function formatPrintTime(o){
+      if(o.totalMinutes!==undefined){
+        const mins=Math.max(0,Math.round(Number(o.totalMinutes)||0));
+        const d=Math.floor(mins/1440), h=Math.floor((mins%1440)/60), m=mins%60;
+        return d ? `${d} Tg. ${h} Std. ${m} Min.` : `${h} Std. ${m} Min.`;
+      }
+      const d=Number(o.days)||0, h=Number(o.hours)||0, m=Number(o.minutes)||0;
+      return d ? `${d} Tg. ${h} Std. ${m} Min.` : `${h} Std. ${m} Min.`;
+    }
+
+    function totalOrderGrams(o){
+      if(o.totalGrams!==undefined) return Math.round(Number(o.totalGrams)||0);
+      return (o.filaments||[]).reduce((sum,r)=>sum+Math.max(0,parseNum(r.g,0)),0);
+    }
+
+    function renderOrders(){
+      const list=$('ordersList'); if(!list) return;
+      const items=readOrders();
+      if(!items.length){
+        list.innerHTML='<div class="empty-orders">📁 Noch keine Aufträge gespeichert.<br><span>Speichere deine aktuelle Kalkulation über den Button oben.</span></div>';
+        return;
+      }
+      list.innerHTML=items.map(o=>{
+        const st=statusInfo(o.status);
+        return `
+        <article class="order-item status-${st.cls}">
+          <div class="order-card-main">
+            <div class="order-card-head">
+              <div class="order-card-title">
+                <strong>${escapeAttr(o.name)}</strong>
+                <div class="order-card-customer">♙ <span>${escapeAttr(o.customer || 'Kein Kunde angegeben')}</span></div>
+              </div>
+              <select class="order-status-select status-${st.cls}" data-status="${o.id}" aria-label="Auftragsstatus">
+                <option value="open" ${o.status==='open'?'selected':''}>◉ Offen</option>
+                <option value="work" ${o.status==='work'?'selected':''}>▷ In Arbeit</option>
+                <option value="done" ${o.status==='done'?'selected':''}>✓ Fertig</option>
+                <option value="paid" ${o.status==='paid'?'selected':''}>€ Bezahlt</option>
+              </select>
+            </div>
+            <div class="order-price-row">
+              <span class="self-label">Selbstkosten</span>
+              <span class="self-value">${escapeAttr(o.self || '0,00 €')}</span>
+              <span class="separator">•</span>
+              <span class="price-label">Preis</span>
+              <span class="price-value">${escapeAttr(o.price || '0,00 €')}</span>
+            </div>
+            <div class="order-stats">
+              <div class="order-stat"><span class="stat-icon">🖨️</span><strong>${escapeAttr(o.plates || '0')}</strong><span>Drucke</span></div>
+              <div class="order-stat"><span class="stat-icon">⚖️</span><strong>${totalOrderGrams(o)} g</strong></div>
+              <div class="order-stat"><span class="stat-icon">⏱️</span><span>${escapeAttr(formatPrintTime(o))}</span></div>
+            </div>
+            <div class="order-date">Gespeichert am ${escapeAttr(o.date || '')}</div>
+          </div>
+          <div class="order-card-actions">
+            <button type="button" class="order-details-btn" data-details="${o.id}">ⓘ Details</button>
+            <button type="button" class="load-order" data-load="${o.id}">↗ Laden</button>
+            <button type="button" class="danger" data-delete="${o.id}">🗑 Löschen</button>
+          </div>
+        </article>`;
+      }).join('');
+
+      list.querySelectorAll('[data-status]').forEach(sel=>sel.addEventListener('change',()=>{
+        const id=sel.dataset.status;
+        const items=readOrders();
+        const item=items.find(x=>String(x.id)===String(id));
+        if(!item) return;
+        item.status=sel.value;
+        writeOrders(items);
+        renderOrders();
+        renderFinance();
+      }));
+      list.querySelectorAll('[data-details]').forEach(b=>b.addEventListener('click',()=>{
+        openOrderDetails(b.dataset.details);
+      }));
+
+      list.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>{
+        if(confirm('Diesen Auftrag wirklich löschen?')){
+          writeOrders(readOrders().filter(o=>String(o.id)!==String(b.dataset.delete)));
+          renderOrders();
+          renderFinance();
+        }
+      }));
+
+      list.querySelectorAll('[data-load]').forEach(b=>b.addEventListener('click',()=>{
+        const o=readOrders().find(x=>String(x.id)===String(b.dataset.load)); if(!o)return;
+        ['days','hours','minutes','plates','file','extra','design','finish','markupInput','rounding'].forEach(id=>{if($(id)&&o[id]!==undefined)$(id).value=o[id]});
+        mode=o.mode||'stranger';
+        document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('active',x.dataset.v===mode));
+        if($('orderStatus')) $('orderStatus').value=o.status||'open';
+        if($('orderNote')) $('orderNote').value=o.note||'';
+        renderFilaments();
+        const area=$('filamentArea');
+        if(area && o.filaments?.length){
+          area.innerHTML='';
+          const intro=document.createElement('div'); intro.className='filament-intro';
+          intro.innerHTML='🧵 <strong>So trägst du es ein:</strong> Gramm = tatsächlicher Verbrauch · €/kg = Preis deiner Filamentrolle · Farbe/Art = z. B. Schwarz PLA';
+          area.appendChild(intro);
+          o.filaments.forEach(r=>area.appendChild(makeRow(r)));
+        }
+        calc(); showPage('calculator');
+      }));
+    }
+
+
+    // ---------- Auftragsdetails ----------
+    let activeDetailOrderId = null;
+
+    function openOrderDetails(id){
+      const o=readOrders().find(x=>String(x.id)===String(id));
+      if(!o) return;
+      activeDetailOrderId=id;
+
+      const st=statusInfo(o.status);
+      $('orderDetailTitle').textContent=o.name || 'Unbenannter Auftrag';
+      $('orderDetailCustomer').textContent='♙ ' + (o.customer || 'Kein Kunde angegeben');
+      $('orderDetailStatus').value=o.status||'open';
+      $('orderDetailNote').value=o.note||'';
+
+      const price=parseMoney(o.price);
+      const self=parseMoney(o.self);
+      const profit=price-self;
+      $('detailPrice').textContent=money(price);
+      $('detailSelf').textContent=money(self);
+      $('detailProfit').textContent=money(profit);
+      $('detailProfit').className=profit>=0?'positive-profit':'negative-profit';
+      $('detailPlates').textContent=o.plates || '0';
+      $('detailGrams').textContent=totalOrderGrams(o)+' g';
+      $('detailTime').textContent=formatPrintTime(o);
+      $('detailMeta').innerHTML=
+        `<span>Gespeichert am ${escapeAttr(o.date||'')}</span>`+
+        `<span>Status: ${escapeAttr(st.label)}</span>`;
+
+      const costs=[
+        ['Material',o.material],
+        ['Strom',o.power],
+        ['Abschreibung',o.depreciation],
+        ['Verschleiß',o.wear],
+        ['Drucker / Maschinenzeit',o.printer],
+        ['Aufbau / Handarbeit',o.build],
+        ['Nachbearbeitung',o.post],
+        ['Lizenz / Datei',o.license],
+        ['Sonstige Kosten',o.other],
+        ['Gemeinkosten',o.overhead]
+      ];
+      const available=costs.filter(x=>x[1]!==undefined && x[1]!==null && String(x[1]).trim()!=='');
+      $('detailCosts').innerHTML=available.length
+        ? available.map(x=>`<div><span>${escapeAttr(x[0])}</span><strong>${escapeAttr(x[1])}</strong></div>`).join('')
+        : '<div><span>Selbstkosten</span><strong>'+escapeAttr(o.self||'0,00 €')+'</strong></div>';
+
+      $('orderDetailModal').hidden=false;
+      document.body.classList.add('modal-open');
+    }
+
+    function closeOrderDetails(){
+      const modal=$('orderDetailModal');
+      if(modal) modal.hidden=true;
+      document.body.classList.remove('modal-open');
+      activeDetailOrderId=null;
+    }
+
+    function saveOrderDetailChanges(){
+      if(activeDetailOrderId===null) return;
+      const items=readOrders();
+      const o=items.find(x=>String(x.id)===String(activeDetailOrderId));
+      if(!o) return;
+      o.status=$('orderDetailStatus').value;
+      o.note=$('orderDetailNote').value.trim();
+      writeOrders(items);
+      renderOrders();
+      renderFinance();
+      openOrderDetails(o.id);
+    }
+
+    document.querySelectorAll('[data-close-order-detail]').forEach(el=>el.addEventListener('click',closeOrderDetails));
+    $('detailSaveChanges')?.addEventListener('click',saveOrderDetailChanges);
+    $('detailLoadOrder')?.addEventListener('click',()=>{
+      const id=activeDetailOrderId;
+      if(id===null) return;
+      const o=readOrders().find(x=>String(x.id)===String(id));
+      if(!o) return;
+      closeOrderDetails();
+      const fields=['days','hours','minutes','plates','file','extra','design','finish','markupInput','rounding'];
+      fields.forEach(id=>{if($(id)&&o[id]!==undefined)$(id).value=o[id]});
+      mode=o.mode||'stranger';
+      document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('active',x.dataset.v===mode));
+      if($('orderStatus')) $('orderStatus').value=o.status||'open';
+      if($('orderNote')) $('orderNote').value=o.note||'';
+      renderFilaments();
+      const area=$('filamentArea');
+      if(area && o.filaments?.length){
+        area.innerHTML='';
+        const intro=document.createElement('div'); intro.className='filament-intro';
+        intro.innerHTML='🧵 <strong>So trägst du es ein:</strong> Gramm = tatsächlicher Verbrauch · €/kg = Preis deiner Filamentrolle · Farbe/Art = z. B. Schwarz PLA';
+        area.appendChild(intro);
+        o.filaments.forEach(r=>area.appendChild(makeRow(r)));
+      }
+      calc(); showPage('calculator');
+    });
+
+    $('orderDetailStatus')?.addEventListener('change',saveOrderDetailChanges);
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && !$('orderDetailModal')?.hidden) closeOrderDetails();
+    });
+
+    // ---------- Finanzen ----------
+    function readExpenses(){
+      try{return JSON.parse(localStorage.getItem('3dcalc-expenses')||'[]')}catch(e){return []}
+    }
+    function writeExpenses(items){localStorage.setItem('3dcalc-expenses',JSON.stringify(items))}
+
+    function parseMoney(text){
+      if(typeof text==='number') return text;
+      const cleaned=String(text||'').replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3}(?:,|$))/g,'').replace(',','.');
+      const n=parseFloat(cleaned);
+      return Number.isFinite(n)?n:0;
+    }
+
+    function orderDateISO(o){
+      if(o.dateISO) return o.dateISO;
+      // Old saved orders only had DD.MM.YYYY.
+      const m=String(o.date||'').match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+      return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+    }
+
+    function inFinancePeriod(dateISO, period){
+      if(period==='all') return true;
+      if(!dateISO) return false;
+      const d=new Date(dateISO+'T12:00:00');
+      const now=new Date();
+      if(period==='year') return d.getFullYear()===now.getFullYear();
+      if(period==='lastMonth'){
+        const y=now.getFullYear(), m=now.getMonth();
+        const last=new Date(y,m-1,1);
+        return d.getFullYear()===last.getFullYear() && d.getMonth()===last.getMonth();
+      }
+      return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+    }
+
+    function currentFinancePeriod(){
+      return document.querySelector('#financePeriods button.active')?.dataset.period || 'month';
+    }
+
+    function financeOrderIncome(o){
+      return o.status==='paid' ? parseMoney(o.price) : 0;
+    }
+
+    function renderFinance(){
+      const incomeEl=$('financeIncome'); if(!incomeEl) return;
+      const period=currentFinancePeriod();
+      const orders=readOrders();
+      const expenses=readExpenses();
+
+      const paidOrders=orders.filter(o=>o.status==='paid' && inFinancePeriod(orderDateISO(o),period));
+      const periodExpenses=expenses.filter(e=>inFinancePeriod(e.date,period));
+
+      const income=paidOrders.reduce((sum,o)=>sum+financeOrderIncome(o),0);
+      const expenseTotal=periodExpenses.reduce((sum,e)=>sum+Number(e.amount||0),0);
+      const profit=income-expenseTotal;
+
+      incomeEl.textContent=money(income);
+      $('financeExpenses').textContent=money(expenseTotal);
+      $('financeProfit').textContent=money(profit);
+      $('financeOrderCount').textContent=String(paidOrders.length);
+
+      $('barIncomeValue').textContent=money(income);
+      $('barExpensesValue').textContent=money(expenseTotal);
+      $('barProfitValue').textContent=money(profit);
+
+      const max=Math.max(income,expenseTotal,Math.max(profit,0),1);
+      $('barIncome').style.width=(income/max*100)+'%';
+      $('barExpenses').style.width=(expenseTotal/max*100)+'%';
+      $('barProfit').style.width=(Math.max(profit,0)/max*100)+'%';
+
+      const fo=$('financeOrdersList');
+      if(fo){
+        if(!paidOrders.length){
+          fo.innerHTML='<div class="finance-empty">Noch keine bezahlten Aufträge im gewählten Zeitraum.</div>';
+        }else{
+          fo.innerHTML=paidOrders.map(o=>`
+            <div class="finance-row">
+              <div><strong>${escapeAttr(o.name)}</strong><small>${escapeAttr(o.customer||'Kein Kunde angegeben')} · ${escapeAttr(o.date||'')}</small></div>
+              <strong class="finance-positive">+${money(financeOrderIncome(o))}</strong>
+            </div>`).join('');
+        }
+      }
+
+      const el=$('expensesList');
+      if(el){
+        if(!periodExpenses.length){
+          el.innerHTML='<div class="finance-empty">Keine Ausgaben im gewählten Zeitraum.</div>';
+        }else{
+          el.innerHTML=periodExpenses.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(e=>`
+            <div class="finance-row">
+              <div><strong>${escapeAttr(e.name)}</strong><small>${escapeAttr(e.category||'Sonstiges')} · ${escapeAttr(e.date||'')}</small></div>
+              <div class="finance-row-right"><strong class="finance-negative">-${money(e.amount)}</strong><button type="button" class="finance-delete" data-expense="${e.id}">🗑</button></div>
+            </div>`).join('');
+          el.querySelectorAll('[data-expense]').forEach(b=>b.addEventListener('click',()=>{
+            writeExpenses(readExpenses().filter(e=>String(e.id)!==String(b.dataset.expense)));
+            renderFinance();
+          }));
+        }
+      }
+    }
+
+    $('saveOrder')?.addEventListener('click',()=>{
+      saveOrder(
+        $('orderName')?.value.trim() || 'Auftrag '+new Date().toLocaleDateString('de-DE'),
+        $('orderCustomer')?.value.trim() || 'Kein Kunde angegeben',
+        $('orderStatus')?.value || 'open',
+        $('orderNote')?.value.trim() || ''
+      );
+    });
+
+    $('saveOrderMain')?.addEventListener('click',()=>{
+      const name=$('orderName')?.value.trim();
+      const customer=$('orderCustomer')?.value.trim();
+      saveOrder(
+        name || 'Auftrag '+new Date().toLocaleDateString('de-DE'),
+        customer || 'Kein Kunde angegeben',
+        $('orderStatus')?.value || 'open',
+        $('orderNote')?.value.trim() || ''
+      );
+    });
+
+    $('financePeriods')?.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      $('financePeriods').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      renderFinance();
+    }));
+
+    const expenseDate=$('expenseDate');
+    if(expenseDate && !expenseDate.value) expenseDate.value=new Date().toISOString().slice(0,10);
+
+    $('addExpense')?.addEventListener('click',()=>{
+      const name=$('expenseName')?.value.trim();
+      const amount=parseFloat(String($('expenseAmount')?.value||'').replace(',','.'));
+      const date=$('expenseDate')?.value || new Date().toISOString().slice(0,10);
+      const category=$('expenseCategory')?.value || 'Sonstiges';
+      if(!name){alert('Bitte eine Bezeichnung für die Ausgabe eingeben.'); return;}
+      if(!Number.isFinite(amount) || amount<=0){alert('Bitte einen gültigen Betrag eingeben.'); return;}
+      const items=readExpenses();
+      items.unshift({id:Date.now()+Math.random(),name,amount:Number(amount.toFixed(2)),date,category});
+      writeExpenses(items.slice(0,500));
+      if($('expenseName')) $('expenseName').value='';
+      if($('expenseAmount')) $('expenseAmount').value='';
+      renderFinance();
+    });
+
+
+    // ---------- Filament-Spulen ----------
+    function readSpools(){
+      try{return JSON.parse(localStorage.getItem('3dcalc-spools')||'[]')}catch(e){return []}
+    }
+    function writeSpools(items){localStorage.setItem('3dcalc-spools',JSON.stringify(items))}
+    function populateSpoolSelect(select){
+      if(!select) return;
+      const current=select.value;
+      const spools=readSpools();
+      select.innerHTML='<option value="">Manuell eingeben</option>'+spools.map(s=>
+        `<option value="${escapeAttr(s.id)}">${escapeAttr(s.name)} · ${escapeAttr(s.color)} · ${escapeAttr(s.material)} · ${Number(s.price||0).toFixed(2).replace('.',',')} €/kg</option>`
+      ).join('');
+      if(spools.some(s=>String(s.id)===String(current))) select.value=current;
+    }
+    function refreshAllSpoolSelectors(){
+      document.querySelectorAll('.spool-select').forEach(populateSpoolSelect);
+    }
+    function renderSpools(){
+      const list=$('spoolsList'); if(!list) return;
+      const query=($('spoolSearch')?.value||'').trim().toLowerCase();
+      const all=readSpools();
+      const items=all.filter(s=>[s.name,s.color,s.material].join(' ').toLowerCase().includes(query));
+      $('spoolCount').textContent=`${all.length} ${all.length===1?'Spule':'Spulen'}`;
+      if(!items.length){
+        list.innerHTML='<div class="spool-empty">🧵 Noch keine passenden Spulen gespeichert.</div>';
+        return;
+      }
+      list.innerHTML=items.map(s=>`
+        <article class="spool-card">
+          <div class="spool-color-dot" style="background:${escapeAttr(s.colorHex||'#64748b')}"></div>
+          <div class="spool-main">
+            <strong>${escapeAttr(s.name)}</strong>
+            <div class="spool-meta"><span>${escapeAttr(s.color||'Keine Farbe')}</span><span>${escapeAttr(s.material||'')}</span></div>
+            <div class="spool-price">${Number(s.price||0).toFixed(2).replace('.',',')} €/kg${s.remaining!==''&&s.remaining!==undefined?' · '+escapeAttr(s.remaining)+' g Rest':''}</div>
+          </div>
+          <div class="spool-actions">
+            <button type="button" data-edit-spool="${s.id}">✎</button>
+            <button type="button" class="danger" data-delete-spool="${s.id}">🗑</button>
+          </div>
+        </article>`).join('');
+      list.querySelectorAll('[data-delete-spool]').forEach(b=>b.addEventListener('click',()=>{
+        if(!confirm('Diese Spule wirklich löschen?')) return;
+        writeSpools(all.filter(s=>String(s.id)!==String(b.dataset.deleteSpool)));
+        renderSpools(); refreshAllSpoolSelectors();
+      }));
+      list.querySelectorAll('[data-edit-spool]').forEach(b=>b.addEventListener('click',()=>{
+        const s=all.find(x=>String(x.id)===String(b.dataset.editSpool)); if(!s)return;
+        $('spoolName').value=s.name||'';
+        $('spoolMaterial').value=s.material||'PLA';
+        $('spoolColor').value=s.color||'';
+        $('spoolPrice').value=s.price||'';
+        $('spoolRemaining').value=s.remaining??'';
+        $('addSpool').dataset.editId=s.id;
+        $('addSpool').textContent='💾 Spule ändern';
+        window.scrollTo(0,0);
+      }));
+    }
+    $('addSpool')?.addEventListener('click',()=>{
+      const name=$('spoolName')?.value.trim();
+      const color=$('spoolColor')?.value.trim();
+      const material=$('spoolMaterial')?.value||'PLA';
+      const price=parseFloat(String($('spoolPrice')?.value||'').replace(',','.'));
+      const remaining=$('spoolRemaining')?.value;
+      if(!name){alert('Bitte einen Spulennamen eingeben.');return}
+      if(!color){alert('Bitte eine Farbe eingeben.');return}
+      if(!Number.isFinite(price)||price<0){alert('Bitte einen gültigen Preis eingeben.');return}
+      const items=readSpools();
+      const editId=$('addSpool').dataset.editId;
+      const item={id:editId||Date.now()+Math.random(),name,color,material,price:Number(price.toFixed(2)),remaining:remaining===''?'':Math.max(0,Number(remaining)||0)};
+      if(editId){
+        const i=items.findIndex(x=>String(x.id)===String(editId));
+        if(i>=0) items[i]=item;
+        delete $('addSpool').dataset.editId;
+        $('addSpool').textContent='➕ Spule speichern';
+      }else items.unshift(item);
+      writeSpools(items.slice(0,500));
+      ['spoolName','spoolColor','spoolPrice','spoolRemaining'].forEach(id=>{if($(id))$(id).value=''});
+      $('spoolMaterial').value='PLA';
+      renderSpools(); refreshAllSpoolSelectors();
+    });
+    $('spoolSearch')?.addEventListener('input',renderSpools);
+
+    // Initial calculation after the DOM and all inputs exist.
+    requestAnimationFrame(calc);
+    setTimeout(calc,50);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
+</script></body></html>
+<style id="nav-icons-centered-larger">
+/* Final refinement: larger, perfectly centered navigation icon tiles. */
+.bottom-nav .nav-item{
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+.bottom-nav .nav-icon{
+  width:64px!important;
+  height:56px!important;
+  margin:0 auto!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  align-self:center!important;
+  justify-self:center!important;
+  overflow:visible!important;
+}
+.bottom-nav .nav-icon-img{
+  width:64px!important;
+  height:56px!important;
+  margin:0!important;
+  display:block!important;
+  object-fit:fill!important;
+  align-self:center!important;
+  justify-self:center!important;
+}
+@media(max-width:520px){
+  .bottom-nav .nav-icon,
+  .bottom-nav .nav-icon-img{
+    width:60px!important;
+    height:52px!important;
+  }
+}
+</style>
+
+
+<style id="clean-reference-nav-icons">
+/* Navigation icons integrated from the approved dark/light reference design. */
+.bottom-nav .nav-icon{
+  width:50px!important;
+  height:44px!important;
+  padding:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+  flex:0 0 auto!important;
+}
+.bottom-nav .nav-icon-img{
+  grid-area:1/1!important;
+  width:50px!important;
+  height:44px!important;
+  display:block!important;
+  object-fit:fill!important;
+  border:0!important;
+  pointer-events:none!important;
+  opacity:1!important;
+  transition:transform .18s ease,filter .18s ease,opacity .18s ease!important;
+}
+.bottom-nav .nav-icon-light{display:none!important}
+body:not(.dark) .bottom-nav .nav-icon-dark{display:none!important}
+body:not(.dark) .bottom-nav .nav-icon-light{display:block!important}
+.bottom-nav .nav-item.active .nav-icon-img{
+  transform:translateY(-1px) scale(1.03)!important;
+  filter:drop-shadow(0 0 7px rgba(25,168,255,.20))!important;
+}
+.bottom-nav .nav-item:not(.active) .nav-icon-img{opacity:1!important}
+.bottom-nav .nav-item:active .nav-icon-img{transform:scale(.97)!important}
+.bottom-nav .nav-item{gap:2px!important}
+.bottom-nav .nav-item small{font-weight:600!important;letter-spacing:.01em!important}
+@media(max-width:520px){
+  .bottom-nav .nav-icon,.bottom-nav .nav-icon-img{width:48px!important;height:42px!important}
+}
+</style>
+<style id="nav-icons-exact-center">
+/* Only alignment: keep the existing icon sizes unchanged. */
+.bottom-nav .nav-item{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:auto auto!important;
+  align-items:center!important;
+  justify-items:center!important;
+  justify-content:stretch!important;
+  text-align:center!important;
+}
+.bottom-nav .nav-item .nav-icon{
+  grid-column:1!important;
+  justify-self:center!important;
+  align-self:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.bottom-nav .nav-item small{
+  grid-column:1!important;
+  width:100%!important;
+  text-align:center!important;
+  justify-self:center!important;
+}
+</style>
