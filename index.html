@@ -1162,6 +1162,49 @@ html{scroll-behavior:auto!important}
 .page.active{display:block !important}
 </style>
 
+
+<style id="page-switch-final">
+.page{width:100%;box-sizing:border-box}
+</style>
+
+
+<script id="absolute-page-navigation">
+(function(){
+  const pages=['calculator','spools','orders','finance','settings'];
+  function switchPage(name){
+    if(!pages.includes(name)) return;
+    document.querySelectorAll('.page').forEach(function(p){
+      p.classList.remove('active');
+      p.hidden=true;
+      p.style.setProperty('display','none','important');
+    });
+    const target=document.getElementById('page-'+name);
+    if(target){
+      target.hidden=false;
+      target.classList.add('active');
+      target.style.setProperty('display','block','important');
+    }
+    document.querySelectorAll('.nav-item[data-page]').forEach(function(n){
+      n.classList.toggle('active',n.dataset.page===name);
+    });
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('DOMContentLoaded',function(){
+    switchPage('calculator');
+  },{once:true});
+  document.addEventListener('click',function(e){
+    const nav=e.target.closest('.nav-item[data-page]');
+    if(!nav) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    switchPage(nav.dataset.page);
+    if(nav.dataset.page==='spools' && typeof window.renderSpools==='function') window.renderSpools();
+    if(nav.dataset.page==='orders' && typeof window.renderOrders==='function') window.renderOrders();
+    if(nav.dataset.page==='finance' && typeof window.renderFinance==='function') window.renderFinance();
+  },true);
+})();
+</script>
+
 </head>
 <body>
 <div class="app">
@@ -1174,7 +1217,7 @@ html{scroll-behavior:auto!important}
 </header>
 
 
-<div class="page active" id="page-calculator">
+<div class="page" id="page-calculator">
 <div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
 <button type="button" data-v="friend">Freund</button><button type="button" data-v="colleague">Kollege</button><button type="button" data-v="stranger" class="active">Fremder</button><button type="button" data-v="business">Gewerblich</button>
 </div></div>
@@ -1629,12 +1672,14 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       document.querySelectorAll('.page').forEach(p=>{
         p.classList.remove('active');
         p.hidden=true;
+        p.style.setProperty('display','none','important');
       });
 
       const page=$('page-'+name);
       if(page){
         page.hidden=false;
         page.classList.add('active');
+        page.style.setProperty('display','block','important');
       }
 
       document.querySelectorAll('.nav-item').forEach(b=>{
