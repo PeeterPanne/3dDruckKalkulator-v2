@@ -1,13 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="3D Kalkulator">
-<link rel="manifest" href="manifest.json">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#111827" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="3D Kalkulator" name="apple-mobile-web-app-title"/>
+<link href="manifest.json" rel="manifest"/>
 <title>3D Druck Kalkulator</title>
 <style>
 :root{
@@ -57,8 +58,7 @@ details summary{cursor:pointer;font-weight:850;list-style:none}details summary::
 @media(max-width:520px){.mode button{font-size:11px}.filaments-head,.filament-row{grid-template-columns:1fr 1fr 1.25fr 34px}.filament-row input{font-size:15px;padding:0 10px}.sectiontitle{font-size:21px}}
 @media(max-width:390px){.app{padding-left:12px;padding-right:12px}.mode{gap:3px}.mode button{font-size:10px}.filaments-head{font-size:10px}}
 </style>
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
-
+<link href="icons/icon-180.png" rel="apple-touch-icon" sizes="180x180"/>
 <style>
 @media (max-width:430px){
   .mode button{min-height:44px}
@@ -66,7 +66,6 @@ details summary{cursor:pointer;font-weight:850;list-style:none}details summary::
   .switch{flex:0 0 auto}
 }
 </style>
-
 <style id="v14-iphone-design">
 /* v14 – iPhone 16 Pro visual refinement */
 :root{
@@ -139,7 +138,6 @@ input[type="number"],input[type="text"],input[type="time"],select{
   .container,.app,.wrap,main{margin:0 9px}
 }
 </style>
-
 <style id="v15-ui">
 /* VERSION 15 – App-like iPhone 16 Pro layout. Calculation/JS untouched. */
 :root{
@@ -377,7 +375,6 @@ body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),tr
   .standard-actions{grid-template-columns:1fr}
 }
 </style>
-
 <style id="v19-filament-fix">
 .filament-field{min-width:0}
 .filament-field label{display:block;color:var(--muted);font-size:11px!important;font-weight:800;margin:0 0 4px!important;line-height:1.1}
@@ -392,7 +389,6 @@ body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),tr
   .filament-field.note-field{grid-area:note}
 }
 </style>
-
 <style id="v20-polish">
 /* v20 – compact Multi-Color switch + clearer filament inputs + robust calculation */
 .multi-head{
@@ -464,8 +460,6 @@ body{background:radial-gradient(620px 260px at 50% -60px,rgba(25,168,255,.12),tr
   .filament-field .field-help{font-size:9px !important}
 }
 </style>
-
-
 <style id="v21-pages">
 html,body{background:#020914!important}
 body{background:radial-gradient(620px 300px at 50% -90px,rgba(25,168,255,.18),transparent 68%),linear-gradient(180deg,#020914,#06111e)!important}
@@ -497,8 +491,6 @@ input:focus,select:focus{border-color:#19a8ff!important;box-shadow:0 0 0 3px rgb
  .header-reset{display:none}.card{padding:14px!important}.page-title{font-size:27px}.order-item{align-items:flex-start}
 }
 </style>
-
-
 <style id="theme-fix">
 /* Final theme fix: dark is the default, light mode overrides all v21 dark surfaces. */
 body:not(.dark){
@@ -617,8 +609,6 @@ body:not(.dark) .header-reset{
   border-color:#d5dde7!important;
 }
 </style>
-
-
 <style id="orders-ui">
 .order-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .order-form-grid>div{min-width:0}
@@ -744,7 +734,6 @@ body:not(.dark) .order-card-actions .load-order{
   background:rgba(21,144,255,.06) !important;
 }
 </style>
-
 <style id="finance-ui">
 /* Auftragsstatus */
 .order-item.status-open::before{background:#ff8a22}
@@ -855,7 +844,6 @@ body:not(.dark) .finance-form-grid select{
 body:not(.dark) .finance-row{border-bottom-color:#e2e8f0 !important}
 body:not(.dark) .order-status-select{background:#fff !important}
 </style>
-
 <style id="five-nav">
 .bottom-nav{grid-template-columns:repeat(5,1fr)}
 .bottom-nav .nav-item{min-width:0}
@@ -865,7 +853,6 @@ body:not(.dark) .order-status-select{background:#fff !important}
   .bottom-nav .nav-item small{font-size:10px}
 }
 </style>
-
 <style id="order-detail-ui">
 .order-note-field{grid-column:1/-1}
 .order-note-field label span{font-weight:500;opacity:.65}
@@ -953,7 +940,6 @@ body:not(.dark) .order-detail-close,
 body:not(.dark) .order-detail-actions button{background:#fff !important;color:#334155 !important;border-color:#cbd5e1 !important}
 body:not(.dark) .order-detail-actions .load-order{color:#0879c9 !important}
 </style>
-
 <style id="spools-ui">
 .spool-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .spool-form-grid input,.spool-form-grid select,.spool-search{
@@ -1005,7 +991,6 @@ body:not(.dark) .spool-main strong{color:#111827 !important}
 body:not(.dark) .spool-meta span{color:#475569;border-color:#cbd5e1}
 body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color:#cbd5e1}
 </style>
-
 <style id="nav-icon-polish">
 .bottom-nav .nav-item { gap: 5px; }
 .bottom-nav .nav-icon {
@@ -1034,8 +1019,6 @@ body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color
 .bottom-nav .nav-item:active .nav-icon { transform: scale(.94); }
 .bottom-nav small { font-weight: 600; letter-spacing: .01em; }
 </style>
-
-
 <style id="nav-touch-fix">
 .bottom-nav{
   grid-template-columns:repeat(5,minmax(0,1fr)) !important;
@@ -1073,8 +1056,6 @@ body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color
   }
 }
 </style>
-
-
 <style id="user-symbol-style">
 .bottom-nav .nav-item{gap:5px!important}
 .bottom-nav .nav-icon{
@@ -1097,8 +1078,6 @@ body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color
 .bottom-nav .nav-icon,.bottom-nav .nav-icon svg{pointer-events:none!important}
 .bottom-nav .nav-item{position:relative!important;z-index:10000!important;min-height:62px!important;pointer-events:auto!important;touch-action:manipulation!important}
 </style>
-
-
 <style id="reference-symbols-v2">
 .bottom-nav .nav-item{gap:5px!important}
 .bottom-nav .nav-icon{
@@ -1118,8 +1097,6 @@ body:not(.dark) .spool-actions button{background:#fff;color:#334155;border-color
 .bottom-nav .nav-icon,.bottom-nav .nav-icon svg{pointer-events:none!important}
 .bottom-nav .nav-item{position:relative!important;z-index:10000!important;pointer-events:auto!important;touch-action:manipulation!important}
 </style>
-
-
 <style id="layout-time-fix">
 html{scroll-behavior:auto!important}
 .page{width:100%;box-sizing:border-box}
@@ -1155,19 +1132,14 @@ html{scroll-behavior:auto!important}
 .spool-pick-wrap label{display:block!important;margin:0 0 4px!important;font-size:10px!important;font-weight:800!important}
 .spool-pick-wrap select{min-width:0!important}
 </style>
-
 <style id="final-page-visibility-fix">
 /* FINAL FIX: exactly one application page is visible at a time. */
 .page{display:none !important;width:100%;box-sizing:border-box}
 .page.active{display:block !important}
 </style>
-
-
 <style id="page-switch-final">
 .page{width:100%;box-sizing:border-box}
 </style>
-
-
 <script id="absolute-page-navigation">
 (function(){
   const pages=['calculator','spools','orders','finance','settings'];
@@ -1204,431 +1176,393 @@ html{scroll-behavior:auto!important}
   },true);
 })();
 </script>
-
-</head>
+<style id="absolute-page-fix-final">
+/* FINAL PAGE STRUCTURE FIX: exactly one app page is visible */
+.app > .page { display:none !important; width:100%; box-sizing:border-box; }
+.app > .page.active { display:block !important; }
+</style></head>
 <body>
 <div class="app">
 <header class="app-header">
-  <div class="brand">
-    <img src="icons/icon-180.png" alt="3D Kalkulator" class="brand-icon">
-    <div class="brand-copy"><h1><span>3D</span> Druck Kalkulator</h1><div class="sub">Berechne deine Druckkosten<br>einfach und genau</div></div>
-  </div>
-  <button class="reset header-reset" id="reset" aria-label="Zurücksetzen">↺</button>
+<div class="brand">
+<img alt="3D Kalkulator" class="brand-icon" src="icons/icon-180.png"/>
+<div class="brand-copy"><h1><span>3D</span> Druck Kalkulator</h1><div class="sub">Berechne deine Druckkosten<br/>einfach und genau</div></div>
+</div>
+<button aria-label="Zurücksetzen" class="reset header-reset" id="reset">↺</button>
 </header>
-
-
-<div class="page" id="page-calculator">
+<div class="page active" id="page-calculator">
 <div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
-<button type="button" data-v="friend">Freund</button><button type="button" data-v="colleague">Kollege</button><button type="button" data-v="stranger" class="active">Fremder</button><button type="button" data-v="business">Gewerblich</button>
+<button data-v="friend" type="button">Freund</button><button data-v="colleague" type="button">Kollege</button><button class="active" data-v="stranger" type="button">Fremder</button><button data-v="business" type="button">Gewerblich</button>
 </div></div>
-
 <div class="card">
-  <div class="sectiontitle">🖨️ Druckdetails</div>
-  <div class="muted" style="font-size:15px;margin-top:-8px">Gib die Werte für deinen geplanten Druck ein.</div>
-
-  <div class="grid" style="margin-top:17px">
-    <div class="full"><label>🕒 Druckzeit</label><div class="timebox timebox-3">
-      <div><label style="font-size:11px">Tage</label><input id="days" type="number" value="0" min="0" step="1" inputmode="numeric"></div>
-      <div><label style="font-size:11px">Stunden</label><input id="hours" type="number" value="13" min="0" max="23" step="1" inputmode="numeric"></div>
-      <div><label style="font-size:11px">Minuten</label><input id="minutes" type="number" value="37" min="0" max="59" step="1" inputmode="numeric"></div>
-    </div>
-    <div class="time-total" id="timeTotal">Gesamtdauer: <strong>13 Std. 37 Min.</strong></div>
-    </div></div>
-    <div><label>Druckplatten / Starts</label><input id="plates" type="number" value="1" min="0" step="1" inputmode="numeric"></div>
-    <div><label>Modelldatei / Lizenz (€)</label><input id="file" type="number" value="0" min="0" step="0.01" inputmode="decimal"></div>
-    <div class="full"><label>Sonstige Kosten (€)</label><input id="extra" type="number" value="0" min="0" step="0.01" inputmode="decimal"></div>
-  </div>
-
-  <div class="multi-head">
-    <div class="multi-title">🎨 Multi-Color Druck <span>(mehrere Filamente)</span></div>
-    <button class="switch" id="multiToggle" type="button" aria-label="Multi-Color ein/aus"><i></i></button>
-  </div>
-
-  <div id="filamentArea"></div>
-  <div class="material-total"><span>Materialkosten</span><strong id="materialCalc">2,82 €</strong></div>
-  <div class="hint">💡 Trage je Filament die Menge in Gramm und den Rollenpreis in €/kg ein. Bei Multi-Color kannst du für jede Farbe/Filamentart eine eigene Zeile anlegen.</div>
+<div class="sectiontitle">🖨️ Druckdetails</div>
+<div class="muted" style="font-size:15px;margin-top:-8px">Gib die Werte für deinen geplanten Druck ein.</div>
+<div class="grid" style="margin-top:17px">
+<div class="full"><label>🕒 Druckzeit</label><div class="timebox timebox-3">
+<div><label style="font-size:11px">Tage</label><input id="days" inputmode="numeric" min="0" step="1" type="number" value="0"/></div>
+<div><label style="font-size:11px">Stunden</label><input id="hours" inputmode="numeric" max="23" min="0" step="1" type="number" value="13"/></div>
+<div><label style="font-size:11px">Minuten</label><input id="minutes" inputmode="numeric" max="59" min="0" step="1" type="number" value="37"/></div>
 </div>
+<div class="time-total" id="timeTotal">Gesamtdauer: <strong>13 Std. 37 Min.</strong></div>
+</div></div>
+<div><label>Druckplatten / Starts</label><input id="plates" inputmode="numeric" min="0" step="1" type="number" value="1"/></div>
+<div><label>Modelldatei / Lizenz (€)</label><input id="file" inputmode="decimal" min="0" step="0.01" type="number" value="0"/></div>
+<div class="full"><label>Sonstige Kosten (€)</label><input id="extra" inputmode="decimal" min="0" step="0.01" type="number" value="0"/></div>
+</div>
+<div class="multi-head">
+<div class="multi-title">🎨 Multi-Color Druck <span>(mehrere Filamente)</span></div>
+<button aria-label="Multi-Color ein/aus" class="switch" id="multiToggle" type="button"><i></i></button>
+</div>
+<div id="filamentArea"></div>
+<div class="material-total"><span>Materialkosten</span><strong id="materialCalc">2,82 €</strong></div>
+<div class="hint">💡 Trage je Filament die Menge in Gramm und den Rollenpreis in €/kg ein. Bei Multi-Color kannst du für jede Farbe/Filamentart eine eigene Zeile anlegen.</div>
 <div class="card"><div class="sectiontitle">Handarbeit</div><div class="grid">
-<div><label>Konstruktion (Std.)</label><input id="design" type="number" value="0" min="0" step="0.1" inputmode="decimal"></div>
-<div><label>Nachbearbeitung (Std.)</label><input id="finish" type="number" value="0" min="0" step="0.1" inputmode="decimal"></div>
+<div><label>Konstruktion (Std.)</label><input id="design" inputmode="decimal" min="0" step="0.1" type="number" value="0"/></div>
+<div><label>Nachbearbeitung (Std.)</label><input id="finish" inputmode="decimal" min="0" step="0.1" type="number" value="0"/></div>
+</div></div><div class="card calculator-breakdown" id="breakdownCard">
+<div class="sectiontitle">⚙️ Kostenaufstellung</div>
+<div class="breakdown">
+<div><span>Material</span><strong id="bMaterial">0,00 €</strong></div>
+<div><span>Strom</span><strong id="bPower">0,00 €</strong></div>
+<div><span>Drucker-Abschreibung</span><strong id="bDep">0,00 €</strong></div>
+<div><span>Verschleiß</span><strong id="bWear">0,00 €</strong></div>
+<div><span>Druckerarbeit / Setup</span><strong id="bPrinter">0,00 €</strong></div>
+<div><span>Konstruktion</span><strong id="bBuild">0,00 €</strong></div>
+<div><span>Nachbearbeitung</span><strong id="bPost">0,00 €</strong></div>
+<div><span>Modelldatei / Lizenz</span><strong id="bLicense">0,00 €</strong></div>
+<div><span>Sonstige Kosten</span><strong id="bOther">0,00 €</strong></div>
+<div id="bOverheadRow"><span>Betriebskosten</span><strong id="bOverhead">0,00 €</strong></div>
+<div class="total"><span>Selbstkosten</span><strong id="bSelf">0,00 €</strong></div>
+<div class="total"><span>Aufschlag / Rabatt</span><strong id="bMarkup">0,00 €</strong></div>
+<div class="total"><span>Verkaufspreis</span><strong id="bSale">0,00 €</strong></div>
+</div>
+</div><div class="result">
+<div class="label">Empfohlener Verkaufspreis</div>
+<div class="price" id="price">0,00 €</div>
+<div class="resultrow"><span>Selbstkosten</span><strong id="self">0,00 €</strong></div>
+<div class="resultrow">
+<span>Aufschlag / Rabatt</span>
+<div class="price-control"><input aria-label="Aufschlag oder Rabatt in Prozent" id="markupInput" inputmode="decimal" step="1" type="number" value="35"/> <span>%</span></div>
+</div>
+<div class="resultrow">
+<span>Verkaufspreis runden</span>
+<select aria-label="Verkaufspreis runden" id="rounding">
+<option value="0">Keine Rundung</option>
+<option value="0.1">auf 0,10 €</option>
+<option value="0.5">auf 0,50 €</option>
+<option value="1">auf 1,00 €</option>
+<option value="5">auf 5,00 €</option>
+</select>
+</div>
+<div class="standard-actions order-actions">
+<button id="saveOrder" type="button">💾 Auftrag speichern</button>
+</div>
 </div></div>
 
 
-<div class="card calculator-breakdown" id="breakdownCard">
-  <div class="sectiontitle">⚙️ Kostenaufstellung</div>
-  <div class="breakdown">
-    <div><span>Material</span><strong id="bMaterial">0,00 €</strong></div>
-    <div><span>Strom</span><strong id="bPower">0,00 €</strong></div>
-    <div><span>Drucker-Abschreibung</span><strong id="bDep">0,00 €</strong></div>
-    <div><span>Verschleiß</span><strong id="bWear">0,00 €</strong></div>
-    <div><span>Druckerarbeit / Setup</span><strong id="bPrinter">0,00 €</strong></div>
-    <div><span>Konstruktion</span><strong id="bBuild">0,00 €</strong></div>
-    <div><span>Nachbearbeitung</span><strong id="bPost">0,00 €</strong></div>
-    <div><span>Modelldatei / Lizenz</span><strong id="bLicense">0,00 €</strong></div>
-    <div><span>Sonstige Kosten</span><strong id="bOther">0,00 €</strong></div>
-    <div id="bOverheadRow"><span>Betriebskosten</span><strong id="bOverhead">0,00 €</strong></div>
-    <div class="total"><span>Selbstkosten</span><strong id="bSelf">0,00 €</strong></div>
-    <div class="total"><span>Aufschlag / Rabatt</span><strong id="bMarkup">0,00 €</strong></div>
-    <div class="total"><span>Verkaufspreis</span><strong id="bSale">0,00 €</strong></div>
-  </div>
-</div>
 
-<div class="result">
-  <div class="label">Empfohlener Verkaufspreis</div>
-  <div class="price" id="price">0,00 €</div>
-  <div class="resultrow"><span>Selbstkosten</span><strong id="self">0,00 €</strong></div>
-  <div class="resultrow">
-    <span>Aufschlag / Rabatt</span>
-    <div class="price-control"><input id="markupInput" type="number" value="35" step="1" inputmode="decimal" aria-label="Aufschlag oder Rabatt in Prozent"> <span>%</span></div>
-  </div>
-  <div class="resultrow">
-    <span>Verkaufspreis runden</span>
-    <select id="rounding" aria-label="Verkaufspreis runden">
-      <option value="0">Keine Rundung</option>
-      <option value="0.1">auf 0,10 €</option>
-      <option value="0.5">auf 0,50 €</option>
-      <option value="1">auf 1,00 €</option>
-      <option value="5">auf 5,00 €</option>
-    </select>
-  </div>
-<div class="standard-actions order-actions">
-  <button type="button" id="saveOrder">💾 Auftrag speichern</button>
+<div class="page" hidden="True" id="page-spools">
+<div class="page-title">🧵 Filament &amp; Spulen</div>
+<div class="page-subtitle">Speichere deine Filamentspulen und wähle sie direkt im Kalkulator aus.</div>
+<div class="card">
+<div class="sectiontitle">Neue Spule</div>
+<div class="spool-form-grid">
+<div>
+<label>Spulenname</label>
+<input id="spoolName" placeholder="z. B. Bambu PLA Basic Schwarz" type="text"/>
+</div>
+<div>
+<label>Material</label>
+<select id="spoolMaterial">
+<option>PLA</option><option>PETG</option><option>ABS</option><option>ASA</option>
+<option>TPU</option><option>PC</option><option>PA</option><option>PLA-CF</option>
+<option>PETG-CF</option><option>Andere</option>
+</select>
+</div>
+<div>
+<label>Farbe</label>
+<input id="spoolColor" placeholder="z. B. Schwarz" type="text"/>
+</div>
+<div>
+<label>Preis € / kg</label>
+<input id="spoolPrice" inputmode="decimal" min="0" placeholder="24,99" step="0.01" type="number"/>
+</div>
+<div>
+<label>Restmenge g <span class="optional-label">(optional)</span></label>
+<input id="spoolRemaining" inputmode="decimal" min="0" placeholder="1000" step="1" type="number"/>
 </div>
 </div>
-
-
-
+<button class="save-order-main" id="addSpool" type="button">➕ Spule speichern</button>
 </div>
-
-<div class="page" id="page-spools" hidden>
-  <div class="page-title">🧵 Filament & Spulen</div>
-  <div class="page-subtitle">Speichere deine Filamentspulen und wähle sie direkt im Kalkulator aus.</div>
-
-  <div class="card">
-    <div class="sectiontitle">Neue Spule</div>
-    <div class="spool-form-grid">
-      <div>
-        <label>Spulenname</label>
-        <input id="spoolName" type="text" placeholder="z. B. Bambu PLA Basic Schwarz">
-      </div>
-      <div>
-        <label>Material</label>
-        <select id="spoolMaterial">
-          <option>PLA</option><option>PETG</option><option>ABS</option><option>ASA</option>
-          <option>TPU</option><option>PC</option><option>PA</option><option>PLA-CF</option>
-          <option>PETG-CF</option><option>Andere</option>
-        </select>
-      </div>
-      <div>
-        <label>Farbe</label>
-        <input id="spoolColor" type="text" placeholder="z. B. Schwarz">
-      </div>
-      <div>
-        <label>Preis € / kg</label>
-        <input id="spoolPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="24,99">
-      </div>
-      <div>
-        <label>Restmenge g <span class="optional-label">(optional)</span></label>
-        <input id="spoolRemaining" type="number" min="0" step="1" inputmode="decimal" placeholder="1000">
-      </div>
-    </div>
-    <button type="button" class="save-order-main" id="addSpool">➕ Spule speichern</button>
-  </div>
-
-  <div class="card">
-    <div class="spool-list-head">
-      <div>
-        <div class="sectiontitle">Meine Spulen</div>
-        <div class="spool-count" id="spoolCount">0 Spulen</div>
-      </div>
-      <input id="spoolSearch" class="spool-search" type="search" placeholder="🔎 Suchen ...">
-    </div>
-    <div id="spoolsList" class="spools-list"></div>
-  </div>
+<div class="card">
+<div class="spool-list-head">
+<div>
+<div class="sectiontitle">Meine Spulen</div>
+<div class="spool-count" id="spoolCount">0 Spulen</div>
 </div>
-
+<input class="spool-search" id="spoolSearch" placeholder="🔎 Suchen ..." type="search"/>
 </div>
-
-<div class="page" id="page-orders" hidden>
-  <div class="page-title">📁 Aufträge</div>
-  <div class="page-subtitle">Speichere fertige Kalkulationen und rufe sie später wieder auf.</div>
-  <div class="card order-create">
-    <div class="sectiontitle">Neuen Auftrag speichern</div>
-    <div class="order-form-grid">
-      <div>
-        <label>Auftragsname</label>
-        <input id="orderName" type="text" placeholder="z. B. Ersatzteil Halterung">
-      </div>
-      <div>
-        <label>Kunde</label>
-        <input id="orderCustomer" type="text" placeholder="z. B. Max Mustermann">
-      </div>
-      <div>
-        <label>Status</label>
-        <select id="orderStatus">
-          <option value="open">🟠 Offen</option>
-          <option value="work">🔵 In Arbeit</option>
-          <option value="done">🟢 Fertig</option>
-          <option value="paid">💰 Bezahlt</option>
-        </select>
-      </div>
-      <div class="order-note-field">
-        <label>Notiz <span>(optional)</span></label>
-        <textarea id="orderNote" rows="2" placeholder="z. B. Abholung am Freitag, Farbe Schwarz ..."></textarea>
-      </div>
-    </div>
-    <button type="button" class="save-order-main" id="saveOrderMain">💾 Aktuelle Kalkulation speichern</button>
-  </div>
-  <div class="card">
-    <div class="sectiontitle">Gespeicherte Aufträge</div>
-    <div id="ordersList" class="orders-list"></div>
-  </div>
+<div class="spools-list" id="spoolsList"></div>
 </div>
-
-
-
-<div class="order-detail-modal" id="orderDetailModal" hidden>
-  <div class="order-detail-backdrop" data-close-order-detail></div>
-  <section class="order-detail-sheet" role="dialog" aria-modal="true" aria-labelledby="orderDetailTitle">
-    <div class="order-detail-head">
-      <div>
-        <span class="order-detail-kicker">Auftragsdetails</span>
-        <h2 id="orderDetailTitle">Auftrag</h2>
-        <div id="orderDetailCustomer" class="order-detail-customer"></div>
-      </div>
-      <button type="button" class="order-detail-close" data-close-order-detail aria-label="Schließen">×</button>
-    </div>
-
-    <div class="order-detail-status-row">
-      <label>Status</label>
-      <select id="orderDetailStatus">
-        <option value="open">🟠 Offen</option>
-        <option value="work">🔵 In Arbeit</option>
-        <option value="done">🟢 Fertig</option>
-        <option value="paid">💰 Bezahlt</option>
-      </select>
-    </div>
-
-    <div class="order-detail-grid">
-      <div class="detail-stat"><span>💰 Verkaufspreis</span><strong id="detailPrice">0,00 €</strong></div>
-      <div class="detail-stat"><span>📉 Selbstkosten</span><strong id="detailSelf">0,00 €</strong></div>
-      <div class="detail-stat"><span>📈 Gewinn</span><strong id="detailProfit">0,00 €</strong></div>
-      <div class="detail-stat"><span>🖨️ Drucke</span><strong id="detailPlates">0</strong></div>
-      <div class="detail-stat"><span>⚖️ Material</span><strong id="detailGrams">0 g</strong></div>
-      <div class="detail-stat"><span>⏱️ Druckzeit</span><strong id="detailTime">0 Std. 0 Min.</strong></div>
-    </div>
-
-    <div class="detail-section">
-      <h3>💶 Kostenaufstellung</h3>
-      <div id="detailCosts" class="detail-cost-list"></div>
-    </div>
-
-    <div class="detail-section">
-      <h3>📝 Notiz</h3>
-      <textarea id="orderDetailNote" rows="4" placeholder="Notiz zum Auftrag ..."></textarea>
-    </div>
-
-    <div class="detail-section">
-      <h3>📅 Auftrag</h3>
-      <div class="detail-meta" id="detailMeta"></div>
-    </div>
-
-    <div class="order-detail-actions">
-      <button type="button" class="load-order" id="detailLoadOrder">↗ Auftrag laden</button>
-      <button type="button" id="detailSaveChanges">💾 Änderungen speichern</button>
-    </div>
-  </section>
+</div><div class="page" hidden="True" id="page-orders">
+<div class="page-title">📁 Aufträge</div>
+<div class="page-subtitle">Speichere fertige Kalkulationen und rufe sie später wieder auf.</div>
+<div class="card order-create">
+<div class="sectiontitle">Neuen Auftrag speichern</div>
+<div class="order-form-grid">
+<div>
+<label>Auftragsname</label>
+<input id="orderName" placeholder="z. B. Ersatzteil Halterung" type="text"/>
 </div>
-
-<div class="page" id="page-finance" hidden>
-  <div class="page-title">💶 Finanzen</div>
-  <div class="page-subtitle">Einnahmen, Ausgaben und Gewinn deiner Aufträge auf einen Blick.</div>
-
-  <div class="finance-filter card">
-    <div class="sectiontitle">Zeitraum</div>
-    <div class="finance-periods" id="financePeriods">
-      <button type="button" data-period="month" class="active">Dieser Monat</button>
-      <button type="button" data-period="lastMonth">Letzter Monat</button>
-      <button type="button" data-period="year">Dieses Jahr</button>
-      <button type="button" data-period="all">Gesamt</button>
-    </div>
-  </div>
-
-  <div class="finance-summary">
-    <div class="finance-summary-card income">
-      <span>💰 Einnahmen</span>
-      <strong id="financeIncome">0,00 €</strong>
-    </div>
-    <div class="finance-summary-card expense">
-      <span>💸 Ausgaben</span>
-      <strong id="financeExpenses">0,00 €</strong>
-    </div>
-    <div class="finance-summary-card profit">
-      <span>📈 Gewinn</span>
-      <strong id="financeProfit">0,00 €</strong>
-    </div>
-    <div class="finance-summary-card count">
-      <span>📦 Bezahlte Aufträge</span>
-      <strong id="financeOrderCount">0</strong>
-    </div>
-  </div>
-
-  <div class="card finance-chart-card">
-    <div class="sectiontitle">Finanzübersicht</div>
-    <div class="finance-bars">
-      <div class="finance-bar-row">
-        <span>Einnahmen</span>
-        <div class="finance-bar-track"><i id="barIncome"></i></div>
-        <strong id="barIncomeValue">0,00 €</strong>
-      </div>
-      <div class="finance-bar-row">
-        <span>Ausgaben</span>
-        <div class="finance-bar-track"><i id="barExpenses"></i></div>
-        <strong id="barExpensesValue">0,00 €</strong>
-      </div>
-      <div class="finance-bar-row">
-        <span>Gewinn</span>
-        <div class="finance-bar-track"><i id="barProfit"></i></div>
-        <strong id="barProfitValue">0,00 €</strong>
-      </div>
-    </div>
-  </div>
-
-  <div class="card finance-add-card">
-    <div class="sectiontitle">Ausgabe hinzufügen</div>
-    <div class="finance-form-grid">
-      <div>
-        <label>Bezeichnung</label>
-        <input id="expenseName" type="text" placeholder="z. B. Filament">
-      </div>
-      <div>
-        <label>Kategorie</label>
-        <select id="expenseCategory">
-          <option>Filament</option>
-          <option>Drucker / Ersatzteile</option>
-          <option>Werkzeug</option>
-          <option>Verpackung</option>
-          <option>Software / Lizenz</option>
-          <option>Sonstiges</option>
-        </select>
-      </div>
-      <div>
-        <label>Betrag €</label>
-        <input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
-      </div>
-      <div>
-        <label>Datum</label>
-        <input id="expenseDate" type="date">
-      </div>
-    </div>
-    <button type="button" class="save-order-main finance-save-btn" id="addExpense">➕ Ausgabe speichern</button>
-  </div>
-
-  <div class="card">
-    <div class="sectiontitle">Einnahmen aus Aufträgen</div>
-    <div id="financeOrdersList" class="finance-list"></div>
-  </div>
-
-  <div class="card">
-    <div class="sectiontitle">Gespeicherte Ausgaben</div>
-    <div id="expensesList" class="finance-list"></div>
-  </div>
+<div>
+<label>Kunde</label>
+<input id="orderCustomer" placeholder="z. B. Max Mustermann" type="text"/>
 </div>
-
-<div class="page" id="page-settings" hidden>
-  <div class="page-title">⚙️ Einstellungen</div>
-  <div class="page-subtitle">App-Darstellung und Kalkulationswerte.</div>
-
-  <div class="card settings-theme">
-    <div class="sectiontitle">Darstellung</div>
-    <div class="setting-row">
-      <div><strong>🌙 Dunkelmodus</strong><div class="muted">Hell / Dunkel für die App</div></div>
-      <button type="button" class="switch" id="themeSwitch" aria-label="Hell- oder Dunkelmodus"><i></i></button>
-    </div>
-  </div>
-
-  <details class="card"><summary>⚙️ Kalkulationswerte</summary><div class="grid" style="margin-top:16px">
-<div><label>Strom €/kWh</label><input id="powerprice" value="0.35" type="number" step=".01"></div>
-<div><label>Druckerleistung W</label><input id="watts" value="180" type="number"></div>
-<div><label>Abschreibung privat €/h</label><input id="depP" value="0.20" type="number" step=".01"></div>
-<div><label>Verschleiß privat €/h</label><input id="wearP" value="0.05" type="number" step=".01"></div>
-<div><label>Druckarbeit privat €/h</label><input id="laborP" value="3.50" type="number" step=".1"></div>
-<div><label>Handarbeit privat €/h</label><input id="handP" value="25" type="number" step=".5"></div>
-<div><label>Abschreibung gew. €/h</label><input id="depB" value="0.30" type="number" step=".01"></div>
-<div><label>Verschleiß gew. €/h</label><input id="wearB" value="0.12" type="number" step=".01"></div>
-<div><label>Druckarbeit gew. €/h</label><input id="laborB" value="15" type="number" step=".1"></div>
-<div><label>Handarbeit gew. €/h</label><input id="handB" value="30" type="number" step=".5"></div>
-<div><label>Setup je Platte (min.)</label><input id="setup" value="15" type="number"></div>
-<div><label>Betriebskosten gew. (%)</label><input id="overhead" value="8" type="number"></div>
+<div>
+<label>Status</label>
+<select id="orderStatus">
+<option value="open">🟠 Offen</option>
+<option value="work">🔵 In Arbeit</option>
+<option value="done">🟢 Fertig</option>
+<option value="paid">💰 Bezahlt</option>
+</select>
+</div>
+<div class="order-note-field">
+<label>Notiz <span>(optional)</span></label>
+<textarea id="orderNote" placeholder="z. B. Abholung am Freitag, Farbe Schwarz ..." rows="2"></textarea>
+</div>
+</div>
+<button class="save-order-main" id="saveOrderMain" type="button">💾 Aktuelle Kalkulation speichern</button>
+</div>
+<div class="card">
+<div class="sectiontitle">Gespeicherte Aufträge</div>
+<div class="orders-list" id="ordersList"></div>
+</div>
+</div><div class="page" hidden="True" id="page-finance">
+<div class="page-title">💶 Finanzen</div>
+<div class="page-subtitle">Einnahmen, Ausgaben und Gewinn deiner Aufträge auf einen Blick.</div>
+<div class="finance-filter card">
+<div class="sectiontitle">Zeitraum</div>
+<div class="finance-periods" id="financePeriods">
+<button class="active" data-period="month" type="button">Dieser Monat</button>
+<button data-period="lastMonth" type="button">Letzter Monat</button>
+<button data-period="year" type="button">Dieses Jahr</button>
+<button data-period="all" type="button">Gesamt</button>
+</div>
+</div>
+<div class="finance-summary">
+<div class="finance-summary-card income">
+<span>💰 Einnahmen</span>
+<strong id="financeIncome">0,00 €</strong>
+</div>
+<div class="finance-summary-card expense">
+<span>💸 Ausgaben</span>
+<strong id="financeExpenses">0,00 €</strong>
+</div>
+<div class="finance-summary-card profit">
+<span>📈 Gewinn</span>
+<strong id="financeProfit">0,00 €</strong>
+</div>
+<div class="finance-summary-card count">
+<span>📦 Bezahlte Aufträge</span>
+<strong id="financeOrderCount">0</strong>
+</div>
+</div>
+<div class="card finance-chart-card">
+<div class="sectiontitle">Finanzübersicht</div>
+<div class="finance-bars">
+<div class="finance-bar-row">
+<span>Einnahmen</span>
+<div class="finance-bar-track"><i id="barIncome"></i></div>
+<strong id="barIncomeValue">0,00 €</strong>
+</div>
+<div class="finance-bar-row">
+<span>Ausgaben</span>
+<div class="finance-bar-track"><i id="barExpenses"></i></div>
+<strong id="barExpensesValue">0,00 €</strong>
+</div>
+<div class="finance-bar-row">
+<span>Gewinn</span>
+<div class="finance-bar-track"><i id="barProfit"></i></div>
+<strong id="barProfitValue">0,00 €</strong>
+</div>
+</div>
+</div>
+<div class="card finance-add-card">
+<div class="sectiontitle">Ausgabe hinzufügen</div>
+<div class="finance-form-grid">
+<div>
+<label>Bezeichnung</label>
+<input id="expenseName" placeholder="z. B. Filament" type="text"/>
+</div>
+<div>
+<label>Kategorie</label>
+<select id="expenseCategory">
+<option>Filament</option>
+<option>Drucker / Ersatzteile</option>
+<option>Werkzeug</option>
+<option>Verpackung</option>
+<option>Software / Lizenz</option>
+<option>Sonstiges</option>
+</select>
+</div>
+<div>
+<label>Betrag €</label>
+<input id="expenseAmount" inputmode="decimal" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+<div>
+<label>Datum</label>
+<input id="expenseDate" type="date"/>
+</div>
+</div>
+<button class="save-order-main finance-save-btn" id="addExpense" type="button">➕ Ausgabe speichern</button>
+</div>
+<div class="card">
+<div class="sectiontitle">Einnahmen aus Aufträgen</div>
+<div class="finance-list" id="financeOrdersList"></div>
+</div>
+<div class="card">
+<div class="sectiontitle">Gespeicherte Ausgaben</div>
+<div class="finance-list" id="expensesList"></div>
+</div>
+</div><div class="page" hidden="True" id="page-settings">
+<div class="page-title">⚙️ Einstellungen</div>
+<div class="page-subtitle">App-Darstellung und Kalkulationswerte.</div>
+<div class="card settings-theme">
+<div class="sectiontitle">Darstellung</div>
+<div class="setting-row">
+<div><strong>🌙 Dunkelmodus</strong><div class="muted">Hell / Dunkel für die App</div></div>
+<button aria-label="Hell- oder Dunkelmodus" class="switch" id="themeSwitch" type="button"><i></i></button>
+</div>
+</div>
+<details class="card"><summary>⚙️ Kalkulationswerte</summary><div class="grid" style="margin-top:16px">
+<div><label>Strom €/kWh</label><input id="powerprice" step=".01" type="number" value="0.35"/></div>
+<div><label>Druckerleistung W</label><input id="watts" type="number" value="180"/></div>
+<div><label>Abschreibung privat €/h</label><input id="depP" step=".01" type="number" value="0.20"/></div>
+<div><label>Verschleiß privat €/h</label><input id="wearP" step=".01" type="number" value="0.05"/></div>
+<div><label>Druckarbeit privat €/h</label><input id="laborP" step=".1" type="number" value="3.50"/></div>
+<div><label>Handarbeit privat €/h</label><input id="handP" step=".5" type="number" value="25"/></div>
+<div><label>Abschreibung gew. €/h</label><input id="depB" step=".01" type="number" value="0.30"/></div>
+<div><label>Verschleiß gew. €/h</label><input id="wearB" step=".01" type="number" value="0.12"/></div>
+<div><label>Druckarbeit gew. €/h</label><input id="laborB" step=".1" type="number" value="15"/></div>
+<div><label>Handarbeit gew. €/h</label><input id="handB" step=".5" type="number" value="30"/></div>
+<div><label>Setup je Platte (min.)</label><input id="setup" type="number" value="15"/></div>
+<div><label>Betriebskosten gew. (%)</label><input id="overhead" type="number" value="8"/></div>
 </div>
 <div class="standard-actions">
-  <button type="button" id="saveDefaults">💾 Standardwerte speichern</button>
-  <button type="button" id="loadDefaults">↥ Gespeicherte Standards laden</button>
+<button id="saveDefaults" type="button">💾 Standardwerte speichern</button>
+<button id="loadDefaults" type="button">↥ Gespeicherte Standards laden</button>
 </div>
 <p class="muted">Privat: 10 % der Druckzeit + Setup je Druckplatte. Gewerblich: 15 min Grundsetup + 10 min je Druckplatte.</p></details>
 <div class="card muted">💡 <strong>Darkmodus:</strong> Mit ☾/☀️ oben kannst du zwischen Hell und Dunkel wechseln. Die Einstellung wird auf deinem iPhone gespeichert.</div><div class="card muted">Hinweis: Die Werte sind kalkulatorische Startwerte. Bei gekauften STL-Dateien immer die Lizenz für Verkäufe prüfen.</div>
+</div></div>
+
+
+
+<div class="order-detail-modal" hidden="" id="orderDetailModal">
+<div class="order-detail-backdrop" data-close-order-detail=""></div>
+<section aria-labelledby="orderDetailTitle" aria-modal="true" class="order-detail-sheet" role="dialog">
+<div class="order-detail-head">
+<div>
+<span class="order-detail-kicker">Auftragsdetails</span>
+<h2 id="orderDetailTitle">Auftrag</h2>
+<div class="order-detail-customer" id="orderDetailCustomer"></div>
+</div>
+<button aria-label="Schließen" class="order-detail-close" data-close-order-detail="" type="button">×</button>
+</div>
+<div class="order-detail-status-row">
+<label>Status</label>
+<select id="orderDetailStatus">
+<option value="open">🟠 Offen</option>
+<option value="work">🔵 In Arbeit</option>
+<option value="done">🟢 Fertig</option>
+<option value="paid">💰 Bezahlt</option>
+</select>
+</div>
+<div class="order-detail-grid">
+<div class="detail-stat"><span>💰 Verkaufspreis</span><strong id="detailPrice">0,00 €</strong></div>
+<div class="detail-stat"><span>📉 Selbstkosten</span><strong id="detailSelf">0,00 €</strong></div>
+<div class="detail-stat"><span>📈 Gewinn</span><strong id="detailProfit">0,00 €</strong></div>
+<div class="detail-stat"><span>🖨️ Drucke</span><strong id="detailPlates">0</strong></div>
+<div class="detail-stat"><span>⚖️ Material</span><strong id="detailGrams">0 g</strong></div>
+<div class="detail-stat"><span>⏱️ Druckzeit</span><strong id="detailTime">0 Std. 0 Min.</strong></div>
+</div>
+<div class="detail-section">
+<h3>💶 Kostenaufstellung</h3>
+<div class="detail-cost-list" id="detailCosts"></div>
+</div>
+<div class="detail-section">
+<h3>📝 Notiz</h3>
+<textarea id="orderDetailNote" placeholder="Notiz zum Auftrag ..." rows="4"></textarea>
+</div>
+<div class="detail-section">
+<h3>📅 Auftrag</h3>
+<div class="detail-meta" id="detailMeta"></div>
+</div>
+<div class="order-detail-actions">
+<button class="load-order" id="detailLoadOrder" type="button">↗ Auftrag laden</button>
+<button id="detailSaveChanges" type="button">💾 Änderungen speichern</button>
+</div>
+</section>
 </div>
 
-<nav class="bottom-nav" aria-label="App-Navigation">
-  <button type="button" class="nav-item active" data-page="calculator">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<rect x="9" y="5" width="30" height="38" rx="8" stroke="currentColor" stroke-width="3.8"/>
-<rect x="14" y="10" width="20" height="9" rx="1" fill="currentColor"/>
-<path d="M15 24h5M23 24h5M31 24h2M15 31h5M23 31h5M31 31h2M15 38h5M23 38h5M31 38h2" stroke="currentColor" stroke-width="3.4" stroke-linecap="square"/>
-</svg>
-    </span>
-    <small>Kalkulator</small>
-  </button>
 
-  <button type="button" class="nav-item" data-page="spools">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<ellipse cx="14" cy="24" rx="9" ry="16" stroke="currentColor" stroke-width="2.8"/>
-<ellipse cx="34" cy="24" rx="9" ry="16" stroke="currentColor" stroke-width="2.8"/>
-<path d="M14 8c4 4 16 4 20 0M14 40c4-4 16-4 20 0" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
-<path d="M15 12c5 3 13 3 18 0M15 16c5 3 13 3 18 0M15 32c5-3 13-3 18 0M15 36c5-3 13-3 18 0" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
-<circle cx="24" cy="24" r="6.2" stroke="currentColor" stroke-width="2.8"/>
-<path d="M24 18v12M18 24h12" stroke="currentColor" stroke-width="2" opacity=".7"/>
+<nav aria-label="App-Navigation" class="bottom-nav">
+<button class="nav-item active" data-page="calculator" type="button">
+<span aria-hidden="true" class="nav-icon">
+<svg fill="none" viewbox="0 0 48 48">
+<rect height="38" rx="8" stroke="currentColor" stroke-width="3.8" width="30" x="9" y="5"></rect>
+<rect fill="currentColor" height="9" rx="1" width="20" x="14" y="10"></rect>
+<path d="M15 24h5M23 24h5M31 24h2M15 31h5M23 31h5M31 31h2M15 38h5M23 38h5M31 38h2" stroke="currentColor" stroke-linecap="square" stroke-width="3.4"></path>
 </svg>
-    </span>
-    <small>Spulen</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="orders">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<path d="M17 8h14v5h3a4 4 0 0 1 4 4v27H10V17a4 4 0 0 1 4-4h3V8Z" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"/>
-<path d="M17 8h14v7H17z" fill="currentColor"/>
-<path d="m15 23 2.5 2.5L21 21M25 24h9M15 30l2.5 2.5L21 28M25 31h9M15 37l2.5 2.5L21 35M25 38h9" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+</span>
+<small>Kalkulator</small>
+</button>
+<button class="nav-item" data-page="spools" type="button">
+<span aria-hidden="true" class="nav-icon">
+<svg fill="none" viewbox="0 0 48 48">
+<ellipse cx="14" cy="24" rx="9" ry="16" stroke="currentColor" stroke-width="2.8"></ellipse>
+<ellipse cx="34" cy="24" rx="9" ry="16" stroke="currentColor" stroke-width="2.8"></ellipse>
+<path d="M14 8c4 4 16 4 20 0M14 40c4-4 16-4 20 0" stroke="currentColor" stroke-linecap="round" stroke-width="2.8"></path>
+<path d="M15 12c5 3 13 3 18 0M15 16c5 3 13 3 18 0M15 32c5-3 13-3 18 0M15 36c5-3 13-3 18 0" stroke="currentColor" stroke-linecap="round" stroke-width="1.9"></path>
+<circle cx="24" cy="24" r="6.2" stroke="currentColor" stroke-width="2.8"></circle>
+<path d="M24 18v12M18 24h12" opacity=".7" stroke="currentColor" stroke-width="2"></path>
 </svg>
-    </span>
-    <small>Aufträge</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="finance">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<path d="M9 11v20l7-7M9 31l7 7" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M39 37V17l-7 7M39 17l-7-7" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 14v21M27.5 17.5c-1-1-2.4-1.5-4-1.5-2.8 0-4.7 1.4-4.7 3.5 0 5.2 9.4 2.6 9.4 7.3 0 2.2-2.1 3.6-5 3.6-2.1 0-4-.7-5.2-2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+</span>
+<small>Spulen</small>
+</button>
+<button class="nav-item" data-page="orders" type="button">
+<span aria-hidden="true" class="nav-icon">
+<svg fill="none" viewbox="0 0 48 48">
+<path d="M17 8h14v5h3a4 4 0 0 1 4 4v27H10V17a4 4 0 0 1 4-4h3V8Z" stroke="currentColor" stroke-linejoin="round" stroke-width="3.4"></path>
+<path d="M17 8h14v7H17z" fill="currentColor"></path>
+<path d="m15 23 2.5 2.5L21 21M25 24h9M15 30l2.5 2.5L21 28M25 31h9M15 37l2.5 2.5L21 35M25 38h9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8"></path>
 </svg>
-    </span>
-    <small>Finanzen</small>
-  </button>
-
-  <button type="button" class="nav-item" data-page="settings">
-    <span class="nav-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-<path d="M19 7h10l1.4 4.3c1 .3 2 .7 2.9 1.2l3.9-2.2 6.5 6.5-2.2 3.9c.5.9.9 1.9 1.2 2.9L47 25v10l-4.3 1.4c-.3 1-.7 2-1.2 2.9l2.2 3.9-6.5 6.5-3.9-2.2c-.9.5-1.9.9-2.9 1.2L29 53H19l-1.4-4.3c-1-.3-2-.7-2.9-1.2l-3.9 2.2-6.5-6.5 2.2-3.9c-.5-.9-.9-1.9-1.2-2.9L1 35V25l4.3-1.4c.3-1 .7-2 1.2-2.9l-2.2-3.9 6.5-6.5 3.9 2.2c.9-.5 1.9-.9 2.9-1.2L19 7Z" transform="translate(0 -2) scale(.98)" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/>
-<circle cx="24" cy="24" r="7.2" stroke="currentColor" stroke-width="3.2"/>
-<circle cx="24" cy="24" r="2.4" fill="currentColor"/>
+</span>
+<small>Aufträge</small>
+</button>
+<button class="nav-item" data-page="finance" type="button">
+<span aria-hidden="true" class="nav-icon">
+<svg fill="none" viewbox="0 0 48 48">
+<path d="M9 11v20l7-7M9 31l7 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.8"></path>
+<path d="M39 37V17l-7 7M39 17l-7-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.8"></path>
+<path d="M24 14v21M27.5 17.5c-1-1-2.4-1.5-4-1.5-2.8 0-4.7 1.4-4.7 3.5 0 5.2 9.4 2.6 9.4 7.3 0 2.2-2.1 3.6-5 3.6-2.1 0-4-.7-5.2-2" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
 </svg>
-    </span>
-    <small>Einstellungen</small>
-  </button>
+</span>
+<small>Finanzen</small>
+</button>
+<button class="nav-item" data-page="settings" type="button">
+<span aria-hidden="true" class="nav-icon">
+<svg fill="none" viewbox="0 0 48 48">
+<path d="M19 7h10l1.4 4.3c1 .3 2 .7 2.9 1.2l3.9-2.2 6.5 6.5-2.2 3.9c.5.9.9 1.9 1.2 2.9L47 25v10l-4.3 1.4c-.3 1-.7 2-1.2 2.9l2.2 3.9-6.5 6.5-3.9-2.2c-.9.5-1.9.9-2.9 1.2L29 53H19l-1.4-4.3c-1-.3-2-.7-2.9-1.2l-3.9 2.2-6.5-6.5 2.2-3.9c-.5-.9-.9-1.9-1.2-2.9L1 35V25l4.3-1.4c.3-1 .7-2 1.2-2.9l-2.2-3.9 6.5-6.5 3.9 2.2c.9-.5 1.9-.9 2.9-1.2L19 7Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2.8" transform="translate(0 -2) scale(.98)"></path>
+<circle cx="24" cy="24" r="7.2" stroke="currentColor" stroke-width="3.2"></circle>
+<circle cx="24" cy="24" fill="currentColor" r="2.4"></circle>
+</svg>
+</span>
+<small>Einstellungen</small>
+</button>
 </nav>
-</div>
+
 <style id="page-visibility-fix">
 /* Pages are controlled individually; never hide the whole app. */
 </style>
@@ -1654,7 +1588,6 @@ body:not(.dark) .breakdown>div{border-bottom-color:#e2e8f0 !important}
 body:not(.dark) .header-reset{background:#f1f5f9 !important;color:#111827 !important;border-color:#cbd5e1 !important}
 body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;border-color:rgba(25,168,255,.18) !important}
 </style>
-
 <script>
 (function(){
   'use strict';
