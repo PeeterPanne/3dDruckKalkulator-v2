@@ -28,7 +28,7 @@ label{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 0
 input{width:100%;height:52px;border:1px solid var(--line);border-radius:15px;background:var(--input);padding:0 14px;font-size:17px;color:var(--text);outline:none}
 input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,144,255,.14)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}
-.mode{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;background:var(--soft);padding:5px;border-radius:16px}
+.mode{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--soft);padding:5px;border-radius:16px}
 .mode button{border:1px solid transparent;background:transparent;border-radius:12px;padding:12px 4px;font-weight:800;color:var(--muted);font-size:13px}
 .mode button.active{background:var(--card);color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.18);border-color:var(--line)}
 .mode button[data-v="friend"].active{color:var(--green)}.mode button[data-v="colleague"].active{color:var(--blue)}
@@ -488,9 +488,9 @@ input:focus,select:focus{border-color:#19a8ff!important;box-shadow:0 0 0 3px rgb
 .orders-list{display:flex;flex-direction:column;gap:9px}.order-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px;border:1px solid #17344e;background:rgba(255,255,255,.025);border-radius:15px}
 .order-info{display:flex;flex-direction:column;gap:3px;min-width:0}.order-info strong{font-size:15px}.order-info span{color:#9eafc2;font-size:12px}.order-actions-small{display:flex;flex-direction:column;gap:5px;flex:0 0 auto}.order-actions-small button{border:1px solid #24445f;background:rgba(255,255,255,.04);color:#dbe7f4;border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800}.order-actions-small .danger{color:#ff7d7d}
 .empty-orders{text-align:center;color:#9eafc2;padding:25px 8px;line-height:1.6}.empty-orders span{font-size:12px}
-.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:100;width:min(760px,100%);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;background:rgba(3,12,21,.97);border-top:1px solid #18344d;backdrop-filter:blur(18px)}
+.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:100;width:min(760px,100%);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:rgba(3,12,21,.97);border-top:1px solid #18344d;backdrop-filter:blur(18px)}
 .nav-item{border:0;background:transparent;color:#8999ad;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55px;border-radius:12px;gap:2px;font-weight:800}.nav-item span{font-size:21px;line-height:1}.nav-item small{font-size:11px}.nav-item.active{color:#19a8ff}
-.page[hidden]{display:none!important}
+
 @media(max-width:520px){
  .app{padding-left:12px!important;padding-right:12px!important}.app-header{padding-top:4px!important}
  .brand{gap:11px}.brand-icon{width:82px;height:82px;border-radius:20px}.brand-copy h1{font-size:25px!important;white-space:normal!important}.brand-copy .sub{font-size:12px!important}
@@ -772,7 +772,7 @@ body:not(.dark) .order-card-actions .load-order{
 .order-status-select.status-paid{color:#bd8aff;border-color:rgba(166,108,255,.4);background:rgba(166,108,255,.10)}
 
 .finance-filter{padding-bottom:17px}
-.finance-periods{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.finance-periods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .finance-periods button{
   min-height:42px;border:1px solid #24445f;background:rgba(255,255,255,.035);
   color:#9eafc2;border-radius:12px;font-weight:800;font-size:13px;
@@ -1156,27 +1156,11 @@ html{scroll-behavior:auto!important}
 .spool-pick-wrap select{min-width:0!important}
 </style>
 
-<script>
-(function(){
-  const allowed = new Set(['calculator','spools','orders','finance','settings']);
-  window.__navigateSafe = function(name){
-    if(!allowed.has(name)) return;
-    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-    const target = document.getElementById('page-' + name);
-    if(target) target.classList.add('active');
-    document.querySelectorAll('.nav-item[data-page]').forEach(function(n){
-      n.classList.toggle('active', n.dataset.page === name);
-    });
-    window.scrollTo(0,0);
-  };
-  document.addEventListener('click', function(e){
-    const nav = e.target.closest('.nav-item[data-page]');
-    if(!nav) return;
-    e.preventDefault();
-    window.__navigateSafe(nav.dataset.page);
-  }, true);
-})();
-</script>
+<style id="final-page-visibility-fix">
+/* FINAL FIX: exactly one application page is visible at a time. */
+.page{display:none !important;width:100%;box-sizing:border-box}
+.page.active{display:block !important}
+</style>
 
 </head>
 <body>
@@ -1190,7 +1174,7 @@ html{scroll-behavior:auto!important}
 </header>
 
 
-<div class="page" id="page-calculator">
+<div class="page active" id="page-calculator">
 <div class="card"><div class="sectiontitle">Für wen wird gedruckt?</div><div class="mode" id="modes">
 <button type="button" data-v="friend">Freund</button><button type="button" data-v="colleague">Kollege</button><button type="button" data-v="stranger" class="active">Fremder</button><button type="button" data-v="business">Gewerblich</button>
 </div></div>
@@ -1273,7 +1257,7 @@ html{scroll-behavior:auto!important}
 
 </div>
 
-<div class="page" id="page-spools">
+<div class="page" id="page-spools" hidden>
   <div class="page-title">🧵 Filament & Spulen</div>
   <div class="page-subtitle">Speichere deine Filamentspulen und wähle sie direkt im Kalkulator aus.</div>
 
@@ -1639,13 +1623,26 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
     // Navigation and pricing-mode buttons are initialized FIRST.
     // This keeps them functional even if another optional section later fails.
     function showPage(name){
-      document.querySelectorAll('.page').forEach(p=>p.hidden=true);
+      const validPages=['calculator','spools','orders','finance','settings'];
+      if(!validPages.includes(name)) return;
+
+      document.querySelectorAll('.page').forEach(p=>{
+        p.classList.remove('active');
+        p.hidden=true;
+      });
+
       const page=$('page-'+name);
-      if(page) page.hidden=false;
+      if(page){
+        page.hidden=false;
+        page.classList.add('active');
+      }
+
       document.querySelectorAll('.nav-item').forEach(b=>{
         b.classList.toggle('active',b.dataset.page===name);
       });
+
       window.scrollTo(0,0);
+
       if(name==='spools' && typeof renderSpools==='function') renderSpools();
       if(name==='orders' && typeof renderOrders==='function') renderOrders();
       if(name==='finance' && typeof renderFinance==='function') renderFinance();
@@ -1679,7 +1676,6 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
     function num(id){
       const el=$(id); return el ? Math.max(0, parseNum(el.value,0)) : 0;
     }
-    const money = (x) => euro(x);
     function euro(x){
       return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number.isFinite(x)?x:0);
     }
