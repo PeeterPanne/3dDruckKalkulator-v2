@@ -1180,60 +1180,7 @@ html{scroll-behavior:auto!important}
 /* FINAL PAGE STRUCTURE FIX: exactly one app page is visible */
 .app > .page { display:none !important; width:100%; box-sizing:border-box; }
 .app > .page.active { display:block !important; }
-</style>
-<style id="searchable-spool-picker">
-.spool-pick-wrap{position:relative;min-width:0}
-.spool-picker{position:relative}
-.spool-search-input{
-  width:100%;box-sizing:border-box;min-height:46px;height:46px;
-  border-radius:13px;border:1px solid #24445f;
-  background:#091525;color:#edf5ff;padding:0 12px;font-size:15px;
-  outline:none;
-}
-.spool-search-input:focus{
-  border-color:#19a8ff;
-  box-shadow:0 0 0 3px rgba(25,168,255,.12);
-}
-.spool-picker-menu{
-  position:absolute;left:0;right:0;top:calc(100% + 5px);z-index:3000;
-  max-height:240px;overflow:auto;padding:5px;
-  border:1px solid #24445f;border-radius:14px;
-  background:#071321;box-shadow:0 14px 30px rgba(0,0,0,.35);
-}
-.spool-picker-menu[hidden]{display:none}
-.spool-picker-option{
-  width:100%;display:block;text-align:left;
-  border:0;border-radius:10px;background:transparent;
-  color:#edf5ff;padding:10px 11px;min-height:42px;
-  font-size:14px;line-height:1.25;cursor:pointer;
-}
-.spool-picker-option:hover,.spool-picker-option:focus{background:rgba(25,168,255,.12);outline:none}
-.spool-picker-option.manual{color:#9eafc2;border-bottom:1px solid rgba(54,76,105,.5);margin-bottom:3px}
-.spool-picker-option strong{display:block;color:#f4f8fc;font-size:14px}
-.spool-picker-option small{display:block;color:#8fa2b8;margin-top:3px;font-size:11px}
-.spool-picker-empty{padding:12px;color:#71839a;text-align:center;font-size:12px}
-body:not(.dark) .spool-search-input{
-  background:#fff!important;color:#111827!important;border-color:#cbd5e1!important;
-}
-body:not(.dark) .spool-picker-menu{
-  background:#fff;border-color:#cbd5e1;box-shadow:0 14px 30px rgba(15,23,42,.16);
-}
-body:not(.dark) .spool-picker-option{color:#334155}
-body:not(.dark) .spool-picker-option strong{color:#111827}
-body:not(.dark) .spool-picker-option small{color:#64748b}
-body:not(.dark) .spool-picker-option.manual{color:#64748b;border-bottom-color:#e2e8f0}
-@media(max-width:430px){
-  .spool-search-input{min-height:44px;height:44px;font-size:15px}
-  .spool-picker-menu{max-height:220px}
-}
-</style>
-
-<style id="spool-color-picker">
-.spool-color-input-wrap{display:flex;align-items:center;gap:10px;min-height:50px}
-#spoolColorHex{width:54px!important;height:46px!important;min-height:46px!important;padding:3px!important;border-radius:12px;border:1px solid #24445f;background:#091525;cursor:pointer}
-#spoolColorHexValue{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--muted,#8fa2b8)}
-</style>
-</head>
+</style></head>
 <body>
 <div class="app">
 <header class="app-header">
@@ -1335,14 +1282,6 @@ body:not(.dark) .spool-picker-option.manual{color:#64748b;border-bottom-color:#e
 <div>
 <label>Farbe</label>
 <input id="spoolColor" placeholder="z. B. Schwarz" type="text"/>
-</div>
-<div>
-<label>Filamentfarbe</label>
-<div class="spool-color-input-wrap">
-  <input id="spoolColorHex" type="color" value="#64748b" aria-label="Filamentfarbe auswählen"/>
-  <span id="spoolColorHexValue">#64748B</span>
-</div>
-<div class="field-help">Farbe des Filaments für den Farbpunkt</div>
 </div>
 <div>
 <label>Preis € / kg</label>
@@ -1736,10 +1675,7 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       const g=r?.g ?? '', kg=r?.kg ?? '', note=r?.note ?? '';
       row.innerHTML=`<div class="spool-pick-wrap">
           <label>Spule</label>
-          <div class="spool-picker">
-            <input class="spool-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="🔎 Spule suchen ...">
-            <div class="spool-picker-menu" hidden></div>
-          </div>
+          <select class="spool-select"><option value="">Manuell eingeben</option></select>
         </div>
         <div class="filament-field" style="grid-area:g">
           <label>Menge (g)</label>
@@ -1764,11 +1700,26 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         }
         calc();
       });
-      row.querySelectorAll('.filament-field input').forEach(input=>{
+      row.querySelectorAll('input').forEach(input=>{
         input.addEventListener('input',()=>{ if(input.classList.contains('fkg') || input.classList.contains('fn')) row.dataset.spoolId=''; calc(); });
         input.addEventListener('change',()=>{ if(input.classList.contains('fkg') || input.classList.contains('fn')) row.dataset.spoolId=''; calc(); });
       });
-      setupSpoolPicker(row,r?.spoolId||'');
+      const spoolSelect=row.querySelector('.spool-select');
+      if(spoolSelect){
+        populateSpoolSelect(spoolSelect);
+        spoolSelect.value=r?.spoolId||'';
+        spoolSelect.addEventListener('change',()=>{
+          const s=readSpools().find(x=>String(x.id)===String(spoolSelect.value));
+          if(!s) return;
+          const price=row.querySelector('.fkg');
+          const color=row.querySelector('.fn');
+          if(price) price.value=s.price;
+          if(color) color.value=(s.color||'') + (s.material ? ' ' + s.material : '');
+          row.dataset.spoolId=s.id;
+          row.querySelectorAll('input').forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true})));
+          calc();
+        });
+      }
       return row;
     }
 
@@ -1824,19 +1775,20 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         const minutes=Math.min(59,Math.floor(num('minutes')));
         const h=days*24+hours+minutes/60;
         const totalMinutes=days*24*60+hours*60+minutes;
-        const totalDays=Math.floor(totalMinutes/1440);
-        const remMinutes=totalMinutes%1440;
-        const totalHours=Math.floor(remMinutes/60);
-        const totalMins=remMinutes%60;
+        const totalHours=Math.floor(totalMinutes/60);
+        const totalMins=totalMinutes%60;
         const timeEl=$('timeTotal');
         if(timeEl){
-          const parts=[];
-          if(totalDays>0) parts.push(`<strong>${totalDays} ${totalDays===1?'Tag':'Tage'}</strong>`);
-          if(totalHours>0 || totalDays===0) parts.push(`<strong>${totalHours} Std.</strong>`);
-          if(totalMins>0 || totalMinutes===0) parts.push(`<strong>${totalMins} Min.</strong>`);
-          timeEl.innerHTML='Gesamtdauer: '+parts.join(' · ');
+          timeEl.innerHTML=`Gesamtdauer: <strong>${totalHours} Std.</strong> · <strong>${totalMins} Min.</strong>`;
         }
         const plates=Math.floor(num('plates'));
+
+        // Kalkulationsbasis:
+        // h = tatsächliche Druckdauer in Dezimalstunden.
+        // Material = Gramm × €/kg ÷ 1000.
+        // Strom = Stunden × Watt ÷ 1000 × €/kWh.
+        // Abschreibung und Verschleiß werden separat je Druckstunde angesetzt;
+        // dadurch werden diese Positionen nicht nochmals in der Druckerarbeit versteckt.
         const material=materialCost();
         const power=h*num('watts')/1000*num('powerprice');
         const dep=h*(business?num('depB'):num('depP'));
@@ -1867,6 +1819,13 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         console.error('3D Kalkulator Berechnungsfehler:',err);
       }
     }
+
+    // Spulen beim Start sofort aus localStorage ins Inventar laden.
+    // Die absolute Seiten-Navigation kann die Darstellung ebenfalls aktualisieren.
+    window.renderSpools = renderSpools;
+    window.refreshAllSpoolSelectors = refreshAllSpoolSelectors;
+    renderSpools();
+    refreshAllSpoolSelectors();
 
     renderFilaments();
     $('multiToggle')?.addEventListener('click',()=>{
@@ -2333,121 +2292,18 @@ document.querySelectorAll('input,select').forEach(el=>{
       try{return JSON.parse(localStorage.getItem('3dcalc-spools')||'[]')}catch(e){return []}
     }
     function writeSpools(items){localStorage.setItem('3dcalc-spools',JSON.stringify(items))}
-    function spoolLabel(s){
-      return `${s.name||'Unbenannt'} · ${s.color||'Keine Farbe'} · ${s.material||''} · ${Number(s.price||0).toFixed(2).replace('.',',')} €/kg`;
-    }
-
     function populateSpoolSelect(select){
       if(!select) return;
       const current=select.value;
       const spools=readSpools();
       select.innerHTML='<option value="">Manuell eingeben</option>'+spools.map(s=>
-        `<option value="${escapeAttr(s.id)}">${escapeAttr(spoolLabel(s))}</option>`
+        `<option value="${escapeAttr(s.id)}">${escapeAttr(s.name)} · ${escapeAttr(s.color)} · ${escapeAttr(s.material)} · ${Number(s.price||0).toFixed(2).replace('.',',')} €/kg</option>`
       ).join('');
       if(spools.some(s=>String(s.id)===String(current))) select.value=current;
     }
-
-    function refreshSpoolPicker(picker){
-      if(!picker) return;
-      const row=picker.closest('.filament-row');
-      const input=picker.querySelector('.spool-search-input');
-      const selectedId=row?.dataset.spoolId||'';
-      const s=readSpools().find(x=>String(x.id)===String(selectedId));
-      if(input){
-        input.value=s ? spoolLabel(s) : '';
-        input.dataset.selectedId=s ? String(s.id) : '';
-        input.placeholder='🔎 Spule suchen ...';
-      }
-    }
-
-    function closeAllSpoolPickers(except){
-      document.querySelectorAll('.spool-picker-menu').forEach(menu=>{
-        if(!except || menu!==except) menu.hidden=true;
-      });
-    }
-
-    function renderSpoolPickerResults(picker, query=''){
-      const menu=picker.querySelector('.spool-picker-menu');
-      if(!menu) return;
-      const q=String(query||'').trim().toLowerCase();
-      const spools=readSpools();
-      const items=spools.filter(s=>[s.name,s.color,s.material].join(' ').toLowerCase().includes(q));
-
-      let html='<button type="button" class="spool-picker-option manual" data-spool-manual="1">✏️ Manuell eingeben</button>';
-      if(items.length){
-        html+=items.map(s=>`
-          <button type="button" class="spool-picker-option" data-spool-id="${escapeAttr(s.id)}">
-            <strong>${escapeAttr(s.name||'Unbenannt')}</strong>
-            <small>${escapeAttr(s.color||'Keine Farbe')} · ${escapeAttr(s.material||'')} · ${Number(s.price||0).toFixed(2).replace('.',',')} €/kg</small>
-          </button>`).join('');
-      }else{
-        html+='<div class="spool-picker-empty">🧵 Keine passenden Spulen gefunden.</div>';
-      }
-      menu.innerHTML=html;
-      menu.querySelector('[data-spool-manual]')?.addEventListener('click',()=>{
-        const row=picker.closest('.filament-row');
-        if(!row) return;
-        row.dataset.spoolId='';
-        const input=picker.querySelector('.spool-search-input');
-        if(input){input.value='';input.dataset.selectedId='';input.placeholder='🔎 Spule suchen ...';}
-        menu.hidden=true;
-        calc();
-      });
-      menu.querySelectorAll('[data-spool-id]').forEach(btn=>btn.addEventListener('click',()=>{
-        const row=picker.closest('.filament-row');
-        const s=readSpools().find(x=>String(x.id)===String(btn.dataset.spoolId));
-        if(!row || !s) return;
-        const price=row.querySelector('.fkg');
-        const color=row.querySelector('.fn');
-        if(price) price.value=s.price;
-        if(color) color.value=(s.color||'') + (s.material ? ' ' + s.material : '');
-        row.dataset.spoolId=s.id;
-        const input=picker.querySelector('.spool-search-input');
-        if(input){
-          input.value=spoolLabel(s);
-          input.dataset.selectedId=String(s.id);
-        }
-        menu.hidden=true;
-        calc();
-      }));
-    }
-
-    function setupSpoolPicker(row, spoolId=''){
-      const wrap=row.querySelector('.spool-pick-wrap');
-      if(!wrap) return;
-      wrap.innerHTML=`<label>Spule</label>
-        <div class="spool-picker">
-          <input class="spool-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="🔎 Spule suchen ...">
-          <div class="spool-picker-menu" hidden></div>
-        </div>`;
-      const picker=wrap.querySelector('.spool-picker');
-      const input=picker.querySelector('.spool-search-input');
-      row.dataset.spoolId=spoolId||'';
-      refreshSpoolPicker(picker);
-      input.addEventListener('focus',()=>{
-        closeAllSpoolPickers(picker.querySelector('.spool-picker-menu'));
-        input.select();
-        renderSpoolPickerResults(picker, input.dataset.selectedId ? '' : input.value);
-        picker.querySelector('.spool-picker-menu').hidden=false;
-      });
-      input.addEventListener('input',()=>{
-        input.dataset.selectedId='';
-        renderSpoolPickerResults(picker,input.value);
-        picker.querySelector('.spool-picker-menu').hidden=false;
-      });
-      input.addEventListener('keydown',e=>{
-        if(e.key==='Escape'){
-          refreshSpoolPicker(picker);
-          picker.querySelector('.spool-picker-menu').hidden=true;
-        }
-      });
-    }
-
     function refreshAllSpoolSelectors(){
-      document.querySelectorAll('.spool-picker').forEach(refreshSpoolPicker);
       document.querySelectorAll('.spool-select').forEach(populateSpoolSelect);
     }
-
     function renderSpools(){
       const list=$('spoolsList'); if(!list) return;
       const query=($('spoolSearch')?.value||'').trim().toLowerCase();
@@ -2481,8 +2337,6 @@ document.querySelectorAll('input,select').forEach(el=>{
         $('spoolName').value=s.name||'';
         $('spoolMaterial').value=s.material||'PLA';
         $('spoolColor').value=s.color||'';
-        $('spoolColorHex').value=s.colorHex||'#64748b';
-        $('spoolColorHexValue').textContent=(s.colorHex||'#64748b').toUpperCase();
         $('spoolPrice').value=s.price||'';
         $('spoolRemaining').value=s.remaining??'';
         $('addSpool').dataset.editId=s.id;
@@ -2501,8 +2355,7 @@ document.querySelectorAll('input,select').forEach(el=>{
       if(!Number.isFinite(price)||price<0){alert('Bitte einen gültigen Preis eingeben.');return}
       const items=readSpools();
       const editId=$('addSpool').dataset.editId;
-      const colorHex=$('spoolColorHex')?.value||'#64748b';
-      const item={id:editId||Date.now()+Math.random(),name,color,material,colorHex,price:Number(price.toFixed(2)),remaining:remaining===''?'':Math.max(0,Number(remaining)||0)};
+      const item={id:editId||Date.now()+Math.random(),name,color,material,price:Number(price.toFixed(2)),remaining:remaining===''?'':Math.max(0,Number(remaining)||0)};
       if(editId){
         const i=items.findIndex(x=>String(x.id)===String(editId));
         if(i>=0) items[i]=item;
@@ -2511,36 +2364,10 @@ document.querySelectorAll('input,select').forEach(el=>{
       }else items.unshift(item);
       writeSpools(items.slice(0,500));
       ['spoolName','spoolColor','spoolPrice','spoolRemaining'].forEach(id=>{if($(id))$(id).value=''});
-      if($('spoolColorHex')) $('spoolColorHex').value='#64748b';
-      if($('spoolColorHexValue')) $('spoolColorHexValue').textContent='#64748B';
       $('spoolMaterial').value='PLA';
       renderSpools(); refreshAllSpoolSelectors();
     });
-    $('spoolColorHex')?.addEventListener('input',()=>{
-      if($('spoolColorHexValue')) $('spoolColorHexValue').textContent=$('spoolColorHex').value.toUpperCase();
-    });
-
     $('spoolSearch')?.addEventListener('input',renderSpools);
-
-    document.addEventListener('click',e=>{
-      if(!e.target.closest('.spool-picker')) closeAllSpoolPickers();
-    });
-
-    function migrateSpoolColors(){
-      const items=readSpools();
-      const map={'schwarz':'#111111','weiß':'#ffffff','weiss':'#ffffff','rot':'#e53935','grün':'#22c55e','gruen':'#22c55e','blau':'#2563eb','gelb':'#facc15','orange':'#f97316','lila':'#8b5cf6','violett':'#8b5cf6','rosa':'#ec4899','pink':'#ec4899','grau':'#6b7280','silber':'#c0c0c0','gold':'#d4af37','braun':'#8b5a2b','beige':'#d6c2a1','türkis':'#14b8a6','tuerkis':'#14b8a6'};
-      let changed=false;
-      items.forEach(s=>{if(!s.colorHex){const key=String(s.color||'').trim().toLowerCase();if(map[key]){s.colorHex=map[key];changed=true;}}});
-      if(changed) writeSpools(items);
-    }
-
-    // Spulen beim Start sofort aus localStorage ins Inventar laden.
-    // Die Seiten-Navigation greift zusätzlich über window.renderSpools darauf zu.
-    window.renderSpools = renderSpools;
-    window.refreshAllSpoolSelectors = refreshAllSpoolSelectors;
-    migrateSpoolColors();
-    renderSpools();
-    refreshAllSpoolSelectors();
 
     // Initial calculation after the DOM and all inputs exist.
     requestAnimationFrame(calc);
