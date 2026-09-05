@@ -57,6 +57,11 @@ input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,144,255,.14)}
 details summary{cursor:pointer;font-weight:850;list-style:none}details summary::-webkit-details-marker{display:none}
 @media(max-width:520px){.mode button{font-size:11px}.filaments-head,.filament-row{grid-template-columns:1fr 1fr 1.25fr 34px}.filament-row input{font-size:15px;padding:0 10px}.sectiontitle{font-size:21px}}
 @media(max-width:390px){.app{padding-left:12px;padding-right:12px}.mode{gap:3px}.mode button{font-size:10px}.filaments-head{font-size:10px}}
+
+.detail-filament-list{display:flex;flex-direction:column;gap:8px}
+.detail-filament-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:12px;background:rgba(127,127,127,.08)}
+.detail-filament-row small{display:block;opacity:.7;margin-top:3px}
+.detail-empty{opacity:.65;padding:4px 0}
 </style>
 <link href="icons/icon-180.png" rel="apple-touch-icon" sizes="180x180"/>
 <style>
@@ -1510,6 +1515,10 @@ html{scroll-behavior:auto!important}
 <div class="detail-stat"><span>⏱️ Druckzeit</span><strong id="detailTime">0 Std. 0 Min.</strong></div>
 </div>
 <div class="detail-section">
+<h3>🧵 Filament</h3>
+<div class="detail-filament-list" id="detailFilaments"></div>
+</div>
+<div class="detail-section">
 <h3>💶 Kostenaufstellung</h3>
 <div class="detail-cost-list" id="detailCosts"></div>
 </div>
@@ -1966,6 +1975,16 @@ document.querySelectorAll('input,select').forEach(el=>{
         price:$('price')?.textContent||'0,00 €',
         self:$('self')?.textContent||'0,00 €',
         material:$('materialCalc')?.textContent||'0,00 €',
+        power:$('bPower')?.textContent||'0,00 €',
+        depreciation:$('bDep')?.textContent||'0,00 €',
+        wear:$('bWear')?.textContent||'0,00 €',
+        printer:$('bPrinter')?.textContent||'0,00 €',
+        build:$('bBuild')?.textContent||'0,00 €',
+        post:$('bPost')?.textContent||'0,00 €',
+        license:$('bLicense')?.textContent||'0,00 €',
+        other:$('bOther')?.textContent||'0,00 €',
+        overhead:$('bOverhead')?.textContent||'0,00 €',
+        markupEuro:$('bMarkup')?.textContent||'0,00 €',
         filaments:currentRows()
       };
     }
@@ -2122,7 +2141,17 @@ document.querySelectorAll('input,select').forEach(el=>{
       $('detailTime').textContent=formatPrintTime(o);
       $('detailMeta').innerHTML=
         `<span>Gespeichert am ${escapeAttr(o.date||'')}</span>`+
-        `<span>Status: ${escapeAttr(st.label)}</span>`;
+        `<span>Status: ${escapeAttr(st.label)}</span>`+`<span>Aufschlag/Rabatt: ${escapeAttr(o.markup||'0')} %</span>`;
+
+      const filaments=Array.isArray(o.filaments)?o.filaments:[];
+      $('detailFilaments').innerHTML=filaments.length
+        ? filaments.map((f,i)=>{
+            const g=Number(f.g)||0, kg=Number(f.kg)||0;
+            const cost=g*kg/1000;
+            const label=(f.note||'Filament '+(i+1)).trim();
+            return `<div class="detail-filament-row"><div><strong>${escapeAttr(label)}</strong><small>${g.toFixed(1).replace('.',',')} g · ${kg.toFixed(2).replace('.',',')} €/kg</small></div><strong>${money(cost)}</strong></div>`;
+          }).join('')
+        : '<div class="detail-empty">Keine Filamentdaten gespeichert.</div>';
 
       const costs=[
         ['Material',o.material],
