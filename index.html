@@ -2361,6 +2361,13 @@ document.querySelectorAll('input,select').forEach(el=>{
     });
     $('spoolSearch')?.addEventListener('input',renderSpools);
 
+    // Spulen beim Start sofort aus localStorage ins Inventar laden.
+    // Die Seiten-Navigation greift zusätzlich über window.renderSpools darauf zu.
+    window.renderSpools = renderSpools;
+    window.refreshAllSpoolSelectors = refreshAllSpoolSelectors;
+    renderSpools();
+    refreshAllSpoolSelectors();
+
     // Initial calculation after the DOM and all inputs exist.
     requestAnimationFrame(calc);
     setTimeout(calc,50);
