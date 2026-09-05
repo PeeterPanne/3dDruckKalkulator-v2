@@ -2174,6 +2174,16 @@ document.querySelectorAll('input,select').forEach(el=>{
       document.body.classList.add('modal-open');
     }
 
+    // Details-Button robust: Event-Delegation funktioniert auch nach jedem Neurendern der Auftragsliste.
+    document.addEventListener('click',function(e){
+      const btn=e.target.closest && e.target.closest('[data-details]');
+      if(!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openOrderDetails(btn.getAttribute('data-details'));
+    },true);
+    window.openOrderDetails=openOrderDetails;
+
     function closeOrderDetails(){
       const modal=$('orderDetailModal');
       if(modal) modal.hidden=true;
