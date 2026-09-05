@@ -971,6 +971,10 @@ body:not(.dark) .order-detail-actions .load-order{color:#0879c9 !important}
 .spool-pick-wrap select{
   width:100%;box-sizing:border-box;min-height:46px;border-radius:13px;border:1px solid #24445f;background:#091525;color:#edf5ff;padding:0 12px;font-size:15px
 }
+.spool-search-calc{
+  width:100%;box-sizing:border-box;min-height:42px;border-radius:12px;border:1px solid #24445f;background:#091525;color:#edf5ff;padding:0 12px;font-size:14px;margin-bottom:7px
+}
+body:not(.dark) .spool-search-calc{background:#fff !important;color:#111827 !important;border-color:#cbd5e1 !important}
 @media(max-width:600px){
   .spool-form-grid{grid-template-columns:1fr}
   .spool-list-head{align-items:stretch;flex-direction:column}
@@ -1674,7 +1678,8 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
       row.className='filament-row';
       const g=r?.g ?? '', kg=r?.kg ?? '', note=r?.note ?? '';
       row.innerHTML=`<div class="spool-pick-wrap">
-          <label>Spule</label>
+          <label>Filament suchen</label>
+          <input class="spool-search-calc" type="search" placeholder="🔎 Filament suchen ..." autocomplete="off">
           <select class="spool-select"><option value="">Manuell eingeben</option></select>
         </div>
         <div class="filament-field" style="grid-area:g">
@@ -1705,8 +1710,9 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
         input.addEventListener('change',()=>{ if(input.classList.contains('fkg') || input.classList.contains('fn')) row.dataset.spoolId=''; calc(); });
       });
       const spoolSelect=row.querySelector('.spool-select');
+      const spoolSearchCalc=row.querySelector('.spool-search-calc');
       if(spoolSelect){
-        populateSpoolSelect(spoolSelect);
+        populateSpoolSelect(spoolSelect, spoolSearchCalc?.value||'');
         spoolSelect.value=r?.spoolId||'';
         spoolSelect.addEventListener('change',()=>{
           const s=readSpools().find(x=>String(x.id)===String(spoolSelect.value));
@@ -1718,6 +1724,13 @@ body:not(.dark) .material-total{background:rgba(25,168,255,.07) !important;borde
           row.dataset.spoolId=s.id;
           row.querySelectorAll('input').forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true})));
           calc();
+        });
+      }
+      if(spoolSearchCalc){
+        spoolSearchCalc.addEventListener('input',()=>{
+          const selected=spoolSelect?.value||'';
+          populateSpoolSelect(spoolSelect, spoolSearchCalc.value);
+          if(spoolSelect && selected && Array.from(spoolSelect.options).some(o=>o.value===selected)) spoolSelect.value=selected;
         });
       }
       return row;
@@ -2292,14 +2305,16 @@ document.querySelectorAll('input,select').forEach(el=>{
       try{return JSON.parse(localStorage.getItem('3dcalc-spools')||'[]')}catch(e){return []}
     }
     function writeSpools(items){localStorage.setItem('3dcalc-spools',JSON.stringify(items))}
-    function populateSpoolSelect(select){
+    function populateSpoolSelect(select, searchTerm=''){
       if(!select) return;
       const current=select.value;
+      const query=String(searchTerm||'').trim().toLowerCase();
       const spools=readSpools();
-      select.innerHTML='<option value="">Manuell eingeben</option>'+spools.map(s=>
+      const filtered=query ? spools.filter(s=>[s.name,s.color,s.material].join(' ').toLowerCase().includes(query)) : spools;
+      select.innerHTML='<option value="">Manuell eingeben</option>'+filtered.map(s=>
         `<option value="${escapeAttr(s.id)}">${escapeAttr(s.name)} · ${escapeAttr(s.color)} · ${escapeAttr(s.material)} · ${Number(s.price||0).toFixed(2).replace('.',',')} €/kg</option>`
       ).join('');
-      if(spools.some(s=>String(s.id)===String(current))) select.value=current;
+      if(filtered.some(s=>String(s.id)===String(current))) select.value=current;
     }
     function refreshAllSpoolSelectors(){
       document.querySelectorAll('.spool-select').forEach(populateSpoolSelect);
